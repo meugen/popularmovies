@@ -1,15 +1,20 @@
 package ua.meugen.android.popularmovies.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.JsonReader;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import ua.meugen.android.popularmovies.json.JsonReadable;
 import ua.meugen.android.popularmovies.json.JsonUtils;
 
-public class PagedMoviesDto {
+public class PagedMoviesDto implements Parcelable {
 
+    public static final Creator<PagedMoviesDto> CREATOR
+            = new PagedMoviesDtoCreator();
     public static final JsonReadable<PagedMoviesDto> READABLE
             = new PagedMoviesDtoReadable();
 
@@ -49,6 +54,19 @@ public class PagedMoviesDto {
     public void setResults(final List<MovieItemDto> results) {
         this.results = results;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(final Parcel parcel, final int flags) {
+        parcel.writeInt(page);
+        parcel.writeInt(totalResults);
+        parcel.writeInt(totalPages);
+        parcel.writeTypedList(results);
+    }
 }
 
 class PagedMoviesDtoReadable implements JsonReadable<PagedMoviesDto> {
@@ -75,5 +93,25 @@ class PagedMoviesDtoReadable implements JsonReadable<PagedMoviesDto> {
         reader.endObject();
 
         return dto;
+    }
+}
+
+class PagedMoviesDtoCreator implements Parcelable.Creator<PagedMoviesDto> {
+
+    @Override
+    public PagedMoviesDto createFromParcel(final Parcel parcel) {
+        final PagedMoviesDto dto = new PagedMoviesDto();
+        dto.setPage(parcel.readInt());
+        dto.setTotalResults(parcel.readInt());
+        dto.setTotalPages(parcel.readInt());
+        final List<MovieItemDto> results = new ArrayList<>();
+        parcel.readTypedList(results, MovieItemDto.CREATOR);
+        dto.setResults(results);
+        return dto;
+    }
+
+    @Override
+    public PagedMoviesDto[] newArray(final int size) {
+        return new PagedMoviesDto[size];
     }
 }

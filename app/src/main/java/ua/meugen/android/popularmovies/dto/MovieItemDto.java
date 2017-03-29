@@ -1,5 +1,7 @@
 package ua.meugen.android.popularmovies.dto;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.JsonReader;
 
 import java.io.IOException;
@@ -8,13 +10,16 @@ import java.util.List;
 
 import ua.meugen.android.popularmovies.json.JsonReadable;
 import ua.meugen.android.popularmovies.json.JsonUtils;
+import ua.meugen.android.popularmovies.utils.ParcelUtils;
 
 /**
  * Created by meugen on 28.03.17.
  */
 
-public class MovieItemDto {
+public class MovieItemDto implements Parcelable {
 
+    public static final Creator<MovieItemDto> CREATOR
+            = new MovieItemDtoCreator();
     public static final JsonReadable<MovieItemDto> READABLE
             = new MovieItemDtoReadable();
 
@@ -144,6 +149,28 @@ public class MovieItemDto {
     public void setVoteAverage(final double voteAverage) {
         this.voteAverage = voteAverage;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(final Parcel parcel, final int flags) {
+        parcel.writeString(posterPath);
+        parcel.writeString(overview);
+        ParcelUtils.writeDate(parcel, releaseDate);
+        ParcelUtils.writeIntegerList(parcel, genreIds);
+        parcel.writeInt(id);
+        parcel.writeString(originalTitle);
+        parcel.writeString(originalLanguage);
+        parcel.writeString(title);
+        parcel.writeString(backdropPath);
+        parcel.writeDouble(popularity);
+        parcel.writeInt(voteCount);
+        parcel.writeDouble(voteAverage);
+        parcel.writeBooleanArray(new boolean[] { adult, video });
+    }
 }
 
 class MovieItemDtoReadable implements JsonReadable<MovieItemDto> {
@@ -190,5 +217,35 @@ class MovieItemDtoReadable implements JsonReadable<MovieItemDto> {
         reader.endObject();
 
         return dto;
+    }
+}
+
+class MovieItemDtoCreator implements Parcelable.Creator<MovieItemDto> {
+
+    @Override
+    public MovieItemDto createFromParcel(final Parcel parcel) {
+        final MovieItemDto dto = new MovieItemDto();
+        dto.setPosterPath(parcel.readString());
+        dto.setOverview(parcel.readString());
+        dto.setReleaseDate(ParcelUtils.readDate(parcel));
+        dto.setGenreIds(ParcelUtils.readerIntegerList(parcel));
+        dto.setId(parcel.readInt());
+        dto.setOriginalTitle(parcel.readString());
+        dto.setOriginalLanguage(parcel.readString());
+        dto.setTitle(parcel.readString());
+        dto.setBackdropPath(parcel.readString());
+        dto.setPopularity(parcel.readDouble());
+        dto.setVoteCount(parcel.readInt());
+        dto.setVoteAverage(parcel.readDouble());
+        final boolean[] bools = new boolean[2];
+        parcel.readBooleanArray(bools);
+        dto.setAdult(bools[0]);
+        dto.setVideo(bools[1]);
+        return dto;
+    }
+
+    @Override
+    public MovieItemDto[] newArray(final int size) {
+        return new MovieItemDto[size];
     }
 }
