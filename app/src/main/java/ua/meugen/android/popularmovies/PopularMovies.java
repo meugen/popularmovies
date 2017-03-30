@@ -2,6 +2,8 @@ package ua.meugen.android.popularmovies;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -9,6 +11,8 @@ import ua.meugen.android.popularmovies.app.Api;
 
 
 public class PopularMovies extends Application {
+
+    private static final String PREF_SORT_TYPE = "sortType";
 
     private Api api;
 
@@ -40,5 +44,24 @@ public class PopularMovies extends Application {
     public Api getApi() {
         ensureApi();
         return api;
+    }
+
+    private SharedPreferences getPrefs() {
+        return PreferenceManager.getDefaultSharedPreferences(this);
+    }
+
+    public SortType getSortType() {
+        final String name = getPrefs().getString(PREF_SORT_TYPE, SortType.POPULAR.name());
+        return SortType.valueOf(name);
+    }
+
+    public void setSortType(final SortType sortType) {
+        getPrefs().edit()
+                .putString(PREF_SORT_TYPE, sortType.name())
+                .apply();
+    }
+
+    public enum SortType {
+        POPULAR, TOP_RATED
     }
 }

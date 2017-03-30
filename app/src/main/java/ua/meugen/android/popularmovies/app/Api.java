@@ -53,25 +53,15 @@ public class Api {
         }
     }
 
-    public PagedMoviesDto popularMovies(final int page) throws IOException {
-        final HttpUrl url = urlBuilder(PATH_POPULAR)
-                .addQueryParameter("page", Integer.toString(page))
-                .build();
-        return execute(url, PagedMoviesDto.READABLE);
-    }
-
     public PagedMoviesDto popularMovies() throws IOException {
-        return popularMovies(1);
-    }
-
-    public PagedMoviesDto topRatedMovies(final int page) throws IOException {
-        final HttpUrl url = urlBuilder(PATH_TOP_RATED)
-                .addQueryParameter("page", Integer.toString(page))
+        final HttpUrl url = urlBuilder(PATH_POPULAR)
                 .build();
         return execute(url, PagedMoviesDto.READABLE);
     }
 
     public PagedMoviesDto topRatedMovies() throws IOException {
-        return topRatedMovies(1);
+        final HttpUrl url = urlBuilder(PATH_TOP_RATED)
+                .build();
+        return execute(url, PagedMoviesDto.READABLE);
     }
 }
