@@ -16,7 +16,7 @@ public class Api {
 
     private static final HttpUrl BASE_URL = HttpUrl.parse("https://api.themoviedb.org/3");
     // TODO insert an api key here
-    private static final String API_KEY = "<<API KEY>>";
+    private static final String API_KEY = "4d0aefea62c601c18d2e9902f2570a61";
 
     private static final String PATH_POPULAR = "movie/popular";
     private static final String PATH_TOP_RATED = "movie/top_rated";

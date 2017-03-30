@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private View progressBarContainer;
     private View messageContainer;
-    private TextView message;
+    private TextView messageView;
     private RecyclerView recycler;
     private SwipeRefreshLayout swipeRefresh;
 
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         progressBarContainer = findViewById(R.id.progress_bar_container);
         messageContainer = findViewById(R.id.message_container);
-        message = (TextView) findViewById(R.id.message);
+        messageView = (TextView) findViewById(R.id.message);
         recycler = (RecyclerView) findViewById(R.id.recycler);
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefresh.setOnRefreshListener(this);
@@ -199,15 +198,23 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
 
         @Override
-        protected void onError(final IOException ex) {
-            message.setText(R.string.error_while_fetching_data);
+        protected void onServerError(final String message, final int code) {
+            messageView.setText(getString(R.string.server_returned_error,
+                    message, code));
+            progressBarContainer.setVisibility(View.GONE);
+            messageContainer.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onNetworkError(final IOException ex) {
+            messageView.setText(R.string.error_while_fetching_data);
             progressBarContainer.setVisibility(View.GONE);
             messageContainer.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onNoNetwork() {
-            message.setText(R.string.waiting_for_internet_connection_message);
+            messageView.setText(R.string.waiting_for_internet_connection_message);
             progressBarContainer.setVisibility(View.GONE);
             messageContainer.setVisibility(View.VISIBLE);
 

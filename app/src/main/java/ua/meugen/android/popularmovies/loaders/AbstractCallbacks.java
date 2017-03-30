@@ -7,8 +7,11 @@ import android.support.v4.content.Loader;
 
 import java.io.IOException;
 
+import ua.meugen.android.popularmovies.dto.BaseResponse;
 
-public abstract class AbstractCallbacks<T> implements LoaderManager.LoaderCallbacks<LoaderResult<T>> {
+
+public abstract class AbstractCallbacks<T extends BaseResponse>
+        implements LoaderManager.LoaderCallbacks<LoaderResult<T>> {
 
     private final Handler handler;
 
@@ -30,11 +33,16 @@ public abstract class AbstractCallbacks<T> implements LoaderManager.LoaderCallba
 
     private void _onLoadFinished(final LoaderResult<T> data) {
         try {
-            onData(data.getData());
+            T response = data.getData();
+            if (response.isSuccess()) {
+                onData(data.getData());
+            } else {
+                onServerError(response.getStatusMessage(), response.getStatusCode());
+            }
         } catch (AbstractLoader.NoNetworkException ex) {
             onNoNetwork();
         } catch (IOException ex) {
-            onError(ex);
+            onNetworkError(ex);
         } finally {
             onCompleted();
         }
@@ -45,7 +53,9 @@ public abstract class AbstractCallbacks<T> implements LoaderManager.LoaderCallba
 
     protected abstract void onData(final T data);
 
-    protected abstract void onError(final IOException ex);
+    protected abstract void onServerError(final String message, final int code);
+
+    protected abstract void onNetworkError(final IOException ex);
 
     protected abstract void onNoNetwork();
 

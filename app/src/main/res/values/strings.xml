@@ -3,6 +3,7 @@
 
     <string name="waiting_for_internet_connection_message">Waiting for an Internet connection</string>
     <string name="error_while_fetching_data">Error while fetching data over Internet</string>
+    <string name="server_returned_error" formatted="false">Server returned an error: %s (code: %d)</string>
 
     <string name="menu_main_popular_title">Popular</string>
     <string name="menu_main_top_rated_title">Top rated</string>

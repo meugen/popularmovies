@@ -11,7 +11,7 @@ import java.util.List;
 import ua.meugen.android.popularmovies.json.JsonReadable;
 import ua.meugen.android.popularmovies.json.JsonUtils;
 
-public class PagedMoviesDto implements Parcelable {
+public class PagedMoviesDto extends BaseResponse implements Parcelable {
 
     public static final Creator<PagedMoviesDto> CREATOR
             = new PagedMoviesDtoCreator();
@@ -66,6 +66,7 @@ public class PagedMoviesDto implements Parcelable {
         parcel.writeInt(totalResults);
         parcel.writeInt(totalPages);
         parcel.writeTypedList(results);
+        _writeToParcel(parcel);
     }
 }
 
@@ -87,7 +88,7 @@ class PagedMoviesDtoReadable implements JsonReadable<PagedMoviesDto> {
             } else if ("results".equals(name)) {
                 dto.setResults(JsonUtils.nextList(reader, MovieItemDto.READABLE));
             } else {
-                reader.skipValue();
+                dto._readFromJson(reader, name);
             }
         }
         reader.endObject();
@@ -107,6 +108,7 @@ class PagedMoviesDtoCreator implements Parcelable.Creator<PagedMoviesDto> {
         final List<MovieItemDto> results = new ArrayList<>();
         parcel.readTypedList(results, MovieItemDto.CREATOR);
         dto.setResults(results);
+        dto._readFromParcel(parcel);
         return dto;
     }
 
