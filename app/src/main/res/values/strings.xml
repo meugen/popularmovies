@@ -7,4 +7,8 @@
 
     <string name="menu_main_popular_title">Popular</string>
     <string name="menu_main_top_rated_title">Top rated</string>
+
+    <string name="activity_movies_title">Popular movies</string>
+    <string name="activity_movie_details_title">Movie details</string>
+    <string name="activity_movie_details_vote_average">Vote: %.1f</string>
 </resources>

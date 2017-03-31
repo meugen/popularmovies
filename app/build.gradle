@@ -29,9 +29,8 @@ dependencies {
     })
     compile "com.android.support:appcompat-v7:$SupportVersion"
     compile "com.android.support:recyclerview-v7:$SupportVersion"
-    testCompile 'junit:junit:4.12'
-    compile 'com.squareup.picasso:picasso:2.5.2'
     compile "com.squareup.okhttp3:okhttp:$OkHttpVersion"
     compile "com.squareup.okhttp3:logging-interceptor:$OkHttpVersion"
-
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    testCompile 'junit:junit:4.12'
 }

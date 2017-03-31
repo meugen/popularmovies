@@ -20,6 +20,8 @@ import java.io.IOException;
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.adapters.MoviesAdapter;
+import ua.meugen.android.popularmovies.adapters.OnMovieClickListener;
+import ua.meugen.android.popularmovies.dto.MovieItemDto;
 import ua.meugen.android.popularmovies.dto.PagedMoviesDto;
 import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
 import ua.meugen.android.popularmovies.loaders.LoaderResult;
@@ -27,7 +29,8 @@ import ua.meugen.android.popularmovies.loaders.PopularMoviesLoader;
 import ua.meugen.android.popularmovies.loaders.TopRatedMoviesLoader;
 import ua.meugen.android.popularmovies.utils.ConnectivityUtils;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MoviesActivity extends AppCompatActivity
+        implements SwipeRefreshLayout.OnRefreshListener, OnMovieClickListener {
 
     private static final int NO_LOADER = 0;
     private static final int LOADER_POPULAR = 1;
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_movies);
 
         progressBarContainer = findViewById(R.id.progress_bar_container);
         messageContainer = findViewById(R.id.message_container);
@@ -145,6 +148,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         refresh();
     }
 
+    @Override
+    public void onMovieClick(final MovieItemDto item) {
+        MovieDetailsActivity.start(this, item);
+    }
+
     private void refresh() {
         movies = null;
         final PopularMovies.SortType sortType = PopularMovies.from(this)
@@ -168,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
         if (adapter == null) {
             adapter = new MoviesAdapter(this, movies.getResults());
+            adapter.setOnMovieClickListener(this);
             recycler.setAdapter(adapter);
         } else {
             adapter.setItems(movies.getResults());
@@ -225,9 +234,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         public Loader<LoaderResult<PagedMoviesDto>> onCreateLoader(
                 final int id, final Bundle args) {
             if (id == LOADER_POPULAR) {
-                return new PopularMoviesLoader(MainActivity.this);
+                return new PopularMoviesLoader(MoviesActivity.this);
             } else if (id == LOADER_TOP_RATED) {
-                return new TopRatedMoviesLoader(MainActivity.this);
+                return new TopRatedMoviesLoader(MoviesActivity.this);
             }
             return null;
         }
