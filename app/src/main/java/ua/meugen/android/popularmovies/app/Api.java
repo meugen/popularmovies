@@ -48,6 +48,7 @@ public class Api {
             reader = new JsonReader(response.body().charStream());
             return readable.readJson(reader);
         } finally {
+            // Some not important changes
             IOUtils.closeQuietly(response);
             IOUtils.closeQuietly(reader);
         }
