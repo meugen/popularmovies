@@ -11,4 +11,8 @@
     <string name="activity_movies_title">Popular movies</string>
     <string name="activity_movie_details_title">Movie details</string>
     <string name="activity_movie_details_vote_average">Vote: %.1f</string>
+
+    <string name="tab_movie_detail_main_text">Movie</string>
+    <string name="tab_movie_detail_videos_text">Videos</string>
+    <string name="tab_movie_detail_reviews_text">Reviews</string>
 </resources>

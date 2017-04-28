@@ -13,8 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".activities.MoviesActivity"
+        <activity
+            android:name=".activities.MoviesActivity"
             android:label="@string/activity_movies_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -22,15 +22,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <activity android:name=".activities.MovieDetailsActivity"
-            android:parentActivityName=".activities.MoviesActivity"
-            android:label="@string/activity_movie_details_title">
-
+        <activity
+            android:name=".activities.MovieDetailsActivity"
+            android:label="@string/activity_movie_details_title"
+            android:parentActivityName=".activities.MoviesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MoviesActivity" />
-
+                android:value=".activities.MoviesActivity"/>
         </activity>
     </application>
 
