@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ua.meugen.android.popularmovies.R;
@@ -34,7 +33,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     @Override
     public MovieViewHolder onCreateViewHolder(
             final ViewGroup parent, final int viewType) {
-        final View view = inflater.inflate(R.layout.movie_item, parent, false);
+        final View view = inflater.inflate(R.layout.item_movie, parent, false);
         return new MovieViewHolder(loader, view);
     }
 

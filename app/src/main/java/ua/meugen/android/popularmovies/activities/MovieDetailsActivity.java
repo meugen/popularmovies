@@ -20,14 +20,20 @@ import java.util.List;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.adapters.NumberAdapter;
+import ua.meugen.android.popularmovies.adapters.VideosAdapter;
 import ua.meugen.android.popularmovies.dto.MovieItemDto;
+import ua.meugen.android.popularmovies.dto.ReviewItemDto;
+import ua.meugen.android.popularmovies.dto.VideoItemDto;
 import ua.meugen.android.popularmovies.images.FileSize;
 import ua.meugen.android.popularmovies.images.ImageLoader;
+import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
+import ua.meugen.android.popularmovies.loaders.MovieDetailsLoader;
 
 public class MovieDetailsActivity extends AppCompatActivity
         implements TabLayout.OnTabSelectedListener {
 
     private static final String EXTRA_ITEM = "item";
+    private static final String EXTRA_DETAILS = "details";
 
     public static void start(final Context context, final MovieItemDto item) {
         final Intent intent = new Intent(context,
@@ -38,7 +44,11 @@ public class MovieDetailsActivity extends AppCompatActivity
     }
 
     private ViewAnimator animator;
+    private RecyclerView videosView;
+    private RecyclerView reviewsView;
+
     private MovieItemDto item;
+    private Bundle details;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -49,6 +59,7 @@ public class MovieDetailsActivity extends AppCompatActivity
             item = getIntent().getParcelableExtra(EXTRA_ITEM);
         } else {
             item = savedInstanceState.getParcelable(EXTRA_ITEM);
+            details = savedInstanceState.getBundle(EXTRA_DETAILS);
         }
 
         setTitle(item.getTitle());
@@ -63,20 +74,40 @@ public class MovieDetailsActivity extends AppCompatActivity
                 item.getVoteAverage()));
         final TextView overviewView = (TextView) findViewById(R.id.overview);
         overviewView.setText(item.getOverview());
-        final RecyclerView recycler1 = (RecyclerView) findViewById(R.id.recycler1);
-        recycler1.setAdapter(new NumberAdapter(this, 1));
-        final RecyclerView recycler2 = (RecyclerView) findViewById(R.id.recycler2);
-        recycler2.setAdapter(new NumberAdapter(this, 2));
+
+        this.videosView = (RecyclerView) findViewById(R.id.videos);
+        this.reviewsView = (RecyclerView) findViewById(R.id.reviews);
+        if (this.details == null) {
+            final Bundle params = new MovieDetailsLoader.ParamsBuilder()
+                    .movieId(item.getId()).includeVideos()
+                    .includeReviews().build();
+        } else {
+            setupDetails();
+        }
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addOnTabSelectedListener(this);
         this.animator = (ViewAnimator) findViewById(R.id.animator);
     }
 
+    private void setupDetails() {
+        if (details.containsKey(MovieDetailsLoader.RESULT_VIDEOS)) {
+            final List<VideoItemDto> videos = details.getParcelableArrayList(
+                    MovieDetailsLoader.RESULT_VIDEOS);
+            videosView.setAdapter(new VideosAdapter(this, videos));
+        }
+        if (details.containsKey(MovieDetailsLoader.RESULT_REVIEWS)) {
+            final List<ReviewItemDto> reviews = details.getParcelableArrayList(
+                    MovieDetailsLoader.RESULT_REVIEWS);
+            // TODO Implement display reviews
+        }
+    }
+
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(EXTRA_ITEM, item);
+        outState.putBundle(EXTRA_DETAILS, details);
     }
 
     @Override
@@ -89,4 +120,6 @@ public class MovieDetailsActivity extends AppCompatActivity
 
     @Override
     public void onTabReselected(final TabLayout.Tab tab) {}
+
+    private class DetailsLoaderCallbacks extends AbstractCallbacks<Bundle>
 }
