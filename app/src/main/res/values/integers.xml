@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="main_recycler_span_count">2</integer>
+    <integer name="videos_recycler_span_count">2</integer>
+    <integer name="reviews_recycler_span_count">1</integer>
+
+    <integer name="movie_details_poster_width">500</integer>
 </resources>

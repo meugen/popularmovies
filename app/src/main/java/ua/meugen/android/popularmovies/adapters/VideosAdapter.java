@@ -16,12 +16,12 @@ import ua.meugen.android.popularmovies.dto.VideoItemDto;
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemViewHolder> {
 
     private final LayoutInflater inflater;
-    private final List<VideoItemDto> items;
+    private final List<VideoItemDto> videos;
 
-    public VideosAdapter(final Context context, final List<VideoItemDto> items) {
+    public VideosAdapter(final Context context, final List<VideoItemDto> videos) {
         this.inflater = LayoutInflater
                 .from(context);
-        this.items = items;
+        this.videos = videos;
     }
 
     @Override
@@ -32,12 +32,12 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
 
     @Override
     public void onBindViewHolder(final VideoItemViewHolder holder, final int position) {
-        holder.bind(items.get(position));
+        holder.bind(videos.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return videos.size();
     }
 
     public static class VideoItemViewHolder extends RecyclerView.ViewHolder {
