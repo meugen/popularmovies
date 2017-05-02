@@ -15,7 +15,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
+import ua.meugen.android.popularmovies.dto.BaseDto;
 import ua.meugen.android.popularmovies.dto.MovieItemDto;
+import ua.meugen.android.popularmovies.dto.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.dto.NewSessionDto;
+import ua.meugen.android.popularmovies.dto.NewTokenDto;
 import ua.meugen.android.popularmovies.dto.PagedMoviesDto;
 import ua.meugen.android.popularmovies.dto.PagedReviewsDto;
 import ua.meugen.android.popularmovies.dto.ReviewItemDto;
@@ -108,6 +112,37 @@ public class ParcelablesTest {
         dto.setId(1);
         dto.setResults(new ArrayList<>(Collections.singleton(createVideoItemDto())));
         testOneParcelable(dto);
+    }
+
+    @Test
+    public void testNewTokenDtoParcelable() throws Exception {
+        final NewTokenDto dto = new NewTokenDto();
+        dto.setExpiresAt(new Date(System.currentTimeMillis()));
+        dto.setToken("token");
+        dto.setSuccess(true);
+        testOneParcelable(dto);
+    }
+
+    @Test
+    public void testNewSessionDtoParcelable() throws Exception {
+        final NewSessionDto dto = new NewSessionDto();
+        dto.setSessionId("session_id");
+        dto.setSuccess(true);
+        testOneParcelable(dto);
+    }
+
+    @Test
+    public void testNewGuestSessionDtoParcelable() throws Exception {
+        final NewGuestSessionDto dto = new NewGuestSessionDto();
+        dto.setExpiresAt(new Date(System.currentTimeMillis()));
+        dto.setGuestSessionId("guest_session_id");
+        dto.setSuccess(true);
+        testOneParcelable(dto);
+    }
+
+    @Test
+    public void testBaseDtoParcelable() throws Exception {
+        testOneParcelable(new BaseDto());
     }
 
     private <T extends Parcelable> void testOneParcelable(

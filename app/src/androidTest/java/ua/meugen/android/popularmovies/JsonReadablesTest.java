@@ -9,8 +9,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.StringReader;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import ua.meugen.android.popularmovies.dto.MovieItemDto;
+import ua.meugen.android.popularmovies.dto.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.dto.NewSessionDto;
+import ua.meugen.android.popularmovies.dto.NewTokenDto;
 import ua.meugen.android.popularmovies.dto.PagedMoviesDto;
 import ua.meugen.android.popularmovies.dto.PagedReviewsDto;
 import ua.meugen.android.popularmovies.dto.ReviewItemDto;
@@ -167,6 +172,82 @@ public class JsonReadablesTest {
             Assert.assertEquals(1, dto.getPage());
             Assert.assertEquals(1, dto.getTotalPages());
             Assert.assertEquals(1, dto.getTotalResults());
+        } finally {
+            IOUtils.closeQuietly(reader);
+        }
+    }
+
+    private static final String NEW_TOKEN_JSON = "{\n" +
+            "  \"success\": true,\n" +
+            "  \"expires_at\": \"2017-05-02 15:44:20 UTC\",\n" +
+            "  \"request_token\": \"39d6c9605303fbeaa59ede1df0d3e483c2ca4701\"\n" +
+            "}";
+
+    @Test
+    public void testNewTokenDtoReadable() throws Exception {
+        JsonReader reader = null;
+        try {
+            reader = new JsonReader(new StringReader(NEW_TOKEN_JSON));
+            final NewTokenDto dto = NewTokenDto.READABLE.readJson(reader);
+            Assert.assertNotNull(dto);
+            Assert.assertTrue(dto.isSuccess());
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dto.getExpiresAt().getTime());
+            calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Assert.assertEquals(calendar.get(Calendar.YEAR), 2017);
+            Assert.assertEquals(calendar.get(Calendar.MONTH), Calendar.MAY);
+            Assert.assertEquals(calendar.get(Calendar.DAY_OF_MONTH), 2);
+            Assert.assertEquals(calendar.get(Calendar.HOUR_OF_DAY), 15);
+            Assert.assertEquals(calendar.get(Calendar.MINUTE), 44);
+            Assert.assertEquals(calendar.get(Calendar.SECOND), 20);
+            Assert.assertEquals(dto.getToken(), "39d6c9605303fbeaa59ede1df0d3e483c2ca4701");
+        } finally {
+            IOUtils.closeQuietly(reader);
+        }
+    }
+
+    private static final String NEW_SESSION_JSON = "{" +
+            "\"success\":true," +
+            "\"session_id\":\"jfvhgcvbgvcbvcnvcvn\"}";
+
+    @Test
+    public void testNewSessionDtoReadable() throws Exception {
+        JsonReader reader = null;
+        try {
+            reader = new JsonReader(new StringReader(NEW_SESSION_JSON));
+            final NewSessionDto dto = NewSessionDto.READABLE.readJson(reader);
+            Assert.assertNotNull(dto);
+            Assert.assertTrue(dto.isSuccess());
+            Assert.assertEquals(dto.getSessionId(), "jfvhgcvbgvcbvcnvcvn");
+        } finally {
+            IOUtils.closeQuietly(reader);
+        }
+    }
+
+    private static final String NEW_GUEST_SESSION_JSON = "{\n" +
+            "  \"success\": true,\n" +
+            "  \"guest_session_id\": \"73be8f09e448b0ec0580ec9354f92c5c\",\n" +
+            "  \"expires_at\": \"2017-05-03 14:35:20 UTC\"\n" +
+            "}";
+
+    @Test
+    public void testNewGuestSessionDtoReadable() throws Exception {
+        JsonReader reader = null;
+        try {
+            reader = new JsonReader(new StringReader(NEW_GUEST_SESSION_JSON));
+            final NewGuestSessionDto dto = NewGuestSessionDto.READABLE.readJson(reader);
+            Assert.assertNotNull(dto);
+            Assert.assertTrue(dto.isSuccess());
+            Assert.assertEquals(dto.getGuestSessionId(), "73be8f09e448b0ec0580ec9354f92c5c");
+            final Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dto.getExpiresAt().getTime());
+            calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
+            Assert.assertEquals(calendar.get(Calendar.YEAR), 2017);
+            Assert.assertEquals(calendar.get(Calendar.MONTH), Calendar.MAY);
+            Assert.assertEquals(calendar.get(Calendar.DAY_OF_MONTH), 3);
+            Assert.assertEquals(calendar.get(Calendar.HOUR_OF_DAY), 14);
+            Assert.assertEquals(calendar.get(Calendar.MINUTE), 35);
+            Assert.assertEquals(calendar.get(Calendar.SECOND), 20);
         } finally {
             IOUtils.closeQuietly(reader);
         }
