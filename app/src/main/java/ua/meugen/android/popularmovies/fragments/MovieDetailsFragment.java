@@ -4,19 +4,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.Date;
 import java.util.UUID;
 
+import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.activities.AuthorizeActivity;
 import ua.meugen.android.popularmovies.app.ListenersCollector;
+import ua.meugen.android.popularmovies.app.Session;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
 import ua.meugen.android.popularmovies.dialogs.SelectSessionTypeDialog;
 import ua.meugen.android.popularmovies.dto.MovieItemDto;
+import ua.meugen.android.popularmovies.dto.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
+import ua.meugen.android.popularmovies.loaders.LoaderResult;
+import ua.meugen.android.popularmovies.loaders.NewGuestSessionLoader;
 import ua.meugen.android.popularmovies.utils.BundleUtils;
 
 
@@ -27,6 +36,8 @@ public class MovieDetailsFragment extends Fragment
     private static final String PARAM_SELECT_SESSION_LISTENER_UUID
             = "selectSessionListenerUUID";
 
+    private static final int NEW_GUEST_SESSION_LOADER_ID = 1;
+
     public static MovieDetailsFragment newInstance(final MovieItemDto movie) {
         final Bundle arguments = new Bundle();
         arguments.putParcelable(PARAM_MOVIE, movie);
@@ -35,6 +46,9 @@ public class MovieDetailsFragment extends Fragment
         fragment.setArguments(arguments);
         return fragment;
     }
+
+    private final NewGuestSessionCallbacks guestSessionCallbacks
+            = new NewGuestSessionCallbacks();
 
     private MovieItemDto movie;
     private UUID selectSessionListenerUUID;
@@ -109,7 +123,9 @@ public class MovieDetailsFragment extends Fragment
             final Intent data) {
         if (resultCode == AuthorizeActivity.RESULT_OK) {
             final String session = data.getStringExtra(AuthorizeActivity.EXTRA_SESSION);
-            Toast.makeText(getContext(), session, Toast.LENGTH_LONG).show();
+            final PopularMovies popularMovies = PopularMovies.from(getContext());
+            popularMovies.storeSession(session, false, new Date(Long.MAX_VALUE));
+            rateMovieWithSession(popularMovies.getSession());
         } else {
             Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG).show();
         }
@@ -128,8 +144,46 @@ public class MovieDetailsFragment extends Fragment
     }
 
     private void rateMovie() {
-        final SelectSessionTypeDialog dialog = SelectSessionTypeDialog
-                .newInstance(selectSessionListenerUUID);
-        dialog.show(getFragmentManager(), "select_session_type");
+        final Session session = PopularMovies.from(getContext()).getSession();
+        if (session == null) {
+            final SelectSessionTypeDialog dialog = SelectSessionTypeDialog
+                    .newInstance(selectSessionListenerUUID);
+            dialog.show(getFragmentManager(), "select_session_type");
+        } else {
+            rateMovieWithSession(session);
+        }
+    }
+
+    private void rateMovieWithSession(final Session session) {
+        Toast.makeText(getContext(), "rateMovieWithSession("
+                + session + ")", Toast.LENGTH_LONG).show();
+    }
+
+    private class NewGuestSessionCallbacks extends AbstractCallbacks<NewGuestSessionDto> {
+
+        @Override
+        protected void onData(final NewGuestSessionDto data) {
+
+        }
+
+        @Override
+        protected void onServerError(final String message, final int code) {
+
+        }
+
+        @Override
+        protected void onNetworkError(final IOException ex) {
+
+        }
+
+        @Override
+        protected void onNoNetwork() {
+
+        }
+
+        @Override
+        public Loader<LoaderResult<NewGuestSessionDto>> onCreateLoader(final int id, final Bundle args) {
+            return new NewGuestSessionLoader(getContext());
+        }
     }
 }
