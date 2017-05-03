@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import ua.meugen.android.popularmovies.R;
+import ua.meugen.android.popularmovies.app.ListenersCollector;
 import ua.meugen.android.popularmovies.databinding.ActivityMovieDetailsBinding;
 import ua.meugen.android.popularmovies.dto.MovieItemDto;
 import ua.meugen.android.popularmovies.fragments.MovieDetailsFragment;
@@ -17,7 +19,7 @@ import ua.meugen.android.popularmovies.fragments.MovieReviewsFragment;
 import ua.meugen.android.popularmovies.fragments.MovieVideosFragment;
 
 public class MovieDetailsActivity extends AppCompatActivity
-        implements TabLayout.OnTabSelectedListener {
+        implements TabLayout.OnTabSelectedListener, ListenersCollector.Container {
 
     private static final String EXTRA_MOVIE = "movie";
 
@@ -34,6 +36,9 @@ public class MovieDetailsActivity extends AppCompatActivity
 
         context.startActivity(intent);
     }
+
+    private final ListenersCollector listenersCollector
+            = new ListenersCollector();
 
     private ActivityMovieDetailsBinding binding;
     private MovieDetailsFragment detailsFragment;
@@ -108,5 +113,11 @@ public class MovieDetailsActivity extends AppCompatActivity
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(PARAM_ACTIVE_TAB, binding.tabLayout.getSelectedTabPosition());
+    }
+
+    @NonNull
+    @Override
+    public ListenersCollector getListenersCollector() {
+        return listenersCollector;
     }
 }

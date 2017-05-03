@@ -11,8 +11,17 @@
     <string name="activity_movies_title">Popular movies</string>
     <string name="activity_movie_details_title">Movie details</string>
     <string name="activity_movie_details_vote_average">Vote: %.1f</string>
+    <string name="activity_authorize_title">Authorize</string>
 
     <string name="tab_movie_detail_main_text">Movie</string>
     <string name="tab_movie_detail_videos_text">Videos</string>
     <string name="tab_movie_detail_reviews_text">Reviews</string>
+
+    <string name="select_session_type_dialog_title">Select session type</string>
+    <string name="user_session_type_title">User session</string>
+    <string name="guest_session_type_title">Guest session</string>
+
+    <string name="rate_movie_text">Rate movie</string>
+
+    <string name="button_cancel">Cancel</string>
 </resources>

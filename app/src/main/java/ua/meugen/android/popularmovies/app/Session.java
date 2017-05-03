@@ -9,7 +9,7 @@ import okhttp3.HttpUrl;
 public abstract class Session {
 
     public static Session newSession(final String id) {
-        return new MainSession(id);
+        return new UserSession(id);
     }
 
     public static Session newGuestSession(final String id) {
@@ -25,9 +25,9 @@ public abstract class Session {
     public abstract void bindToUrl(final HttpUrl.Builder builder);
 }
 
-class MainSession extends Session {
+class UserSession extends Session {
 
-    public MainSession(final String id) {
+    public UserSession(final String id) {
         super(id);
     }
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="session_types">
+        <item>@string/user_session_type_title</item>
+        <item>@string/guest_session_type_title</item>
+    </string-array>
+</resources>

@@ -30,6 +30,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.MoviesActivity"/>
         </activity>
+        <activity
+            android:name=".activities.AuthorizeActivity"
+            android:label="@string/activity_authorize_title"/>
     </application>
 
 </manifest>
