@@ -24,4 +24,14 @@
     <string name="rate_movie_text">Rate movie</string>
 
     <string name="button_cancel">Cancel</string>
+    <string name="button_ok">OK</string>
+
+    <string name="rate_movie_result_ok">Movie rate sent successful</string>
+    <string name="rate_movie_result_server_error">Server returned an error: %s</string>
+    <string name="rate_movie_result_network_error">Network error</string>
+    <string name="rate_movie_result_no_network">No network</string>
+
+    <string name="guest_session_result_server_error">Server returned an error: %s</string>
+    <string name="guest_session_result_network_error">Network error</string>
+    <string name="guest_session_result_no_network">No network</string>
 </resources>
