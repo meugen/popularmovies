@@ -8,46 +8,11 @@
     tools:context="ua.meugen.android.popularmovies.activities.MoviesActivity"
     android:id="@+id/swipe_refresh">
 
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/progress_bar_container">
-
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
-
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/message_container"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/waiting_for_internet_connection_message"
-                android:layout_gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/message"/>
-
-        </FrameLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/recycler"
-            app:layoutManager="GridLayoutManager"
-            app:spanCount="@integer/main_recycler_span_count"
-            android:visibility="gone"/>
-
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:id="@+id/recycler"
+        app:layoutManager="GridLayoutManager"
+        app:spanCount="@integer/main_recycler_span_count"/>
 
 </android.support.v4.widget.SwipeRefreshLayout>

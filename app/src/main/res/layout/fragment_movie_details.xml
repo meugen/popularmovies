@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <import type="ua.meugen.android.popularmovies.dto.MovieItemDto"/>
-        <variable name="movie" type="MovieItemDto"/>
+        <variable name="cursor" type="android.database.Cursor"/>
     </data>
     <ScrollView
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                 android:layout_marginStart="@dimen/activity_detail_padding"
                 android:layout_marginEnd="@dimen/activity_detail_padding"
                 tools:src="@drawable/titanic_poster"
-                app:imagePath="@{movie.posterPath}"
+                app:imagePath="@{cursor.getString(1)}"
                 app:imageWidth="@{@integer/movie_details_poster_width}"/>
 
             <TextView
@@ -52,7 +52,7 @@
                 android:layout_marginStart="@dimen/activity_detail_padding"
                 android:layout_marginEnd="@dimen/activity_detail_padding"
                 tools:text="Nov 18, 1997"
-                app:date="@{movie.releaseDate}"/>
+                app:date="@{cursor.getLong(2)}"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -64,7 +64,7 @@
                 app:layout_constraintLeft_toLeftOf="@+id/release_date"
                 app:layout_constraintRight_toRightOf="@+id/release_date"
                 tools:text="Vote: 7.4"
-                app:vote="@{movie.voteAverage}"/>
+                app:vote="@{cursor.getDouble(3)}"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -76,7 +76,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/poster"
                 tools:text="84 years later, a 101-year-old woman named Rose DeWitt Bukater tells the story to her granddaughter Lizzy Calvert, Brock Lovett, Lewis Bodine, Bobby Buell and Anatoly Mikailavich on the Keldysh about her life set in April 10th 1912, on a ship called Titanic when young Rose boards the departing ship with the upper-class passengers and her mother, Ruth DeWitt Bukater, and her fiancé, Caledon Hockley. Meanwhile, a drifter and artist named Jack Dawson and his best friend Fabrizio De Rossi win third-class tickets to the ship in a game. And she explains the whole story from departure until the death of Titanic on its first and last voyage April 15th, 1912 at 2:20 in the morning."
-                android:text="@{movie.overview}"/>
+                android:text="@{cursor.getString(4)}"/>
 
             <Button
                 android:layout_width="0dp"

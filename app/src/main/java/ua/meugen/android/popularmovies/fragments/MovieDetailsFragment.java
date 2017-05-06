@@ -1,9 +1,13 @@
 package ua.meugen.android.popularmovies.fragments;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +33,7 @@ import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
 import ua.meugen.android.popularmovies.loaders.LoaderResult;
 import ua.meugen.android.popularmovies.loaders.NewGuestSessionLoader;
 import ua.meugen.android.popularmovies.loaders.RateMovieLoader;
+import ua.meugen.android.popularmovies.providers.MoviesContract;
 import ua.meugen.android.popularmovies.utils.BundleUtils;
 
 
@@ -37,17 +42,18 @@ public class MovieDetailsFragment extends Fragment
         SelectSessionTypeDialog.OnSessionTypeSelectedListener,
         RateMovieDialog.OnMovieRatedListener {
 
-    private static final String PARAM_MOVIE = "movie";
+    private static final String PARAM_MOVIE_ID = "movieId";
     private static final String PARAM_LISTENER_UUID
             = "listenerUUID";
     private static final String PARAM_ACTIVE_LOADER = "activeLoader";
 
     private static final int NEW_GUEST_SESSION_LOADER_ID = 1;
     private static final int RATE_MOVIE_LOADER_ID = 2;
+    private static final int MOVIE_DETAILS_LOADER = 3;
 
-    public static MovieDetailsFragment newInstance(final MovieItemDto movie) {
+    public static MovieDetailsFragment newInstance(final int movieId) {
         final Bundle arguments = new Bundle();
-        arguments.putParcelable(PARAM_MOVIE, movie);
+        arguments.putInt(PARAM_MOVIE_ID, movieId);
 
         final MovieDetailsFragment fragment = new MovieDetailsFragment();
         fragment.setArguments(arguments);
@@ -58,8 +64,12 @@ public class MovieDetailsFragment extends Fragment
             = new NewGuestSessionCallbacks();
     private final RateMovieCallbacks rateMovieCallbacks
             = new RateMovieCallbacks();
+    private final MovieDetailsCallbacks movieDetailsCallbacks
+            = new MovieDetailsCallbacks();
 
-    private MovieItemDto movie;
+    private FragmentMovieDetailsBinding binding;
+
+    private int movieId;
     private UUID listenerUUID;
     private int activeLoader = -1;
 
@@ -91,9 +101,8 @@ public class MovieDetailsFragment extends Fragment
             final LayoutInflater inflater,
             @Nullable final ViewGroup container,
             @Nullable final Bundle savedInstanceState) {
-        final FragmentMovieDetailsBinding binding = FragmentMovieDetailsBinding
+        binding = FragmentMovieDetailsBinding
                 .inflate(inflater, container, false);
-        binding.setMovie(movie);
         binding.rateMovie.setOnClickListener(this);
         return binding.getRoot();
     }
@@ -101,8 +110,9 @@ public class MovieDetailsFragment extends Fragment
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getActivity().setTitle(movie.getTitle());
 
+        getLoaderManager().initLoader(MOVIE_DETAILS_LOADER,
+                null, movieDetailsCallbacks);
         if (activeLoader == NEW_GUEST_SESSION_LOADER_ID) {
             getLoaderManager().initLoader(NEW_GUEST_SESSION_LOADER_ID,
                     null, guestSessionCallbacks);
@@ -113,7 +123,7 @@ public class MovieDetailsFragment extends Fragment
     }
 
     private void restoreInstanceState(final Bundle state) {
-        this.movie = state.getParcelable(PARAM_MOVIE);
+        this.movieId = state.getInt(PARAM_MOVIE_ID);
         this.listenerUUID = BundleUtils.getUUID(state,
                 PARAM_LISTENER_UUID);
         this.activeLoader = state.getInt(
@@ -123,7 +133,7 @@ public class MovieDetailsFragment extends Fragment
     @Override
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(PARAM_MOVIE, this.movie);
+        outState.putInt(PARAM_MOVIE_ID, this.movieId);
         BundleUtils.putUUID(outState, PARAM_LISTENER_UUID,
                 listenerUUID);
         outState.putInt(PARAM_ACTIVE_LOADER, activeLoader);
@@ -185,7 +195,7 @@ public class MovieDetailsFragment extends Fragment
     @Override
     public void onMovieRated(final float value) {
         activeLoader = RATE_MOVIE_LOADER_ID;
-        final Bundle args = RateMovieLoader.buildParams(movie.getId(), value);
+        final Bundle args = RateMovieLoader.buildParams(movieId, value);
         getLoaderManager().restartLoader(RATE_MOVIE_LOADER_ID, args, rateMovieCallbacks);
     }
 
@@ -259,5 +269,32 @@ public class MovieDetailsFragment extends Fragment
         protected void onCompleted() {
             activeLoader = -1;
         }
+    }
+
+    private class MovieDetailsCallbacks implements LoaderManager.LoaderCallbacks<Cursor>, MoviesContract {
+
+        @Override
+        public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
+            final Uri uri = MOVIES_URI.buildUpon()
+                    .appendPath(Integer.toString(movieId))
+                    .build();
+            final String[] columns = new String[] {
+                    FIELD_TITLE,
+                    FIELD_POSTER_PATH,
+                    FIELD_RELEASE_DATE,
+                    FIELD_VOTE_AVERAGE,
+                    FIELD_OVERVIEW };
+            return new CursorLoader(getContext(), uri, columns, null, null, null);
+        }
+
+        @Override
+        public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
+            data.moveToFirst();
+            getActivity().setTitle(data.getString(0));
+            binding.setCursor(data);
+        }
+
+        @Override
+        public void onLoaderReset(final Loader<Cursor> loader) {}
     }
 }

@@ -4,5 +4,5 @@ import ua.meugen.android.popularmovies.dto.MovieItemDto;
 
 public interface OnMovieClickListener {
 
-    void onMovieClick(MovieItemDto item);
+    void onMovieClick(int movieId);
 }

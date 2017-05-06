@@ -2,12 +2,17 @@ package ua.meugen.android.popularmovies.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
 import ua.meugen.android.popularmovies.R;
@@ -17,11 +22,12 @@ import ua.meugen.android.popularmovies.dto.MovieItemDto;
 import ua.meugen.android.popularmovies.fragments.MovieDetailsFragment;
 import ua.meugen.android.popularmovies.fragments.MovieReviewsFragment;
 import ua.meugen.android.popularmovies.fragments.MovieVideosFragment;
+import ua.meugen.android.popularmovies.providers.MoviesContract;
 
 public class MovieDetailsActivity extends AppCompatActivity
         implements TabLayout.OnTabSelectedListener, ListenersCollector.Container {
 
-    private static final String EXTRA_MOVIE = "movie";
+    private static final String EXTRA_MOVIE_ID = "movieId";
 
     private static final String PARAM_ACTIVE_TAB = "activeTab";
 
@@ -29,10 +35,10 @@ public class MovieDetailsActivity extends AppCompatActivity
     private static final String TAG_VIDEOS = "videos";
     private static final String TAG_REVIEWS = "reviews";
 
-    public static void start(final Context context, final MovieItemDto movie) {
+    public static void start(final Context context, final int movieId) {
         final Intent intent = new Intent(context,
                 MovieDetailsActivity.class);
-        intent.putExtra(EXTRA_MOVIE, movie);
+        intent.putExtra(EXTRA_MOVIE_ID, movieId);
 
         context.startActivity(intent);
     }
@@ -52,10 +58,10 @@ public class MovieDetailsActivity extends AppCompatActivity
                 .setContentView(this, R.layout.activity_movie_details);
 
         if (savedInstanceState == null) {
-            final MovieItemDto movie = getIntent().getParcelableExtra(EXTRA_MOVIE);
-            detailsFragment = MovieDetailsFragment.newInstance(movie);
-            videosFragment = MovieVideosFragment.newInstance(movie.getId());
-            reviewsFragment = MovieReviewsFragment.newInstance(movie.getId());
+            final int movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, 0);
+            detailsFragment = MovieDetailsFragment.newInstance(movieId);
+            videosFragment = MovieVideosFragment.newInstance(movieId);
+            reviewsFragment = MovieReviewsFragment.newInstance(movieId);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.content_container, detailsFragment, TAG_DETAILS)
                     .add(R.id.content_container, videosFragment, TAG_VIDEOS)

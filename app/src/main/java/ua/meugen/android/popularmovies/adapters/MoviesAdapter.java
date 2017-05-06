@@ -1,6 +1,9 @@
 package ua.meugen.android.popularmovies.adapters;
 
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,21 +16,31 @@ import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.dto.MovieItemDto;
 import ua.meugen.android.popularmovies.images.FileSize;
 import ua.meugen.android.popularmovies.images.ImageLoader;
+import ua.meugen.android.popularmovies.providers.MoviesContract;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 
     private final LayoutInflater inflater;
     private final ImageLoader loader;
 
-    private List<MovieItemDto> items;
+    private Cursor cursor;
 
     private OnMovieClickListener onMovieClickListener;
 
-    public MoviesAdapter(final Context context, final List<MovieItemDto> items) {
+    public MoviesAdapter(final Context context) {
         this.inflater = LayoutInflater.from(context);
         this.loader = ImageLoader.from(context);
+    }
 
-        this.items = items;
+    public void swapCursor(final Cursor cursor) {
+        if (this.cursor == cursor) {
+            return;
+        }
+        if (this.cursor != null) {
+            this.cursor.close();
+        }
+        this.cursor = cursor;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -41,12 +54,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public void onBindViewHolder(
             final MovieViewHolder holder,
             final int position) {
-        holder.bind(items.get(position));
+        cursor.moveToPosition(position);
+        holder.bind();
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return cursor == null ? 0 : cursor.getCount();
     }
 
     public OnMovieClickListener getOnMovieClickListener() {
@@ -55,11 +69,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
     public void setOnMovieClickListener(final OnMovieClickListener onMovieClickListener) {
         this.onMovieClickListener = onMovieClickListener;
-    }
-
-    public void setItems(final List<MovieItemDto> list) {
-        this.items = list;
-        this.notifyDataSetChanged();
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder
@@ -74,15 +83,16 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             poster = (ImageView) itemView.findViewById(R.id.poster);
         }
 
-        public void bind(final MovieItemDto item) {
-            loader.load(FileSize.w(500), item.getPosterPath()).into(poster);
+        public void bind() {
+            loader.load(FileSize.w(500), cursor.getString(1)).into(poster);
             poster.setOnClickListener(this);
         }
 
         @Override
         public void onClick(final View view) {
             if (onMovieClickListener != null) {
-                onMovieClickListener.onMovieClick(items.get(getAdapterPosition()));
+                cursor.moveToPosition(getAdapterPosition());
+                onMovieClickListener.onMovieClick(cursor.getInt(0));
             }
         }
     }
