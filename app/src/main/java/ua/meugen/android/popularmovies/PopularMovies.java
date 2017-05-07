@@ -15,7 +15,11 @@ import ua.meugen.android.popularmovies.app.Session;
 
 public class PopularMovies extends Application {
 
-    private static final String PREF_SORT_TYPE = "sortType";
+    public static final int SORT_TYPE_POPULAR = 1;
+    public static final int SORT_TYPE_TOP_RATED = 2;
+    public static final int SORT_TYPE_FAVORITES = 3;
+
+    private static final String PREF_SORT_TYPE_INT = "sortTypeInt";
     private static final String PREF_SESSION_ID = "sessionId";
     private static final String PREF_IS_GUEST = "isGuest";
     private static final String PREF_EXPIRES_AT = "expiresAt";
@@ -56,14 +60,13 @@ public class PopularMovies extends Application {
         return PreferenceManager.getDefaultSharedPreferences(this);
     }
 
-    public SortType getSortType() {
-        final String name = getPrefs().getString(PREF_SORT_TYPE, SortType.POPULAR.name());
-        return SortType.valueOf(name);
+    public int getSortType() {
+        return getPrefs().getInt(PREF_SORT_TYPE_INT, SORT_TYPE_POPULAR);
     }
 
-    public void setSortType(final SortType sortType) {
+    public void setSortType(final int sortType) {
         getPrefs().edit()
-                .putString(PREF_SORT_TYPE, sortType.name())
+                .putInt(PREF_SORT_TYPE_INT, sortType)
                 .apply();
     }
 
@@ -94,9 +97,5 @@ public class PopularMovies extends Application {
             return Session.newGuestSession(sessionId);
         }
         return Session.newSession(sessionId);
-    }
-
-    public enum SortType {
-        POPULAR, TOP_RATED
     }
 }

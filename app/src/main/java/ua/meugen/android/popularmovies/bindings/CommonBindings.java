@@ -33,10 +33,10 @@ public class CommonBindings {
     @BindingAdapter("date")
     public static void setDate(
             final TextView textView,
-            final long date) {
+            final Date date) {
         final java.text.DateFormat dateFormat = DateFormat
                 .getMediumDateFormat(textView.getContext());
-        textView.setText(dateFormat.format(new Date(date)));
+        textView.setText(date == null ? null : dateFormat.format(date));
     }
 
     @BindingAdapter("vote")

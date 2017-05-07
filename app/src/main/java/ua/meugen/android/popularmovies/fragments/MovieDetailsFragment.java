@@ -9,9 +9,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -27,10 +29,10 @@ import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
 import ua.meugen.android.popularmovies.dialogs.RateMovieDialog;
 import ua.meugen.android.popularmovies.dialogs.SelectSessionTypeDialog;
 import ua.meugen.android.popularmovies.dto.BaseDto;
-import ua.meugen.android.popularmovies.dto.MovieItemDto;
 import ua.meugen.android.popularmovies.dto.NewGuestSessionDto;
 import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
 import ua.meugen.android.popularmovies.loaders.LoaderResult;
+import ua.meugen.android.popularmovies.loaders.MoviesFavoritesLoader;
 import ua.meugen.android.popularmovies.loaders.NewGuestSessionLoader;
 import ua.meugen.android.popularmovies.loaders.RateMovieLoader;
 import ua.meugen.android.popularmovies.providers.MoviesContract;
@@ -49,7 +51,9 @@ public class MovieDetailsFragment extends Fragment
 
     private static final int NEW_GUEST_SESSION_LOADER_ID = 1;
     private static final int RATE_MOVIE_LOADER_ID = 2;
-    private static final int MOVIE_DETAILS_LOADER = 3;
+    private static final int MOVIE_DETAILS_LOADER_ID = 3;
+    private static final int MOVIE_FAVORITES_LOADER_ID = 4; // query for current movie is in favorites
+    private static final int MOVIES_FAVORITES_LOADER_ID = 5; // Insert or delete current movie from favorites
 
     public static MovieDetailsFragment newInstance(final int movieId) {
         final Bundle arguments = new Bundle();
@@ -66,6 +70,8 @@ public class MovieDetailsFragment extends Fragment
             = new RateMovieCallbacks();
     private final MovieDetailsCallbacks movieDetailsCallbacks
             = new MovieDetailsCallbacks();
+    private final MoviesFavoritesCallbacks moviesFavoritesCallbacks
+             = new MoviesFavoritesCallbacks();
 
     private FragmentMovieDetailsBinding binding;
 
@@ -104,6 +110,7 @@ public class MovieDetailsFragment extends Fragment
         binding = FragmentMovieDetailsBinding
                 .inflate(inflater, container, false);
         binding.rateMovie.setOnClickListener(this);
+        binding.switchFavorites.setOnClickListener(this);
         return binding.getRoot();
     }
 
@@ -111,13 +118,16 @@ public class MovieDetailsFragment extends Fragment
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getLoaderManager().initLoader(MOVIE_DETAILS_LOADER,
+        final LoaderManager loaderManager = getLoaderManager();
+        loaderManager.initLoader(MOVIE_DETAILS_LOADER_ID,
+                null, movieDetailsCallbacks);
+        loaderManager.initLoader(MOVIE_FAVORITES_LOADER_ID,
                 null, movieDetailsCallbacks);
         if (activeLoader == NEW_GUEST_SESSION_LOADER_ID) {
-            getLoaderManager().initLoader(NEW_GUEST_SESSION_LOADER_ID,
+            loaderManager.initLoader(NEW_GUEST_SESSION_LOADER_ID,
                     null, guestSessionCallbacks);
         } else if (activeLoader == RATE_MOVIE_LOADER_ID) {
-            getLoaderManager().initLoader(RATE_MOVIE_LOADER_ID,
+            loaderManager.initLoader(RATE_MOVIE_LOADER_ID,
                     null, rateMovieCallbacks);
         }
     }
@@ -144,7 +154,16 @@ public class MovieDetailsFragment extends Fragment
         final int viewId = view.getId();
         if (viewId == R.id.rate_movie) {
             rateMovie();
+        } else if (viewId == R.id.switch_favorites) {
+            switchFavorites();
         }
+    }
+
+    private void switchFavorites() {
+        final Bundle params = MoviesFavoritesLoader.buildParams(movieId,
+                binding.switchFavorites.isChecked());
+        getLoaderManager().restartLoader(MOVIES_FAVORITES_LOADER_ID,
+                params, moviesFavoritesCallbacks);
     }
 
     @Override
@@ -275,26 +294,61 @@ public class MovieDetailsFragment extends Fragment
 
         @Override
         public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
-            final Uri uri = MOVIES_URI.buildUpon()
-                    .appendPath(Integer.toString(movieId))
-                    .build();
-            final String[] columns = new String[] {
-                    FIELD_TITLE,
-                    FIELD_POSTER_PATH,
-                    FIELD_RELEASE_DATE,
-                    FIELD_VOTE_AVERAGE,
-                    FIELD_OVERVIEW };
+            Uri uri;
+            String[] columns;
+            if (id == MOVIE_DETAILS_LOADER_ID) {
+                uri = MOVIES_URI.buildUpon()
+                        .appendPath(Integer.toString(movieId))
+                        .build();
+                columns = new String[] {
+                        FIELD_TITLE,
+                        FIELD_POSTER_PATH,
+                        FIELD_RELEASE_DATE,
+                        FIELD_VOTE_AVERAGE,
+                        FIELD_OVERVIEW };
+            } else if (id == MOVIE_FAVORITES_LOADER_ID) {
+                uri = MOVIES_URI.buildUpon()
+                        .appendPath(Integer.toString(movieId))
+                        .appendPath(FAVORITES)
+                        .build();
+                columns = new String[] {
+                        FIELD_MOVIE_ID,
+                        FIELD_TYPE };
+            } else {
+                throw new IllegalArgumentException("Unknown loader id: " + id);
+            }
             return new CursorLoader(getContext(), uri, columns, null, null, null);
         }
 
         @Override
         public void onLoadFinished(final Loader<Cursor> loader, final Cursor data) {
-            data.moveToFirst();
-            getActivity().setTitle(data.getString(0));
-            binding.setCursor(data);
+            if (loader.getId() == MOVIE_DETAILS_LOADER_ID) {
+                data.moveToFirst();
+                getActivity().setTitle(data.getString(0));
+                binding.setPosterPath(data.getString(1));
+                binding.setReleaseDate(new Date(data.getLong(2)));
+                binding.setVoteAverage(data.getDouble(3));
+                binding.setOverview(data.getString(4));
+            } else if (loader.getId() == MOVIE_FAVORITES_LOADER_ID) {
+                binding.setFavorites(data.moveToFirst());
+            }
         }
 
         @Override
         public void onLoaderReset(final Loader<Cursor> loader) {}
+    }
+
+    private class MoviesFavoritesCallbacks implements LoaderManager.LoaderCallbacks<Void> {
+
+        @Override
+        public Loader<Void> onCreateLoader(final int id, final Bundle args) {
+            return new MoviesFavoritesLoader(getContext(), args);
+        }
+
+        @Override
+        public void onLoadFinished(final Loader<Void> loader, final Void data) {}
+
+        @Override
+        public void onLoaderReset(final Loader<Void> loader) {}
     }
 }

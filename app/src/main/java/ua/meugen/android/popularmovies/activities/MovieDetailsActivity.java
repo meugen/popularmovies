@@ -2,27 +2,20 @@ package ua.meugen.android.popularmovies.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.app.ListenersCollector;
 import ua.meugen.android.popularmovies.databinding.ActivityMovieDetailsBinding;
-import ua.meugen.android.popularmovies.dto.MovieItemDto;
 import ua.meugen.android.popularmovies.fragments.MovieDetailsFragment;
 import ua.meugen.android.popularmovies.fragments.MovieReviewsFragment;
 import ua.meugen.android.popularmovies.fragments.MovieVideosFragment;
-import ua.meugen.android.popularmovies.providers.MoviesContract;
 
 public class MovieDetailsActivity extends AppCompatActivity
         implements TabLayout.OnTabSelectedListener, ListenersCollector.Container {

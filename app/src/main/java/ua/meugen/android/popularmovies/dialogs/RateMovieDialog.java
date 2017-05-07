@@ -1,7 +1,6 @@
 package ua.meugen.android.popularmovies.dialogs;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -10,14 +9,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.view.Window;
 import android.widget.RatingBar;
 
 import java.util.UUID;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.app.ListenersCollector;
-import ua.meugen.android.popularmovies.app.RateMovieBody;
 import ua.meugen.android.popularmovies.databinding.DialogRateMovieBinding;
 import ua.meugen.android.popularmovies.utils.BundleUtils;
 

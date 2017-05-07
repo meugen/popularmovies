@@ -6,5 +6,7 @@
               android:title="@string/menu_main_popular_title"/>
         <item android:id="@+id/top_rated"
               android:title="@string/menu_main_top_rated_title"/>
+        <item android:id="@+id/favorites"
+            android:title="@string/menu_main_favorites_title"/>
     </group>
 </menu>

@@ -1,22 +1,16 @@
 package ua.meugen.android.popularmovies.adapters;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.util.List;
-
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.dto.MovieItemDto;
 import ua.meugen.android.popularmovies.images.FileSize;
 import ua.meugen.android.popularmovies.images.ImageLoader;
-import ua.meugen.android.popularmovies.providers.MoviesContract;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 
@@ -35,9 +29,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public void swapCursor(final Cursor cursor) {
         if (this.cursor == cursor) {
             return;
-        }
-        if (this.cursor != null) {
-            this.cursor.close();
         }
         this.cursor = cursor;
         notifyDataSetChanged();

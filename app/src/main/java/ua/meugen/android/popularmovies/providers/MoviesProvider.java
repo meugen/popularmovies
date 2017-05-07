@@ -16,6 +16,7 @@ public class MoviesProvider extends ContentProvider implements MoviesContract {
     private static final int ID_TOP_RATED = 2;
     private static final int ID_FAVORITES = 3;
     private static final int ID_MOVIES_BY_ID = 4;
+    private static final int ID_MOVIES_FAVORITES_BY_ID = 5;
 
     private static UriMatcher uriMatcher;
     private DbOpenHelper openHelper;
@@ -25,7 +26,16 @@ public class MoviesProvider extends ContentProvider implements MoviesContract {
 
     @Override
     public int delete(final Uri uri, final String selection, final String[] selectionArgs) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        final int match = uriMatcher.match(uri);
+        if (match == ID_MOVIES_FAVORITES_BY_ID) {
+            final SQLiteDatabase db = openHelper.getWritableDatabase();
+            final int result = db.delete(TABLE_MOVIE_TYPES, SELECTION_MOVIE_TYPE,
+                    new String[] { uri.getPathSegments().get(1), FAVORITES });
+            getContext().getContentResolver().notifyChange(uri, null);
+            return result;
+        } else {
+            throw new IllegalArgumentException("Unknown uri: " + uri);
+        }
     }
 
     @Override
@@ -35,7 +45,20 @@ public class MoviesProvider extends ContentProvider implements MoviesContract {
 
     @Override
     public Uri insert(final Uri uri, final ContentValues values) {
-        throw new UnsupportedOperationException("Not yet implemented");
+        final int match = uriMatcher.match(uri);
+        if (match == ID_MOVIES_FAVORITES_BY_ID) {
+            final ContentValues newMovieType = new ContentValues();
+            newMovieType.put(FIELD_MOVIE_ID, uri.getPathSegments().get(1));
+            newMovieType.put(FIELD_TYPE, FAVORITES);
+
+            final SQLiteDatabase db = openHelper.getWritableDatabase();
+            db.insertWithOnConflict(TABLE_MOVIE_TYPES, null, newMovieType,
+                    SQLiteDatabase.CONFLICT_IGNORE);
+            getContext().getContentResolver().notifyChange(uri, null);
+            return uri;
+        } else {
+            throw new IllegalArgumentException("Unknown uri: " + uri);
+        }
     }
 
     @Override
@@ -46,6 +69,8 @@ public class MoviesProvider extends ContentProvider implements MoviesContract {
             uriMatcher.addURI(AUTHORITY, TOP_RATED, ID_TOP_RATED);
             uriMatcher.addURI(AUTHORITY, FAVORITES, ID_FAVORITES);
             uriMatcher.addURI(AUTHORITY, MOVIES + "/#", ID_MOVIES_BY_ID);
+            uriMatcher.addURI(AUTHORITY, MOVIES + "/#/" + FAVORITES,
+                    ID_MOVIES_FAVORITES_BY_ID);
         }
         openHelper = new DbOpenHelper(getContext());
         return true;
@@ -65,11 +90,21 @@ public class MoviesProvider extends ContentProvider implements MoviesContract {
             cursor = queryMoviesByType(projection, FAVORITES);
         } else if (match == ID_MOVIES_BY_ID) {
             cursor = queryMoviesById(projection, uri.getLastPathSegment());
+        } else if (match == ID_MOVIES_FAVORITES_BY_ID) {
+            final String id = uri.getPathSegments().get(1);
+            cursor = queryForMovieType(projection, id, FAVORITES);
         } else {
             throw new IllegalArgumentException("Unknown uri: " + uri);
         }
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
+    }
+
+    private Cursor queryForMovieType(
+            final String[] projection, final String id, final String type) {
+        final SQLiteDatabase db = openHelper.getReadableDatabase();
+        return db.query(TABLE_MOVIE_TYPES, projection, SELECTION_MOVIE_TYPE,
+                new String[] { id, type}, null, null, null);
     }
 
     private Cursor queryMoviesByType(final String[] projection, final String type) {

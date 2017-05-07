@@ -58,4 +58,5 @@ public interface MoviesContract {
             + FIELD_MOVIE_ID + " FROM " + TABLE_MOVIE_TYPES
             + " WHERE " + FIELD_TYPE + "=?)";
     String SELECTION_BY_ID = FIELD_ID + "=?";
+    String SELECTION_MOVIE_TYPE = FIELD_MOVIE_ID + "=? AND " + FIELD_TYPE + "=?";
 }

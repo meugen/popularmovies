@@ -13,7 +13,6 @@ import java.io.IOException;
 
 import ua.meugen.android.popularmovies.adapters.ReviewsAdapter;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieReviewsBinding;
-import ua.meugen.android.popularmovies.databinding.FragmentMovieVideosBinding;
 import ua.meugen.android.popularmovies.dto.PagedReviewsDto;
 import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
 import ua.meugen.android.popularmovies.loaders.LoaderResult;

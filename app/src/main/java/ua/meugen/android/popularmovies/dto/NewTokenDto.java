@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import android.util.JsonReader;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
