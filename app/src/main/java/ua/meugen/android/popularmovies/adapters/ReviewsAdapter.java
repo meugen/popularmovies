@@ -21,6 +21,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewIt
     private final LayoutInflater inflater;
     private final List<ReviewItemDto> reviews;
 
+    private OnClickReviewListener onClickReviewListener;
+
     public ReviewsAdapter(final Context context, final List<ReviewItemDto> reviews) {
         this.inflater = LayoutInflater.from(context);
         this.reviews = reviews;
@@ -42,7 +44,21 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewIt
         return reviews.size();
     }
 
-    public static class ReviewItemViewHolder extends RecyclerView.ViewHolder {
+    public OnClickReviewListener getOnClickReviewListener() {
+        return onClickReviewListener;
+    }
+
+    public void setOnClickReviewListener(final OnClickReviewListener onClickReviewListener) {
+        this.onClickReviewListener = onClickReviewListener;
+    }
+
+    private void callOnClickReviewListener(final int position) {
+        if (onClickReviewListener != null) {
+            onClickReviewListener.onClickReview(reviews.get(position));
+        }
+    }
+
+    public class ReviewItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView contentView;
         private final TextView authorView;
@@ -56,6 +72,17 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewIt
         public void bind(final ReviewItemDto dto) {
             contentView.setText(dto.getContent());
             authorView.setText(dto.getAuthor());
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(final View view) {
+            callOnClickReviewListener(getAdapterPosition());
+        }
+    }
+
+    public interface OnClickReviewListener {
+
+        void onClickReview(ReviewItemDto dto);
     }
 }

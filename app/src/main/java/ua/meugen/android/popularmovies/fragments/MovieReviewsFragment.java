@@ -13,7 +13,9 @@ import java.io.IOException;
 
 import ua.meugen.android.popularmovies.adapters.ReviewsAdapter;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieReviewsBinding;
+import ua.meugen.android.popularmovies.dialogs.ReviewDetailDialog;
 import ua.meugen.android.popularmovies.dto.PagedReviewsDto;
+import ua.meugen.android.popularmovies.dto.ReviewItemDto;
 import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
 import ua.meugen.android.popularmovies.loaders.LoaderResult;
 import ua.meugen.android.popularmovies.loaders.MovieReviewsLoader;
@@ -23,7 +25,7 @@ import ua.meugen.android.popularmovies.loaders.MovieVideosLoader;
  * @author meugen
  */
 
-public class MovieReviewsFragment extends Fragment {
+public class MovieReviewsFragment extends Fragment implements ReviewsAdapter.OnClickReviewListener {
 
     private static final String PARAM_ID = "id";
     private static final String PARAM_REVIEWS = "reviews";
@@ -102,8 +104,16 @@ public class MovieReviewsFragment extends Fragment {
     }
 
     private void setupReviews() {
-        binding.reviews.setAdapter(new ReviewsAdapter(getContext(),
-                reviews.getResults()));
+        final ReviewsAdapter adapter = new ReviewsAdapter(getContext(),
+                reviews.getResults());
+        adapter.setOnClickReviewListener(this);
+        binding.reviews.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClickReview(final ReviewItemDto dto) {
+        final ReviewDetailDialog dialog = ReviewDetailDialog.newInstance(dto);
+        dialog.show(getFragmentManager(), "review_detail");
     }
 
     private class ReviewsLoaderCallbacks extends AbstractCallbacks<PagedReviewsDto> {

@@ -1,5 +1,7 @@
 package ua.meugen.android.popularmovies.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,7 @@ import java.io.IOException;
 
 import ua.meugen.android.popularmovies.adapters.VideosAdapter;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieVideosBinding;
+import ua.meugen.android.popularmovies.dto.VideoItemDto;
 import ua.meugen.android.popularmovies.dto.VideosDto;
 import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
 import ua.meugen.android.popularmovies.loaders.LoaderResult;
@@ -22,7 +25,7 @@ import ua.meugen.android.popularmovies.loaders.MovieVideosLoader;
  * @author meugen
  */
 
-public class MovieVideosFragment extends Fragment {
+public class MovieVideosFragment extends Fragment implements VideosAdapter.OnClickVideoListener {
 
     private static final String PARAM_ID = "id";
     private static final String PARAM_VIDEOS = "videos";
@@ -101,8 +104,17 @@ public class MovieVideosFragment extends Fragment {
     }
 
     private void setupVideos() {
-        binding.videos.setAdapter(new VideosAdapter(getContext(),
-                videos.getResults()));
+        final VideosAdapter adapter = new VideosAdapter(getContext(),
+                videos.getResults());
+        adapter.setOnClickVideoListener(this);
+        binding.videos.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClickListener(final VideoItemDto dto) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("https://www.youtube.com/watch?v=" + dto.getKey()));
+        startActivity(intent);
     }
 
     private class VideosLoaderCallbacks extends AbstractCallbacks<VideosDto> {

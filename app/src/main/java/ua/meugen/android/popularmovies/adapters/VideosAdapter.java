@@ -1,6 +1,7 @@
 package ua.meugen.android.popularmovies.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,8 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
 
     private final LayoutInflater inflater;
     private final List<VideoItemDto> videos;
+
+    private OnClickVideoListener onClickVideoListener;
 
     public VideosAdapter(final Context context, final List<VideoItemDto> videos) {
         this.inflater = LayoutInflater
@@ -40,7 +43,21 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
         return videos.size();
     }
 
-    public static class VideoItemViewHolder extends RecyclerView.ViewHolder {
+    public OnClickVideoListener getOnClickVideoListener() {
+        return onClickVideoListener;
+    }
+
+    public void setOnClickVideoListener(final OnClickVideoListener onClickVideoListener) {
+        this.onClickVideoListener = onClickVideoListener;
+    }
+
+    private void callOnClickVideoListener(final int position) {
+        if (onClickVideoListener != null) {
+            onClickVideoListener.onClickListener(videos.get(position));
+        }
+    }
+
+    public class VideoItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final TextView nameView;
 
@@ -51,6 +68,17 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
 
         public void bind(final VideoItemDto dto) {
             nameView.setText(dto.getName());
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(final View view) {
+            callOnClickVideoListener(getAdapterPosition());
+        }
+    }
+
+    public interface OnClickVideoListener {
+
+        void onClickListener(VideoItemDto dto);
     }
 }

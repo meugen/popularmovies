@@ -24,9 +24,11 @@
     <string name="guest_session_type_title">Guest session</string>
 
     <string name="rate_movie_text">Rate movie</string>
+    <string name="review_detail_title">Review</string>
 
     <string name="button_cancel">Cancel</string>
     <string name="button_ok">OK</string>
+    <string name="button_close">Close</string>
 
     <string name="rate_movie_result_ok">Movie rate sent successful</string>
     <string name="rate_movie_result_server_error">Server returned an error: %s</string>
