@@ -18,7 +18,7 @@ public abstract class AbstractLoader<T> extends AsyncTaskLoader<LoaderResult<T>>
 
     protected AbstractLoader(final Context context) {
         super(context);
-        this.api = PopularMovies.from(context).getApi();
+        this.api = PopularMovies.component(context).api();
     }
 
     @Override

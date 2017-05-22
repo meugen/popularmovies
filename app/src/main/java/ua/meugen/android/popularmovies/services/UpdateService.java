@@ -10,6 +10,8 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.app.Api;
 import ua.meugen.android.popularmovies.dto.MovieItemDto;
@@ -37,20 +39,27 @@ public class UpdateService extends IntentService implements MoviesContract {
         context.startService(intent);
     }
 
+    @Inject Api api;
+
     public UpdateService() {
         super("UpdateService");
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        PopularMovies.component(this).inject(this);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             try {
-                final Api api = PopularMovies.from(this).getApi();
                 final String action = intent.getAction();
                 if (ACTION_POPULAR.equals(action)) {
-                    handleActionPopular(api);
+                    handleActionPopular();
                 } else if (ACTION_TOP_RATED.equals(action)) {
-                    handleActionTopRated(api);
+                    handleActionTopRated();
                 }
             } catch (IOException e) {
                 Log.e(TAG, e.getMessage(), e);
@@ -58,12 +67,12 @@ public class UpdateService extends IntentService implements MoviesContract {
         }
     }
 
-    private void handleActionPopular(final Api api) throws IOException {
+    private void handleActionPopular() throws IOException {
         final PagedMoviesDto movies = api.popularMovies();
         update(POPULAR_URI, movies.getResults());
     }
 
-    private void handleActionTopRated(final Api api) throws IOException {
+    private void handleActionTopRated() throws IOException {
         final PagedMoviesDto movies = api.topRatedMovies();
         update(TOP_RATED_URI, movies.getResults());
     }

@@ -10,6 +10,8 @@ import java.util.Date;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import ua.meugen.android.popularmovies.app.Api;
+import ua.meugen.android.popularmovies.app.AppComponent;
+import ua.meugen.android.popularmovies.app.DaggerAppComponent;
 import ua.meugen.android.popularmovies.app.Session;
 
 
@@ -24,36 +26,24 @@ public class PopularMovies extends Application {
     private static final String PREF_IS_GUEST = "isGuest";
     private static final String PREF_EXPIRES_AT = "expiresAt";
 
-    private Api api;
+    private AppComponent appComponent;
 
     public static PopularMovies from(final Context context) {
         return (PopularMovies) context.getApplicationContext();
     }
 
+    public static AppComponent component(final Context context) {
+        return from(context).getAppComponent();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        appComponent = DaggerAppComponent.create();
     }
 
-    private void ensureApi() {
-        if (this.api == null) {
-            synchronized (this) {
-                if (this.api == null) {
-                    final OkHttpClient.Builder builder = new OkHttpClient.Builder();
-                    if (BuildConfig.DEBUG) {
-                        final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-                        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-                        builder.addInterceptor(interceptor);
-                    }
-                    this.api = new Api(builder.build());
-                }
-            }
-        }
-    }
-
-    public Api getApi() {
-        ensureApi();
-        return api;
+    public AppComponent getAppComponent() {
+        return appComponent;
     }
 
     private SharedPreferences getPrefs() {
