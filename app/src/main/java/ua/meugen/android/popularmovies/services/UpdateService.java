@@ -69,11 +69,21 @@ public class UpdateService extends IntentService implements MoviesContract {
 
     private void handleActionPopular() throws IOException {
         final PagedMoviesDto movies = api.popularMovies();
+        if (!movies.isSuccess()) {
+            Log.e(TAG, "Error from server: '" + movies.getStatusMessage()
+                    + "'\ncode: " + movies.getStatusCode());
+            return;
+        }
         update(POPULAR_URI, movies.getResults());
     }
 
     private void handleActionTopRated() throws IOException {
         final PagedMoviesDto movies = api.topRatedMovies();
+        if (!movies.isSuccess()) {
+            Log.e(TAG, "Error from server: '" + movies.getStatusMessage()
+                    + "'\ncode: " + movies.getStatusCode());
+            return;
+        }
         update(TOP_RATED_URI, movies.getResults());
     }
 
