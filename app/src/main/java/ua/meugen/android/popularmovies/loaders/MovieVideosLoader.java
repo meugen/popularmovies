@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import ua.meugen.android.popularmovies.app.Api;
 import ua.meugen.android.popularmovies.dto.VideosDto;
 
@@ -22,10 +24,14 @@ public class MovieVideosLoader extends AbstractLoader<VideosDto> {
         return params;
     }
 
-    private final int id;
+    private int id;
 
-    public MovieVideosLoader(final Context context, final Bundle params) {
-        super(context);
+    @Inject
+    public MovieVideosLoader(final Context context, final Api api) {
+        super(context, api);
+    }
+
+    public void attachParams(final Bundle params) {
         this.id = params.getInt(PARAM_ID);
     }
 

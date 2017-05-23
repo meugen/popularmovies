@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import java.io.IOException;
 
+import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.adapters.ReviewsAdapter;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieReviewsBinding;
 import ua.meugen.android.popularmovies.dialogs.ReviewDetailDialog;
@@ -136,7 +137,10 @@ public class MovieReviewsFragment extends Fragment implements ReviewsAdapter.OnC
         @Override
         public Loader<LoaderResult<PagedReviewsDto>> onCreateLoader(
                 final int id, final Bundle args) {
-            return new MovieReviewsLoader(getContext(), args);
+            final MovieReviewsLoader loader = PopularMovies.component(getContext())
+                    .loadersComponent().movieReviewsLoader();
+            loader.attachParams(args);
+            return loader;
         }
     }
 }

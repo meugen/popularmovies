@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.app.Api;
 import ua.meugen.android.popularmovies.app.Session;
@@ -26,11 +28,15 @@ public class RateMovieLoader extends AbstractLoader<BaseDto> {
         return params;
     }
 
-    private final int id;
-    private final double value;
+    private int id;
+    private double value;
 
-    public RateMovieLoader(final Context context, final Bundle params) {
-        super(context);
+    @Inject
+    public RateMovieLoader(final Context context, final Api api) {
+        super(context, api);
+    }
+
+    public void attachParams(final Bundle params) {
         this.id = params.getInt(PARAM_ID);
         this.value = params.getDouble(PARAM_VALUE);
     }

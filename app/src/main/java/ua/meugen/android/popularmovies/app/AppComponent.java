@@ -1,5 +1,7 @@
 package ua.meugen.android.popularmovies.app;
 
+import android.content.Context;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -15,5 +17,5 @@ public interface AppComponent {
 
     void inject(UpdateService service);
 
-    Api api();
+    LoadersComponent loadersComponent();
 }

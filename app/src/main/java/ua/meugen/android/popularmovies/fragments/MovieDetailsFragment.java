@@ -23,6 +23,7 @@ import java.util.UUID;
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.activities.AuthorizeActivity;
+import ua.meugen.android.popularmovies.activities.MovieDetailsActivity;
 import ua.meugen.android.popularmovies.app.ListenersCollector;
 import ua.meugen.android.popularmovies.app.Session;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
@@ -248,7 +249,8 @@ public class MovieDetailsFragment extends Fragment
 
         @Override
         public Loader<LoaderResult<NewGuestSessionDto>> onCreateLoader(final int id, final Bundle args) {
-            return new NewGuestSessionLoader(getContext());
+            return PopularMovies.component(getContext())
+                    .loadersComponent().newGuestSessionLoader();
         }
 
         @Override
@@ -281,7 +283,10 @@ public class MovieDetailsFragment extends Fragment
 
         @Override
         public Loader<LoaderResult<BaseDto>> onCreateLoader(final int id, final Bundle args) {
-            return new RateMovieLoader(getContext(), args);
+            final RateMovieLoader loader = PopularMovies.component(getContext())
+                    .loadersComponent().rateMovieLoader();
+            loader.attachParams(args);
+            return loader;
         }
 
         @Override
@@ -342,7 +347,10 @@ public class MovieDetailsFragment extends Fragment
 
         @Override
         public Loader<Void> onCreateLoader(final int id, final Bundle args) {
-            return new MoviesFavoritesLoader(getContext(), args);
+            final MoviesFavoritesLoader loader = PopularMovies.component(getContext())
+                    .loadersComponent().moviesFavoritesLoader();
+            loader.attachParams(args);
+            return loader;
         }
 
         @Override

@@ -11,6 +11,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import ua.meugen.android.popularmovies.app.Api;
 import ua.meugen.android.popularmovies.app.AppComponent;
+import ua.meugen.android.popularmovies.app.AppModule;
 import ua.meugen.android.popularmovies.app.DaggerAppComponent;
 import ua.meugen.android.popularmovies.app.Session;
 
@@ -39,7 +40,9 @@ public class PopularMovies extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        appComponent = DaggerAppComponent.create();
+        appComponent = DaggerAppComponent.builder()
+                .appModule(new AppModule(this))
+                .build();
     }
 
     public AppComponent getAppComponent() {

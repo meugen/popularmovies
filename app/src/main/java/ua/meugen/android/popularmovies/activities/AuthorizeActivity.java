@@ -14,6 +14,7 @@ import android.webkit.WebViewClient;
 
 import java.io.IOException;
 
+import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.ActivityAuthorizeBinding;
 import ua.meugen.android.popularmovies.dto.NewSessionDto;
@@ -169,7 +170,8 @@ public class AuthorizeActivity extends AppCompatActivity {
 
         @Override
         public Loader<LoaderResult<NewTokenDto>> onCreateLoader(final int id, final Bundle args) {
-            return new NewTokenLoader(AuthorizeActivity.this);
+            return PopularMovies.component(AuthorizeActivity.this)
+                    .loadersComponent().newTokenLoader();
         }
     }
 
@@ -197,7 +199,10 @@ public class AuthorizeActivity extends AppCompatActivity {
 
         @Override
         public Loader<LoaderResult<NewSessionDto>> onCreateLoader(final int id, final Bundle args) {
-            return new NewSessionLoader(AuthorizeActivity.this, args);
+            final NewSessionLoader loader = PopularMovies.component(AuthorizeActivity.this)
+                    .loadersComponent().newSessionLoader();
+            loader.attachParams(args);
+            return loader;
         }
     }
 }

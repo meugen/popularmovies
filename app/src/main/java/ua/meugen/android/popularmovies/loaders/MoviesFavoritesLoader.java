@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 
+import javax.inject.Inject;
+
 import ua.meugen.android.popularmovies.providers.MoviesContract;
 
 /**
@@ -23,11 +25,15 @@ public class MoviesFavoritesLoader extends AsyncTaskLoader<Void> implements Movi
         return params;
     }
 
-    private final int id;
-    private final boolean insert;
+    private int id;
+    private boolean insert;
 
-    public MoviesFavoritesLoader(final Context context, final Bundle params) {
+    @Inject
+    public MoviesFavoritesLoader(final Context context) {
         super(context);
+    }
+
+    public void attachParams(final Bundle params) {
         this.id = params.getInt(PARAM_ID);
         this.insert = params.getBoolean(PARAM_INSERT);
     }

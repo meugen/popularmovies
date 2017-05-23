@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import ua.meugen.android.popularmovies.app.Api;
 import ua.meugen.android.popularmovies.dto.NewSessionDto;
 
@@ -18,10 +20,14 @@ public class NewSessionLoader extends AbstractLoader<NewSessionDto> {
         return params;
     }
 
-    private final String token;
+    private String token;
 
-    public NewSessionLoader(final Context context, final Bundle params) {
-        super(context);
+    @Inject
+    public NewSessionLoader(final Context context, final Api api) {
+        super(context, api);
+    }
+
+    public void attachParams(final Bundle params) {
         this.token = params.getString(PARAM_TOKEN);
     }
 

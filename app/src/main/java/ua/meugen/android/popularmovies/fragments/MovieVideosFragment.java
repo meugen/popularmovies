@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import java.io.IOException;
 
+import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.adapters.VideosAdapter;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieVideosBinding;
 import ua.meugen.android.popularmovies.dto.VideoItemDto;
@@ -136,7 +137,10 @@ public class MovieVideosFragment extends Fragment implements VideosAdapter.OnCli
 
         @Override
         public Loader<LoaderResult<VideosDto>> onCreateLoader(final int id, final Bundle args) {
-            return new MovieVideosLoader(getContext(), args);
+            final MovieVideosLoader loader = PopularMovies.component(getContext())
+                    .loadersComponent().movieVideosLoader();
+            loader.attachParams(args);
+            return loader;
         }
     }
 }
