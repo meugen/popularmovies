@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Locale;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -24,6 +27,7 @@ import ua.meugen.android.popularmovies.json.JsonReadable;
 import ua.meugen.android.popularmovies.json.JsonWritable;
 import ua.meugen.android.popularmovies.utils.IOUtils;
 
+@Singleton
 public class Api {
 
     private static final HttpUrl BASE_URL = HttpUrl.parse("https://api.themoviedb.org/3");
@@ -41,10 +45,7 @@ public class Api {
 
     private final OkHttpClient client;
 
-    public Api() {
-        this(new OkHttpClient.Builder().build());
-    }
-
+    @Inject
     public Api(final OkHttpClient client) {
         this.client = client;
     }

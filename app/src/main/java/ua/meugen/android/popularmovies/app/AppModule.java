@@ -25,9 +25,4 @@ public class AppModule {
         }
         return builder.build();
     }
-
-    @Provides @Singleton
-    public Api provideApi(final OkHttpClient client) {
-        return new Api(client);
-    }
 }
