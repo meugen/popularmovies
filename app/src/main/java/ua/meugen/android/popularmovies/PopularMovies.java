@@ -13,6 +13,7 @@ import ua.meugen.android.popularmovies.app.Api;
 import ua.meugen.android.popularmovies.app.AppComponent;
 import ua.meugen.android.popularmovies.app.AppModule;
 import ua.meugen.android.popularmovies.app.DaggerAppComponent;
+import ua.meugen.android.popularmovies.app.LoadersComponent;
 import ua.meugen.android.popularmovies.app.Session;
 
 
@@ -28,13 +29,18 @@ public class PopularMovies extends Application {
     private static final String PREF_EXPIRES_AT = "expiresAt";
 
     private AppComponent appComponent;
+    private LoadersComponent loadersComponent;
 
     public static PopularMovies from(final Context context) {
         return (PopularMovies) context.getApplicationContext();
     }
 
-    public static AppComponent component(final Context context) {
+    public static AppComponent appComponent(final Context context) {
         return from(context).getAppComponent();
+    }
+
+    public static LoadersComponent loadersComponent(final Context context) {
+        return from(context).getLoadersComponent();
     }
 
     @Override
@@ -47,6 +53,13 @@ public class PopularMovies extends Application {
 
     public AppComponent getAppComponent() {
         return appComponent;
+    }
+
+    public LoadersComponent getLoadersComponent() {
+        if (loadersComponent == null) {
+            loadersComponent = appComponent.loadersComponent();
+        }
+        return loadersComponent;
     }
 
     private SharedPreferences getPrefs() {

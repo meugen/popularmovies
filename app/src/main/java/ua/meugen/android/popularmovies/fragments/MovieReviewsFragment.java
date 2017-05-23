@@ -137,8 +137,9 @@ public class MovieReviewsFragment extends Fragment implements ReviewsAdapter.OnC
         @Override
         public Loader<LoaderResult<PagedReviewsDto>> onCreateLoader(
                 final int id, final Bundle args) {
-            final MovieReviewsLoader loader = PopularMovies.component(getContext())
-                    .loadersComponent().movieReviewsLoader();
+            final MovieReviewsLoader loader = PopularMovies
+                    .loadersComponent(getContext())
+                    .movieReviewsLoader();
             loader.attachParams(args);
             return loader;
         }

@@ -137,8 +137,9 @@ public class MovieVideosFragment extends Fragment implements VideosAdapter.OnCli
 
         @Override
         public Loader<LoaderResult<VideosDto>> onCreateLoader(final int id, final Bundle args) {
-            final MovieVideosLoader loader = PopularMovies.component(getContext())
-                    .loadersComponent().movieVideosLoader();
+            final MovieVideosLoader loader = PopularMovies
+                    .loadersComponent(getContext())
+                    .movieVideosLoader();
             loader.attachParams(args);
             return loader;
         }

@@ -48,7 +48,7 @@ public class UpdateService extends IntentService implements MoviesContract {
     @Override
     public void onCreate() {
         super.onCreate();
-        PopularMovies.component(this).inject(this);
+        PopularMovies.appComponent(this).inject(this);
     }
 
     @Override

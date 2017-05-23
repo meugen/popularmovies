@@ -9,11 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -23,7 +21,6 @@ import java.util.UUID;
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.activities.AuthorizeActivity;
-import ua.meugen.android.popularmovies.activities.MovieDetailsActivity;
 import ua.meugen.android.popularmovies.app.ListenersCollector;
 import ua.meugen.android.popularmovies.app.Session;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
@@ -34,7 +31,6 @@ import ua.meugen.android.popularmovies.dto.NewGuestSessionDto;
 import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
 import ua.meugen.android.popularmovies.loaders.LoaderResult;
 import ua.meugen.android.popularmovies.loaders.MoviesFavoritesLoader;
-import ua.meugen.android.popularmovies.loaders.NewGuestSessionLoader;
 import ua.meugen.android.popularmovies.loaders.RateMovieLoader;
 import ua.meugen.android.popularmovies.providers.MoviesContract;
 import ua.meugen.android.popularmovies.utils.BundleUtils;
@@ -249,8 +245,9 @@ public class MovieDetailsFragment extends Fragment
 
         @Override
         public Loader<LoaderResult<NewGuestSessionDto>> onCreateLoader(final int id, final Bundle args) {
-            return PopularMovies.component(getContext())
-                    .loadersComponent().newGuestSessionLoader();
+            return PopularMovies
+                    .loadersComponent(getContext())
+                    .newGuestSessionLoader();
         }
 
         @Override
@@ -283,8 +280,9 @@ public class MovieDetailsFragment extends Fragment
 
         @Override
         public Loader<LoaderResult<BaseDto>> onCreateLoader(final int id, final Bundle args) {
-            final RateMovieLoader loader = PopularMovies.component(getContext())
-                    .loadersComponent().rateMovieLoader();
+            final RateMovieLoader loader = PopularMovies
+                    .loadersComponent(getContext())
+                    .rateMovieLoader();
             loader.attachParams(args);
             return loader;
         }
@@ -347,8 +345,9 @@ public class MovieDetailsFragment extends Fragment
 
         @Override
         public Loader<Void> onCreateLoader(final int id, final Bundle args) {
-            final MoviesFavoritesLoader loader = PopularMovies.component(getContext())
-                    .loadersComponent().moviesFavoritesLoader();
+            final MoviesFavoritesLoader loader = PopularMovies
+                    .loadersComponent(getContext())
+                    .moviesFavoritesLoader();
             loader.attachParams(args);
             return loader;
         }

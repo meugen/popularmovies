@@ -22,7 +22,6 @@ import ua.meugen.android.popularmovies.dto.NewTokenDto;
 import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
 import ua.meugen.android.popularmovies.loaders.LoaderResult;
 import ua.meugen.android.popularmovies.loaders.NewSessionLoader;
-import ua.meugen.android.popularmovies.loaders.NewTokenLoader;
 
 public class AuthorizeActivity extends AppCompatActivity {
 
@@ -170,8 +169,9 @@ public class AuthorizeActivity extends AppCompatActivity {
 
         @Override
         public Loader<LoaderResult<NewTokenDto>> onCreateLoader(final int id, final Bundle args) {
-            return PopularMovies.component(AuthorizeActivity.this)
-                    .loadersComponent().newTokenLoader();
+            return PopularMovies
+                    .loadersComponent(AuthorizeActivity.this)
+                    .newTokenLoader();
         }
     }
 
@@ -199,8 +199,9 @@ public class AuthorizeActivity extends AppCompatActivity {
 
         @Override
         public Loader<LoaderResult<NewSessionDto>> onCreateLoader(final int id, final Bundle args) {
-            final NewSessionLoader loader = PopularMovies.component(AuthorizeActivity.this)
-                    .loadersComponent().newSessionLoader();
+            final NewSessionLoader loader = PopularMovies
+                    .loadersComponent(AuthorizeActivity.this)
+                    .newSessionLoader();
             loader.attachParams(args);
             return loader;
         }
