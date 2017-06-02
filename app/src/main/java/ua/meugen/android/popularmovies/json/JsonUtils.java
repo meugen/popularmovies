@@ -17,8 +17,10 @@ import java.util.Locale;
 
 public class JsonUtils {
 
-    private static final SimpleDateFormat FORMATTER
+    private static final SimpleDateFormat DATE_FORMAT
             = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+    private static final SimpleDateFormat DATE_TIME_FORMAT
+            = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss zzz", Locale.ENGLISH);
 
     public static final JsonReadable<Integer> INTEGER_READABLE = new JsonReadable<Integer>() {
         @Override
@@ -37,7 +39,7 @@ public class JsonUtils {
             if (token == JsonToken.NUMBER) {
                 result = new Date(reader.nextLong());
             } else if (token == JsonToken.STRING) {
-                result = FORMATTER.parse(reader.nextString());
+                result = DATE_FORMAT.parse(reader.nextString());
             } else {
                 throw new IOException("Can't convert value with token " + token + " to date.");
             }
@@ -59,5 +61,15 @@ public class JsonUtils {
         reader.endArray();
 
         return result;
+    }
+
+    public static Date nextDateTime(final JsonReader reader) throws IOException {
+        final String dateString = reader.nextString();
+        try {
+            return DATE_TIME_FORMAT.parse(dateString);
+        } catch (ParseException e) {
+            throw new IOException("Unknown date format: "
+                    + dateString, e);
+        }
     }
 }

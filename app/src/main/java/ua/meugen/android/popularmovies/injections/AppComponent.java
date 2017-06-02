@@ -1,6 +1,4 @@
-package ua.meugen.android.popularmovies.app;
-
-import android.content.Context;
+package ua.meugen.android.popularmovies.injections;
 
 import javax.inject.Singleton;
 
@@ -12,7 +10,7 @@ import ua.meugen.android.popularmovies.services.UpdateService;
  */
 
 @Singleton
-@Component(modules = { AppModule.class })
+@Component(modules = { AppModule.class, ReadablesModule.class })
 public interface AppComponent {
 
     void inject(UpdateService service);

@@ -2,22 +2,15 @@ package ua.meugen.android.popularmovies.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.JsonReader;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import ua.meugen.android.popularmovies.json.JsonReadable;
-import ua.meugen.android.popularmovies.json.JsonUtils;
 
 
 public class PagedReviewsDto extends BaseResponse implements Parcelable {
 
     public static final Creator<PagedReviewsDto> CREATOR
             = new PagedReviewsDtoCreator();
-    public static final JsonReadable<PagedReviewsDto> READABLE
-            = new PagedReviewsDtoReadable();
 
     private int id;
     private int page;
@@ -127,34 +120,5 @@ class PagedReviewsDtoCreator implements Parcelable.Creator<PagedReviewsDto> {
     @Override
     public PagedReviewsDto[] newArray(final int size) {
         return new PagedReviewsDto[size];
-    }
-}
-
-class PagedReviewsDtoReadable implements JsonReadable<PagedReviewsDto> {
-
-    @Override
-    public PagedReviewsDto readJson(final JsonReader reader) throws IOException {
-        final PagedReviewsDto dto = new PagedReviewsDto();
-
-        reader.beginObject();
-        while (reader.hasNext()) {
-            final String name = reader.nextName();
-            if ("id".equals(name)) {
-                dto.setId(reader.nextInt());
-            } else if ("page".equals(name)) {
-                dto.setPage(reader.nextInt());
-            } else if ("total_pages".equals(name)) {
-                dto.setTotalPages(reader.nextInt());
-            } else if ("total_results".equals(name)) {
-                dto.setTotalResults(reader.nextInt());
-            } else if ("results".equals(name)) {
-                dto.setResults(JsonUtils.nextList(reader, ReviewItemDto.READABLE));
-            } else {
-                dto._readFromJson(reader, name);
-            }
-        }
-        reader.endObject();
-
-        return dto;
     }
 }

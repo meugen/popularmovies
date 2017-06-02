@@ -2,15 +2,8 @@ package ua.meugen.android.popularmovies.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.JsonReader;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-
-import ua.meugen.android.popularmovies.json.JsonReadable;
 
 /**
  * @author meugen
@@ -20,8 +13,6 @@ public class NewGuestSessionDto extends BaseResponse implements Parcelable {
 
     public static final Creator<NewGuestSessionDto> CREATOR
             = new NewGuestSessionDtoCreator();
-    public static final JsonReadable<NewGuestSessionDto> READABLE
-            = new NewGuestSessionDtoReadable();
 
     private boolean success;
     private String guestSessionId;
@@ -108,43 +99,5 @@ class NewGuestSessionDtoCreator implements Parcelable.Creator<NewGuestSessionDto
     @Override
     public NewGuestSessionDto[] newArray(final int size) {
         return new NewGuestSessionDto[size];
-    }
-}
-
-class NewGuestSessionDtoReadable implements JsonReadable<NewGuestSessionDto> {
-
-    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss zzz", Locale.ENGLISH);
-
-    @Override
-    public NewGuestSessionDto readJson(final JsonReader reader) throws IOException {
-        final NewGuestSessionDto dto = new NewGuestSessionDto();
-
-        reader.beginObject();
-        while (reader.hasNext()) {
-            final String name = reader.nextName();
-            if ("success".equals(name)) {
-                dto.setSuccess(reader.nextBoolean());
-            } else if ("guest_session_id".equals(name)) {
-                dto.setGuestSessionId(reader.nextString());
-            } else if ("expires_at".equals(name)) {
-                dto.setExpiresAt(nextDate(reader));
-            } else {
-                dto._readFromJson(reader, name);
-            }
-        }
-        reader.endObject();
-
-        return dto;
-    }
-
-    private Date nextDate(final JsonReader reader) throws IOException {
-        final String dateString = reader.nextString();
-        try {
-            return FORMATTER.parse(dateString);
-        } catch (ParseException e) {
-            throw new IOException("Unknown date format: "
-                    + dateString, e);
-        }
     }
 }

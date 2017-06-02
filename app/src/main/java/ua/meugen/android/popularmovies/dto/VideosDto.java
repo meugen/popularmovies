@@ -2,22 +2,15 @@ package ua.meugen.android.popularmovies.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.JsonReader;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import ua.meugen.android.popularmovies.json.JsonReadable;
-import ua.meugen.android.popularmovies.json.JsonUtils;
 
 
 public class VideosDto extends BaseResponse implements Parcelable {
 
     public static final Creator<VideosDto> CREATOR
             = new VideosDtoCreator();
-    public static final JsonReadable<VideosDto> READABLE
-            = new VideosDtoReadable();
 
     private int id;
     private List<VideoItemDto> results;
@@ -88,28 +81,5 @@ class VideosDtoCreator implements Parcelable.Creator<VideosDto> {
     @Override
     public VideosDto[] newArray(final int size) {
         return new VideosDto[size];
-    }
-}
-
-class VideosDtoReadable implements JsonReadable<VideosDto> {
-
-    @Override
-    public VideosDto readJson(final JsonReader reader) throws IOException {
-        final VideosDto dto = new VideosDto();
-
-        reader.beginObject();
-        while (reader.hasNext()) {
-            final String name = reader.nextName();
-            if ("id".equals(name)) {
-                dto.setId(reader.nextInt());
-            } else if ("results".equals(name)) {
-                dto.setResults(JsonUtils.nextList(reader, VideoItemDto.READABLE));
-            } else {
-                dto._readFromJson(reader, name);
-            }
-        }
-        reader.endObject();
-
-        return dto;
     }
 }

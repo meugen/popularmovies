@@ -7,14 +7,11 @@ import android.preference.PreferenceManager;
 
 import java.util.Date;
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import ua.meugen.android.popularmovies.app.Api;
-import ua.meugen.android.popularmovies.app.AppComponent;
-import ua.meugen.android.popularmovies.app.AppModule;
-import ua.meugen.android.popularmovies.app.DaggerAppComponent;
-import ua.meugen.android.popularmovies.app.LoadersComponent;
 import ua.meugen.android.popularmovies.app.Session;
+import ua.meugen.android.popularmovies.injections.AppComponent;
+import ua.meugen.android.popularmovies.injections.AppModule;
+import ua.meugen.android.popularmovies.injections.DaggerAppComponent;
+import ua.meugen.android.popularmovies.injections.LoadersComponent;
 
 
 public class PopularMovies extends Application {

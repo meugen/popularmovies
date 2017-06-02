@@ -5,6 +5,8 @@ import android.util.JsonReader;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -21,10 +23,43 @@ import ua.meugen.android.popularmovies.dto.PagedReviewsDto;
 import ua.meugen.android.popularmovies.dto.ReviewItemDto;
 import ua.meugen.android.popularmovies.dto.VideoItemDto;
 import ua.meugen.android.popularmovies.dto.VideosDto;
+import ua.meugen.android.popularmovies.json.JsonReadable;
+import ua.meugen.android.popularmovies.json.readables.MovieItemDtoReadable;
+import ua.meugen.android.popularmovies.json.readables.NewGuestSessionDtoReadable;
+import ua.meugen.android.popularmovies.json.readables.NewSessionDtoReadable;
+import ua.meugen.android.popularmovies.json.readables.NewTokenDtoReadable;
+import ua.meugen.android.popularmovies.json.readables.PagedMoviesDtoReadable;
+import ua.meugen.android.popularmovies.json.readables.PagedReviewsDtoReadable;
+import ua.meugen.android.popularmovies.json.readables.ReviewItemDtoReadable;
+import ua.meugen.android.popularmovies.json.readables.VideoItemDtoReadable;
+import ua.meugen.android.popularmovies.json.readables.VideosDtoReadable;
 import ua.meugen.android.popularmovies.utils.IOUtils;
 
 @RunWith(AndroidJUnit4.class)
 public class JsonReadablesTest {
+
+    private static JsonReadable<MovieItemDto> movieItemReadable;
+    private static JsonReadable<PagedMoviesDto> pagedMoviesReadable;
+    private static JsonReadable<VideoItemDto> videoItemReadable;
+    private static JsonReadable<VideosDto> videosReadable;
+    private static JsonReadable<ReviewItemDto> reviewItemReadable;
+    private static JsonReadable<PagedReviewsDto> pagedReviewsReadable;
+    private static JsonReadable<NewTokenDto> newTokenReadable;
+    private static JsonReadable<NewSessionDto> newSessionReadable;
+    private static JsonReadable<NewGuestSessionDto> newGuestSessionReadable;
+
+    @BeforeClass
+    public static void setup() {
+        movieItemReadable = new MovieItemDtoReadable();
+        pagedMoviesReadable = new PagedMoviesDtoReadable(movieItemReadable);
+        videoItemReadable = new VideoItemDtoReadable();
+        videosReadable = new VideosDtoReadable(videoItemReadable);
+        reviewItemReadable = new ReviewItemDtoReadable();
+        pagedReviewsReadable = new PagedReviewsDtoReadable(reviewItemReadable);
+        newTokenReadable = new NewTokenDtoReadable();
+        newSessionReadable = new NewSessionDtoReadable();
+        newGuestSessionReadable = new NewGuestSessionDtoReadable();
+    }
 
     private static final String MOVIE_ITEM_JSON = "{\n" +
             "      \"poster_path\": \"/9O7gLzmreU0nGkIB6K3BsJbzvNv.jpg\",\n" +
@@ -53,7 +88,7 @@ public class JsonReadablesTest {
         JsonReader reader = null;
         try {
             reader = new JsonReader(new StringReader(MOVIE_ITEM_JSON));
-            final MovieItemDto dto = MovieItemDto.READABLE.readJson(reader);
+            final MovieItemDto dto = movieItemReadable.readJson(reader);
             Assert.assertNotNull(dto);
             Assert.assertEquals("/9O7gLzmreU0nGkIB6K3BsJbzvNv.jpg", dto.getPosterPath());
             Assert.assertFalse(dto.isAdult());
@@ -77,7 +112,7 @@ public class JsonReadablesTest {
         JsonReader reader = null;
         try {
             reader = new JsonReader(new StringReader(PAGED_MOVIES_JSON));
-            final PagedMoviesDto dto = PagedMoviesDto.READABLE.readJson(reader);
+            final PagedMoviesDto dto = pagedMoviesReadable.readJson(reader);
             Assert.assertNotNull(dto);
             Assert.assertEquals(1, dto.getPage());
             Assert.assertEquals(1, dto.getTotalPages());
@@ -106,7 +141,7 @@ public class JsonReadablesTest {
         JsonReader reader = null;
         try {
             reader = new JsonReader(new StringReader(VIDEO_ITEM_JSON));
-            final VideoItemDto dto = VideoItemDto.READABLE.readJson(reader);
+            final VideoItemDto dto = videoItemReadable.readJson(reader);
             Assert.assertNotNull(dto);
             Assert.assertEquals("58f4d4129251413d76023ecf", dto.getId());
             Assert.assertEquals("en", dto.getIso6391());
@@ -126,7 +161,7 @@ public class JsonReadablesTest {
         JsonReader reader = null;
         try {
             reader = new JsonReader(new StringReader(PAGED_VIDEOS_JSON));
-            final VideosDto dto = VideosDto.READABLE.readJson(reader);
+            final VideosDto dto = videosReadable.readJson(reader);
             Assert.assertNotNull(dto);
             Assert.assertEquals(278, dto.getId());
             Assert.assertEquals(1, dto.getResults().size());
@@ -149,7 +184,7 @@ public class JsonReadablesTest {
         JsonReader reader = null;
         try {
             reader = new JsonReader(new StringReader(REVIEW_ITEM_JSON));
-            final ReviewItemDto dto = ReviewItemDto.READABLE.readJson(reader);
+            final ReviewItemDto dto = reviewItemReadable.readJson(reader);
             Assert.assertNotNull(dto);
             Assert.assertEquals("5723a329c3a3682e720005db", dto.getId());
             Assert.assertEquals("elshaarawy", dto.getAuthor());
@@ -165,7 +200,7 @@ public class JsonReadablesTest {
         JsonReader reader = null;
         try {
             reader = new JsonReader(new StringReader(PAGED_REVIEWS_JSON));
-            final PagedReviewsDto dto = PagedReviewsDto.READABLE.readJson(reader);
+            final PagedReviewsDto dto = pagedReviewsReadable.readJson(reader);
             Assert.assertNotNull(dto);
             Assert.assertEquals(278, dto.getId());
             Assert.assertEquals(1, dto.getResults().size());
@@ -188,7 +223,7 @@ public class JsonReadablesTest {
         JsonReader reader = null;
         try {
             reader = new JsonReader(new StringReader(NEW_TOKEN_JSON));
-            final NewTokenDto dto = NewTokenDto.READABLE.readJson(reader);
+            final NewTokenDto dto = newTokenReadable.readJson(reader);
             Assert.assertNotNull(dto);
             Assert.assertTrue(dto.isSuccess());
             final Calendar calendar = Calendar.getInstance();
@@ -215,7 +250,7 @@ public class JsonReadablesTest {
         JsonReader reader = null;
         try {
             reader = new JsonReader(new StringReader(NEW_SESSION_JSON));
-            final NewSessionDto dto = NewSessionDto.READABLE.readJson(reader);
+            final NewSessionDto dto = newSessionReadable.readJson(reader);
             Assert.assertNotNull(dto);
             Assert.assertTrue(dto.isSuccess());
             Assert.assertEquals(dto.getSessionId(), "jfvhgcvbgvcbvcnvcvn");
@@ -235,7 +270,7 @@ public class JsonReadablesTest {
         JsonReader reader = null;
         try {
             reader = new JsonReader(new StringReader(NEW_GUEST_SESSION_JSON));
-            final NewGuestSessionDto dto = NewGuestSessionDto.READABLE.readJson(reader);
+            final NewGuestSessionDto dto = newGuestSessionReadable.readJson(reader);
             Assert.assertNotNull(dto);
             Assert.assertTrue(dto.isSuccess());
             Assert.assertEquals(dto.getGuestSessionId(), "73be8f09e448b0ec0580ec9354f92c5c");

@@ -1,8 +1,5 @@
-package ua.meugen.android.popularmovies.app;
+package ua.meugen.android.popularmovies.injections;
 
-import javax.inject.Singleton;
-
-import dagger.Component;
 import dagger.Subcomponent;
 import ua.meugen.android.popularmovies.loaders.MovieReviewsLoader;
 import ua.meugen.android.popularmovies.loaders.MovieVideosLoader;

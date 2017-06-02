@@ -2,11 +2,6 @@ package ua.meugen.android.popularmovies.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.JsonReader;
-
-import java.io.IOException;
-
-import ua.meugen.android.popularmovies.json.JsonReadable;
 
 /**
  * @author meugen
@@ -16,8 +11,6 @@ public class NewSessionDto extends BaseResponse implements Parcelable {
 
     public static final Creator<NewSessionDto> CREATOR
             = new NewSessionDtoCreator();
-    public static final JsonReadable<NewSessionDto> READABLE
-            = new NewSessionDtoReadable();
 
     private boolean success;
     private String sessionId;
@@ -90,28 +83,5 @@ class NewSessionDtoCreator implements Parcelable.Creator<NewSessionDto> {
     @Override
     public NewSessionDto[] newArray(final int size) {
         return new NewSessionDto[size];
-    }
-}
-
-class NewSessionDtoReadable implements JsonReadable<NewSessionDto> {
-
-    @Override
-    public NewSessionDto readJson(final JsonReader reader) throws IOException {
-        final NewSessionDto dto = new NewSessionDto();
-
-        reader.beginObject();
-        while (reader.hasNext()) {
-            final String name = reader.nextName();
-            if ("success".equals(name)) {
-                dto.setSuccess(reader.nextBoolean());
-            } else if ("session_id".equals(name)) {
-                dto.setSessionId(reader.nextString());
-            } else {
-                dto._readFromJson(reader, name);
-            }
-        }
-        reader.endObject();
-
-        return dto;
     }
 }

@@ -2,15 +2,8 @@ package ua.meugen.android.popularmovies.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.JsonReader;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-
-import ua.meugen.android.popularmovies.json.JsonReadable;
 
 /**
  * @author meugen
@@ -20,8 +13,6 @@ public class NewTokenDto extends BaseResponse implements Parcelable {
 
     public static final Creator<NewTokenDto> CREATOR
             = new NewTokenDtoCreator();
-    public static final JsonReadable<NewTokenDto> READABLE
-            = new NewTokenDtoReadable();
 
     private boolean success;
     private Date expiresAt;
@@ -108,43 +99,5 @@ class NewTokenDtoCreator implements Parcelable.Creator<NewTokenDto> {
     @Override
     public NewTokenDto[] newArray(final int size) {
         return new NewTokenDto[size];
-    }
-}
-
-class NewTokenDtoReadable implements JsonReadable<NewTokenDto> {
-
-    private static final SimpleDateFormat FORMATTER = new SimpleDateFormat(
-            "yyyy-MM-dd HH:mm:ss zzz", Locale.ENGLISH);
-
-    @Override
-    public NewTokenDto readJson(final JsonReader reader) throws IOException {
-        final NewTokenDto dto = new NewTokenDto();
-
-        reader.beginObject();
-        while (reader.hasNext()) {
-            final String name = reader.nextName();
-            if ("success".equals(name)) {
-                dto.setSuccess(reader.nextBoolean());
-            } else if ("expires_at".equals(name)) {
-                dto.setExpiresAt(nextDate(reader));
-            } else if ("request_token".equals(name)) {
-                dto.setToken(reader.nextString());
-            } else {
-                dto._readFromJson(reader, name);
-            }
-        }
-        reader.endObject();
-
-        return dto;
-    }
-
-    private Date nextDate(final JsonReader reader) throws IOException {
-        final String dateString = reader.nextString();
-        try {
-            return FORMATTER.parse(dateString);
-        } catch (ParseException e) {
-            throw new IOException("Unknown date format: "
-                    + dateString, e);
-        }
     }
 }

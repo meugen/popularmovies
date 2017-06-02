@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.app;
+package ua.meugen.android.popularmovies.injections;
 
 import android.content.Context;
 

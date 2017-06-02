@@ -43,12 +43,18 @@ public class Api {
     private static final String PATH_NEW_GUEST_SESSION = "authentication/guest_session/new";
     private static final String PATH_RATE_MOVIE = "movie/%d/rating";
 
-    private final OkHttpClient client;
+    @Inject OkHttpClient client;
+
+    @Inject JsonReadable<PagedMoviesDto> pagedMoviesReadable;
+    @Inject JsonReadable<VideosDto> videosReadable;
+    @Inject JsonReadable<PagedReviewsDto> pagedReviewsReadable;
+    @Inject JsonReadable<NewTokenDto> newTokenReadable;
+    @Inject JsonReadable<NewSessionDto> newSessionReadable;
+    @Inject JsonReadable<NewGuestSessionDto> newGuestSessionReadable;
+    @Inject JsonReadable<BaseDto> baseReadable;
 
     @Inject
-    public Api(final OkHttpClient client) {
-        this.client = client;
-    }
+    public Api() {}
 
     private HttpUrl.Builder urlBuilder(final String path) {
         return BASE_URL.newBuilder()
@@ -105,44 +111,44 @@ public class Api {
     public PagedMoviesDto popularMovies() throws IOException {
         final HttpUrl url = urlBuilder(PATH_POPULAR)
                 .build();
-        return execute(url, PagedMoviesDto.READABLE);
+        return execute(url, pagedMoviesReadable);
     }
 
     public PagedMoviesDto topRatedMovies() throws IOException {
         final HttpUrl url = urlBuilder(PATH_TOP_RATED)
                 .build();
-        return execute(url, PagedMoviesDto.READABLE);
+        return execute(url, pagedMoviesReadable);
     }
 
     public VideosDto movieVideos(final int id) throws IOException {
         final HttpUrl url = urlBuilder(String.format(Locale.ENGLISH, PATH_VIDEOS, id))
                 .build();
-        return execute(url, VideosDto.READABLE);
+        return execute(url, videosReadable);
     }
 
     public PagedReviewsDto movieReviews(final int id) throws IOException {
         final HttpUrl url = urlBuilder(String.format(Locale.ENGLISH, PATH_REVIEWS, id))
                 .build();
-        return execute(url, PagedReviewsDto.READABLE);
+        return execute(url, pagedReviewsReadable);
     }
 
     public NewTokenDto newToken() throws IOException {
         final HttpUrl url = urlBuilder(PATH_NEW_TOKEN)
                 .build();
-        return execute(url, NewTokenDto.READABLE);
+        return execute(url, newTokenReadable);
     }
 
     public NewSessionDto newSession(final String token) throws IOException {
         final HttpUrl url = urlBuilder(PATH_NEW_SESSION)
                 .addQueryParameter("request_token", token)
                 .build();
-        return execute(url, NewSessionDto.READABLE);
+        return execute(url, newSessionReadable);
     }
 
     public NewGuestSessionDto newGuestSession() throws IOException {
         final HttpUrl url = urlBuilder(PATH_NEW_GUEST_SESSION)
                 .build();
-        return execute(url, NewGuestSessionDto.READABLE);
+        return execute(url, newGuestSessionReadable);
     }
 
     public BaseDto rateMovie(
@@ -155,6 +161,6 @@ public class Api {
         final HttpUrl.Builder builder = urlBuilder(
                 String.format(Locale.ENGLISH, PATH_RATE_MOVIE, id));
         session.bindToUrl(builder);
-        return execute(builder.build(), body, BaseDto.READABLE);
+        return execute(builder.build(), body, baseReadable);
     }
 }

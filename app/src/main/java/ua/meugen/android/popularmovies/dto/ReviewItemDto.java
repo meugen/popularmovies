@@ -2,19 +2,12 @@ package ua.meugen.android.popularmovies.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.JsonReader;
-
-import java.io.IOException;
-
-import ua.meugen.android.popularmovies.json.JsonReadable;
 
 
 public class ReviewItemDto implements Parcelable {
 
     public static final Creator<ReviewItemDto> CREATOR
             = new ReviewItemDtoCreator();
-    public static final JsonReadable<ReviewItemDto> READABLE
-            = new ReviewItemDtoReadable();
 
     private String id;
     private String author;
@@ -105,32 +98,5 @@ class ReviewItemDtoCreator implements Parcelable.Creator<ReviewItemDto> {
     @Override
     public ReviewItemDto[] newArray(final int size) {
         return new ReviewItemDto[size];
-    }
-}
-
-class ReviewItemDtoReadable implements JsonReadable<ReviewItemDto> {
-
-    @Override
-    public ReviewItemDto readJson(final JsonReader reader) throws IOException {
-        final ReviewItemDto dto = new ReviewItemDto();
-
-        reader.beginObject();
-        while (reader.hasNext()) {
-            final String name = reader.nextName();
-            if ("id".equals(name)) {
-                dto.setId(reader.nextString());
-            } else if ("author".equals(name)) {
-                dto.setAuthor(reader.nextString());
-            } else if ("content".equals(name)) {
-                dto.setContent(reader.nextString());
-            } else if ("url".equals(name)) {
-                dto.setUrl(reader.nextString());
-            } else {
-                reader.skipValue();
-            }
-        }
-        reader.endObject();
-
-        return dto;
     }
 }

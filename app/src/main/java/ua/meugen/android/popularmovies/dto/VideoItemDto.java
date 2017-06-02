@@ -2,18 +2,11 @@ package ua.meugen.android.popularmovies.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.JsonReader;
-
-import java.io.IOException;
-
-import ua.meugen.android.popularmovies.json.JsonReadable;
 
 public class VideoItemDto implements Parcelable {
 
     public static final Creator<VideoItemDto> CREATOR
             = new VideoItemDtoCreator();
-    public static final JsonReadable<VideoItemDto> READABLE
-            = new VideoItemDtoReadable();
 
     private String id;
     private String iso6391;
@@ -157,40 +150,5 @@ class VideoItemDtoCreator implements Parcelable.Creator<VideoItemDto> {
     @Override
     public VideoItemDto[] newArray(final int size) {
         return new VideoItemDto[size];
-    }
-}
-
-class VideoItemDtoReadable implements JsonReadable<VideoItemDto> {
-
-    @Override
-    public VideoItemDto readJson(final JsonReader reader) throws IOException {
-        final VideoItemDto dto = new VideoItemDto();
-
-        reader.beginObject();
-        while (reader.hasNext()) {
-            final String name = reader.nextName();
-            if ("id".equals(name)) {
-                dto.setId(reader.nextString());
-            } else if ("iso_639_1".equals(name)) {
-                dto.setIso6391(reader.nextString());
-            } else if ("iso_3166_1".equals(name)) {
-                dto.setIso31661(reader.nextString());
-            } else if ("key".equals(name)) {
-                dto.setKey(reader.nextString());
-            } else if ("name".equals(name)) {
-                dto.setName(reader.nextString());
-            } else if ("site".equals(name)) {
-                dto.setSite(reader.nextString());
-            } else if ("size".equals(name)) {
-                dto.setSize(reader.nextInt());
-            } else if ("type".equals(name)) {
-                dto.setType(reader.nextString());
-            } else {
-                reader.skipValue();
-            }
-        }
-        reader.endObject();
-
-        return dto;
     }
 }

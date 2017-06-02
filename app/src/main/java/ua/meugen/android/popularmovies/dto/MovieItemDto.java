@@ -2,14 +2,10 @@ package ua.meugen.android.popularmovies.dto;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.JsonReader;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import ua.meugen.android.popularmovies.json.JsonReadable;
-import ua.meugen.android.popularmovies.json.JsonUtils;
 import ua.meugen.android.popularmovies.utils.ParcelUtils;
 
 /**
@@ -20,8 +16,6 @@ public class MovieItemDto implements Parcelable {
 
     public static final Creator<MovieItemDto> CREATOR
             = new MovieItemDtoCreator();
-    public static final JsonReadable<MovieItemDto> READABLE
-            = new MovieItemDtoReadable();
 
     private String posterPath;
     private boolean adult;
@@ -223,53 +217,6 @@ public class MovieItemDto implements Parcelable {
         temp = Double.doubleToLongBits(voteAverage);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
-    }
-}
-
-class MovieItemDtoReadable implements JsonReadable<MovieItemDto> {
-
-    @Override
-    public MovieItemDto readJson(final JsonReader reader) throws IOException {
-        final MovieItemDto dto = new MovieItemDto();
-
-        reader.beginObject();
-        while (reader.hasNext()) {
-            final String name = reader.nextName();
-            if ("poster_path".equals(name)) {
-                dto.setPosterPath(reader.nextString());
-            } else if ("adult".equals(name)) {
-                dto.setAdult(reader.nextBoolean());
-            } else if ("overview".equals(name)) {
-                dto.setOverview(reader.nextString());
-            } else if ("release_date".equals(name)) {
-                dto.setReleaseDate(JsonUtils.nextDate(reader));
-            } else if ("genre_ids".equals(name)) {
-                dto.setGenreIds(JsonUtils.nextList(reader, JsonUtils.INTEGER_READABLE));
-            } else if ("id".equals(name)) {
-                dto.setId(reader.nextInt());
-            } else if ("original_title".equals(name)) {
-                dto.setOriginalTitle(reader.nextString());
-            } else if ("original_language".equals(name)) {
-                dto.setOriginalLanguage(reader.nextString());
-            } else if ("title".equals(name)) {
-                dto.setTitle(reader.nextString());
-            } else if ("backdrop_path".equals(name)) {
-                dto.setBackdropPath(reader.nextString());
-            } else if ("popularity".equals(name)) {
-                dto.setPopularity(reader.nextDouble());
-            } else if ("vote_count".equals(name)) {
-                dto.setVoteCount(reader.nextInt());
-            } else if ("video".equals(name)) {
-                dto.setVideo(reader.nextBoolean());
-            } else if ("vote_average".equals(name)) {
-                dto.setVoteAverage(reader.nextDouble());
-            } else {
-                reader.skipValue();
-            }
-        }
-        reader.endObject();
-
-        return dto;
     }
 }
 

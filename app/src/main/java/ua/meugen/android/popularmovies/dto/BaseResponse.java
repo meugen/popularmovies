@@ -1,9 +1,6 @@
 package ua.meugen.android.popularmovies.dto;
 
 import android.os.Parcel;
-import android.util.JsonReader;
-
-import java.io.IOException;
 
 /**
  * @author meugen
@@ -51,18 +48,6 @@ public class BaseResponse {
         final boolean[] values = new boolean[1];
         parcel.readBooleanArray(values);
         success = values[0];
-    }
-
-    final void _readFromJson(final JsonReader reader, final String name) throws IOException {
-        if ("status_message".equals(name)) {
-            statusMessage = reader.nextString();
-        } else if ("status_code".equals(name)) {
-            statusCode = reader.nextInt();
-        } else if ("success".equals(name)) {
-            success = reader.nextBoolean();
-        } else {
-            reader.skipValue();
-        }
     }
 
     @Override

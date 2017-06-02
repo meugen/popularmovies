@@ -5,7 +5,6 @@ import android.support.v4.content.AsyncTaskLoader;
 
 import java.io.IOException;
 
-import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.app.Api;
 import ua.meugen.android.popularmovies.utils.ConnectivityUtils;
 
