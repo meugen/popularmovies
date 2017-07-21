@@ -22,23 +22,27 @@ android {
     }
 }
 
-def OkHttpVersion = '3.6.0'
-def SupportVersion = '25.3.1'
-def DaggerVersion = '2.10'
-
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile "com.android.support:appcompat-v7:$SupportVersion"
-    compile "com.android.support:recyclerview-v7:$SupportVersion"
-    compile "com.squareup.okhttp3:okhttp:$OkHttpVersion"
-    compile "com.squareup.okhttp3:logging-interceptor:$OkHttpVersion"
-    compile "com.android.support:design:$SupportVersion"
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile "com.google.dagger:dagger:$DaggerVersion"
-    annotationProcessor "com.google.dagger:dagger-compiler:$DaggerVersion"
-    testCompile 'junit:junit:4.12'
+
+    compile support.appCompat
+    compile support.recyclerView
+    compile support.design
+
+    compile supportConstraint
+    compile picasso
+
+    compile dagger.core
+    annotationProcessor dagger.compiler
+
+    compile retrofit.core
+    compile retrofit.converterGson
+    compile retrofit.adapterRxJava
+
+    compile okHttp.core
+    compile okHttp.logging
+
+    compile rx.java
+    compile rx.android
+
+    testCompile junit
 }

@@ -12,6 +12,58 @@ buildscript {
     }
 }
 
+ext {
+    //Packages
+    RetrofitPackage = 'com.squareup.retrofit2'
+    SupportPackage = 'com.android.support'
+    SupportConstraintPackage = 'com.android.support.constraint'
+    DaggerPackage = 'com.google.dagger'
+    OkHttpPackage = 'com.squareup.okhttp3'
+    PicassoPackage = 'com.squareup.picasso'
+    RxJavaPackage = 'io.reactivex.rxjava2'
+
+    // Versions
+    RetrofitVersion = '2.3.0'
+    SupportVersion = '25.3.1'
+    SupportConstraintVersion = '1.0.2'
+    DaggerVersion = '2.10'
+    OkHttpVersion = '3.8.0'
+    PicassoVersion = '2.5.2'
+    RxJavaVersion = '2.0.1'
+
+    support = [
+            appCompat: "$SupportPackage:appcompat-v7:$SupportVersion",
+            recyclerView: "$SupportPackage:recyclerview-v7:$SupportVersion",
+            design: "$SupportPackage:design:$SupportVersion"
+    ]
+
+    dagger = [
+            core: "$DaggerPackage:dagger:$DaggerVersion",
+            compiler: "$DaggerPackage:dagger-compiler:$DaggerVersion"
+    ]
+
+    retrofit = [
+            core: "$RetrofitPackage:retrofit:$RetrofitVersion",
+            converterGson: "$RetrofitPackage:converter-gson:$RetrofitVersion",
+            adapterRxJava: "$RetrofitPackage:adapter-rxjava2:$RetrofitVersion"
+    ]
+
+    okHttp = [
+            core: "$OkHttpPackage:okhttp:$OkHttpVersion",
+            logging: "$OkHttpPackage:logging-interceptor:$OkHttpVersion"
+    ]
+
+    rx = [
+            java: "$RxJavaPackage:rxjava:RxJavaVersion",
+            android: "$RxJavaPackage:rxandroid:$RxJavaVersion"
+    ]
+
+    picasso = "$PicassoPackage:picasso:$PicassoVersion"
+    supportConstraint = "$SupportConstraintPackage:constraint-layout:$SupportConstraintVersion"
+    junit = "junit:junit:4.12"
+
+}
+
 allprojects {
     repositories {
         jcenter()
