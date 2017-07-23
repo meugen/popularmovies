@@ -7,8 +7,8 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import ua.meugen.android.popularmovies.app.Api;
-import ua.meugen.android.popularmovies.dto.VideosDto;
+import ua.meugen.android.popularmovies.app.OldApi;
+import ua.meugen.android.popularmovies.model.dto.VideosDto;
 
 /**
  * @author meugen
@@ -27,7 +27,7 @@ public class MovieVideosLoader extends AbstractLoader<VideosDto> {
     private int id;
 
     @Inject
-    public MovieVideosLoader(final Context context, final Api api) {
+    public MovieVideosLoader(final Context context, final OldApi api) {
         super(context, api);
     }
 
@@ -36,7 +36,7 @@ public class MovieVideosLoader extends AbstractLoader<VideosDto> {
     }
 
     @Override
-    protected VideosDto loadInBackground(final Api api) throws IOException {
+    protected VideosDto loadInBackground(final OldApi api) throws IOException {
         return api.movieVideos(this.id);
     }
 }

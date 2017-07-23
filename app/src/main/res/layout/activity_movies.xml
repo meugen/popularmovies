@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="ua.meugen.android.popularmovies.activities.MoviesActivity"
-    android:id="@+id/swipe_refresh">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.RecyclerView
+    <data>
+        <import type="ua.meugen.android.popularmovies.viewmodel.MoviesViewModel"/>
+        <variable name="model" type="MoviesViewModel"/>
+    </data>
+
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recycler"
-        app:layoutManager="GridLayoutManager"
-        app:spanCount="@integer/main_recycler_span_count"/>
+        tools:context="ua.meugen.android.popularmovies.view.activities.MoviesActivity"
+        android:id="@+id/swipe_refresh"
+        app:onRefreshListener="@{model}"
+        app:refreshing="@{model.refreshing}">
 
-</android.support.v4.widget.SwipeRefreshLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recycler"
+            app:layoutManager="GridLayoutManager"
+            app:spanCount="@integer/main_recycler_span_count"
+            app:adapter="@{model.adapter}"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+</layout>

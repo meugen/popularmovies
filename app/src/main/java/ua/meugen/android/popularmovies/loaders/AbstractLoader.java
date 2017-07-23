@@ -5,17 +5,17 @@ import android.support.v4.content.AsyncTaskLoader;
 
 import java.io.IOException;
 
-import ua.meugen.android.popularmovies.app.Api;
+import ua.meugen.android.popularmovies.app.OldApi;
 import ua.meugen.android.popularmovies.utils.ConnectivityUtils;
 
 
 public abstract class AbstractLoader<T> extends AsyncTaskLoader<LoaderResult<T>> {
 
-    private final Api api;
+    private final OldApi api;
 
     private LoaderResult<T> result;
 
-    protected AbstractLoader(final Context context, final Api api) {
+    protected AbstractLoader(final Context context, final OldApi api) {
         super(context);
         this.api = api;
     }
@@ -49,7 +49,7 @@ public abstract class AbstractLoader<T> extends AsyncTaskLoader<LoaderResult<T>>
         this.result = data;
     }
 
-    protected abstract T loadInBackground(final Api api) throws IOException;
+    protected abstract T loadInBackground(final OldApi api) throws IOException;
 
     public static class NoNetworkException extends IOException {
 

@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.MoviesActivity"
+            android:name=".view.activities.MoviesActivity"
             android:label="@string/activity_movies_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -23,15 +23,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.MovieDetailsActivity"
+            android:name=".view.activities.MovieDetailsActivity"
             android:label="@string/activity_movie_details_title"
-            android:parentActivityName=".activities.MoviesActivity">
+            android:parentActivityName=".view.activities.MoviesActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.MoviesActivity"/>
+                android:value=".view.activities.MoviesActivity"/>
         </activity>
         <activity
-            android:name=".activities.AuthorizeActivity"
+            android:name=".view.activities.AuthorizeActivity"
             android:label="@string/activity_authorize_title"/>
 
         <provider

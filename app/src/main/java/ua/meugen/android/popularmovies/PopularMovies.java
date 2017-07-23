@@ -4,18 +4,22 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.IntDef;
 
 import java.util.Date;
 
+import io.realm.Realm;
 import ua.meugen.android.popularmovies.app.Session;
-import ua.meugen.android.popularmovies.injections.AppComponent;
-import ua.meugen.android.popularmovies.injections.AppModule;
-import ua.meugen.android.popularmovies.injections.DaggerAppComponent;
-import ua.meugen.android.popularmovies.injections.LoadersComponent;
+import ua.meugen.android.popularmovies.model.injections.AppComponent;
+import ua.meugen.android.popularmovies.model.injections.AppModule;
+import ua.meugen.android.popularmovies.model.injections.DaggerAppComponent;
+import ua.meugen.android.popularmovies.model.injections.LoadersComponent;
 
 
 public class PopularMovies extends Application {
 
+    @IntDef({SORT_TYPE_POPULAR, SORT_TYPE_TOP_RATED, SORT_TYPE_FAVORITES})
+    public @interface SortType {}
     public static final int SORT_TYPE_POPULAR = 1;
     public static final int SORT_TYPE_TOP_RATED = 2;
     public static final int SORT_TYPE_FAVORITES = 3;
@@ -43,6 +47,7 @@ public class PopularMovies extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Realm.init(this);
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
@@ -63,11 +68,13 @@ public class PopularMovies extends Application {
         return PreferenceManager.getDefaultSharedPreferences(this);
     }
 
+    @SortType
+    @SuppressWarnings("ResourceType")
     public int getSortType() {
         return getPrefs().getInt(PREF_SORT_TYPE_INT, SORT_TYPE_POPULAR);
     }
 
-    public void setSortType(final int sortType) {
+    public void setSortType(@SortType final int sortType) {
         getPrefs().edit()
                 .putInt(PREF_SORT_TYPE_INT, sortType)
                 .apply();

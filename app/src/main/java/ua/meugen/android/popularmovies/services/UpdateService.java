@@ -13,9 +13,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ua.meugen.android.popularmovies.PopularMovies;
-import ua.meugen.android.popularmovies.app.Api;
-import ua.meugen.android.popularmovies.dto.MovieItemDto;
-import ua.meugen.android.popularmovies.dto.PagedMoviesDto;
+import ua.meugen.android.popularmovies.app.OldApi;
+import ua.meugen.android.popularmovies.model.dto.MovieItemDto;
+import ua.meugen.android.popularmovies.model.dto.PagedMoviesDto;
 import ua.meugen.android.popularmovies.providers.MoviesContract;
 
 public class UpdateService extends IntentService implements MoviesContract {
@@ -39,7 +39,7 @@ public class UpdateService extends IntentService implements MoviesContract {
         context.startService(intent);
     }
 
-    @Inject Api api;
+    @Inject OldApi api;
 
     public UpdateService() {
         super("UpdateService");

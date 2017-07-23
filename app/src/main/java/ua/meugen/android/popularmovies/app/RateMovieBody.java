@@ -4,7 +4,7 @@ import android.util.JsonWriter;
 
 import java.io.IOException;
 
-import ua.meugen.android.popularmovies.json.JsonWritable;
+import ua.meugen.android.popularmovies.model.json.JsonWritable;
 
 /**
  * @author meugen

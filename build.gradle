@@ -6,6 +6,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'me.tatarka:gradle-retrolambda:3.6.1'
+        classpath 'io.realm:realm-gradle-plugin:3.5.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -20,7 +22,8 @@ ext {
     DaggerPackage = 'com.google.dagger'
     OkHttpPackage = 'com.squareup.okhttp3'
     PicassoPackage = 'com.squareup.picasso'
-    RxJavaPackage = 'io.reactivex.rxjava2'
+    RxJavaPackage = 'io.reactivex'
+    EspressoPackage = 'com.android.support.test.espresso'
 
     // Versions
     RetrofitVersion = '2.3.0'
@@ -29,7 +32,9 @@ ext {
     DaggerVersion = '2.10'
     OkHttpVersion = '3.8.0'
     PicassoVersion = '2.5.2'
-    RxJavaVersion = '2.0.1'
+    RxJavaVersion = '1.3.0'
+    RxAndroidVersion = '1.2.1'
+    EspressoVersion = '2.2.2'
 
     support = [
             appCompat: "$SupportPackage:appcompat-v7:$SupportVersion",
@@ -45,7 +50,7 @@ ext {
     retrofit = [
             core: "$RetrofitPackage:retrofit:$RetrofitVersion",
             converterGson: "$RetrofitPackage:converter-gson:$RetrofitVersion",
-            adapterRxJava: "$RetrofitPackage:adapter-rxjava2:$RetrofitVersion"
+            adapterRxJava: "$RetrofitPackage:adapter-rxjava:$RetrofitVersion"
     ]
 
     okHttp = [
@@ -54,8 +59,13 @@ ext {
     ]
 
     rx = [
-            java: "$RxJavaPackage:rxjava:RxJavaVersion",
-            android: "$RxJavaPackage:rxandroid:$RxJavaVersion"
+            java: "$RxJavaPackage:rxjava:$RxJavaVersion",
+            android: "$RxJavaPackage:rxandroid:$RxAndroidVersion"
+    ]
+
+    // com.android.support.test.espresso:espresso-core:2.2.2
+    espresso = [
+            core: "$EspressoPackage:espresso-core:$EspressoVersion"
     ]
 
     picasso = "$PicassoPackage:picasso:$PicassoVersion"

@@ -7,8 +7,8 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import ua.meugen.android.popularmovies.app.Api;
-import ua.meugen.android.popularmovies.dto.NewSessionDto;
+import ua.meugen.android.popularmovies.app.OldApi;
+import ua.meugen.android.popularmovies.model.dto.NewSessionDto;
 
 public class NewSessionLoader extends AbstractLoader<NewSessionDto> {
 
@@ -23,7 +23,7 @@ public class NewSessionLoader extends AbstractLoader<NewSessionDto> {
     private String token;
 
     @Inject
-    public NewSessionLoader(final Context context, final Api api) {
+    public NewSessionLoader(final Context context, final OldApi api) {
         super(context, api);
     }
 
@@ -32,7 +32,7 @@ public class NewSessionLoader extends AbstractLoader<NewSessionDto> {
     }
 
     @Override
-    protected NewSessionDto loadInBackground(final Api api) throws IOException {
+    protected NewSessionDto loadInBackground(final OldApi api) throws IOException {
         return api.newSession(token);
     }
 }

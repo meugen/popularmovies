@@ -1,5 +1,7 @@
 package ua.meugen.android.popularmovies.app;
 
+import java.util.Map;
+
 import okhttp3.HttpUrl;
 
 /**
@@ -22,7 +24,7 @@ public abstract class Session {
         this.id = id;
     }
 
-    public abstract void bindToUrl(final HttpUrl.Builder builder);
+    public abstract void bindParams(final Map<String, String> params);
 }
 
 class UserSession extends Session {
@@ -32,8 +34,8 @@ class UserSession extends Session {
     }
 
     @Override
-    public void bindToUrl(final HttpUrl.Builder builder) {
-        builder.addQueryParameter("session_id", id);
+    public void bindParams(final Map<String, String> params) {
+        params.put("session_id", id);
     }
 }
 
@@ -44,7 +46,7 @@ class GuestSession extends Session {
     }
 
     @Override
-    public void bindToUrl(final HttpUrl.Builder builder) {
-        builder.addQueryParameter("guest_session_id", id);
+    public void bindParams(final Map<String, String> params) {
+        params.put("guest_session_id", id);
     }
 }

@@ -8,9 +8,9 @@ import java.io.IOException;
 import javax.inject.Inject;
 
 import ua.meugen.android.popularmovies.PopularMovies;
-import ua.meugen.android.popularmovies.app.Api;
+import ua.meugen.android.popularmovies.app.OldApi;
 import ua.meugen.android.popularmovies.app.Session;
-import ua.meugen.android.popularmovies.dto.BaseDto;
+import ua.meugen.android.popularmovies.model.dto.BaseDto;
 
 /**
  * @author meugen
@@ -32,7 +32,7 @@ public class RateMovieLoader extends AbstractLoader<BaseDto> {
     private double value;
 
     @Inject
-    public RateMovieLoader(final Context context, final Api api) {
+    public RateMovieLoader(final Context context, final OldApi api) {
         super(context, api);
     }
 
@@ -42,7 +42,7 @@ public class RateMovieLoader extends AbstractLoader<BaseDto> {
     }
 
     @Override
-    protected BaseDto loadInBackground(final Api api) throws IOException {
+    protected BaseDto loadInBackground(final OldApi api) throws IOException {
         final Session session = PopularMovies.from(getContext()).getSession();
         if (session == null) {
             throw new IllegalArgumentException("Session is null");

@@ -7,7 +7,7 @@ import android.support.v4.content.Loader;
 
 import java.io.IOException;
 
-import ua.meugen.android.popularmovies.dto.BaseResponse;
+import ua.meugen.android.popularmovies.model.dto.BaseResponse;
 
 
 public abstract class AbstractCallbacks<T extends BaseResponse>
