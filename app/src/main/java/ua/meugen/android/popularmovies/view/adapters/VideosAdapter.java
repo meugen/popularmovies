@@ -7,23 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.model.dto.VideoItemDto;
+import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickVideoListener;
 
 
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemViewHolder> {
 
     private final LayoutInflater inflater;
-    private final List<VideoItemDto> videos;
+    private final OnClickVideoListener listener;
 
-    private OnClickVideoListener onClickVideoListener;
+    private List<VideoItemDto> videos;
 
-    public VideosAdapter(final Context context, final List<VideoItemDto> videos) {
+    public VideosAdapter(final Context context, final OnClickVideoListener listener) {
         this.inflater = LayoutInflater
                 .from(context);
+        this.listener = listener;
+        this.videos = Collections.emptyList();
+    }
+
+    public void setVideos(final List<VideoItemDto> videos) {
         this.videos = videos;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -40,20 +48,6 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
     @Override
     public int getItemCount() {
         return videos.size();
-    }
-
-    public OnClickVideoListener getOnClickVideoListener() {
-        return onClickVideoListener;
-    }
-
-    public void setOnClickVideoListener(final OnClickVideoListener onClickVideoListener) {
-        this.onClickVideoListener = onClickVideoListener;
-    }
-
-    private void callOnClickVideoListener(final int position) {
-        if (onClickVideoListener != null) {
-            onClickVideoListener.onClickListener(videos.get(position));
-        }
     }
 
     public class VideoItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -76,8 +70,4 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
         }
     }
 
-    public interface OnClickVideoListener {
-
-        void onClickListener(VideoItemDto dto);
-    }
 }

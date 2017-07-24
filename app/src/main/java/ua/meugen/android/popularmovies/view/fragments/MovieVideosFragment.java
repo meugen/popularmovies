@@ -1,17 +1,19 @@
 package ua.meugen.android.popularmovies.view.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.IOException;
+
+import javax.inject.Inject;
 
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.view.adapters.VideosAdapter;
@@ -21,41 +23,39 @@ import ua.meugen.android.popularmovies.model.dto.VideosDto;
 import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
 import ua.meugen.android.popularmovies.loaders.LoaderResult;
 import ua.meugen.android.popularmovies.loaders.MovieVideosLoader;
+import ua.meugen.android.popularmovies.viewmodel.MovieVideosViewModel;
+import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickVideoListener;
 
 /**
  * @author meugen
  */
 
-public class MovieVideosFragment extends Fragment implements VideosAdapter.OnClickVideoListener {
-
-    private static final String PARAM_ID = "id";
-    private static final String PARAM_VIDEOS = "videos";
+public class MovieVideosFragment extends Fragment implements OnClickVideoListener {
 
     public static MovieVideosFragment newInstance(final int id) {
         final Bundle arguments = new Bundle();
-        arguments.putInt(PARAM_ID, id);
+        MovieVideosViewModel.bindMovieId(arguments, id);
 
         final MovieVideosFragment fragment = new MovieVideosFragment();
         fragment.setArguments(arguments);
         return fragment;
     }
 
-    private final VideosLoaderCallbacks callbacks
-            = new VideosLoaderCallbacks();
+    @Inject MovieVideosViewModel model;
 
-    private int id;
-    private VideosDto videos;
-
-    private FragmentMovieVideosBinding binding;
+    @Override
+    public void onAttach(final Context context) {
+        super.onAttach(context);
+        PopularMovies.appComponent(context).inject(this);
+    }
 
     @Override
     public void onCreate(@Nullable final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (savedInstanceState == null) {
-            restoreInstanceState(getArguments());
+            model.restoreInstanceState(getArguments());
         } else {
-            restoreInstanceState(savedInstanceState);
+            model.restoreInstanceState(savedInstanceState);
         }
     }
 
@@ -73,35 +73,13 @@ public class MovieVideosFragment extends Fragment implements VideosAdapter.OnCli
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        if (videos == null) {
-            loadVideos(false);
-        } else {
-            setupVideos();
-        }
-    }
-
-    private void restoreInstanceState(final Bundle state) {
-        id = state.getInt(PARAM_ID);
-        videos = state.getParcelable(PARAM_VIDEOS);
+        model.load();
     }
 
     @Override
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        outState.putInt(PARAM_ID, id);
-        outState.putParcelable(PARAM_VIDEOS, videos);
-    }
-
-    private void loadVideos(final boolean restart) {
-        final LoaderManager loaderManager = getLoaderManager();
-        final Bundle params = MovieVideosLoader.buildParams(id);
-        if (restart) {
-            loaderManager.restartLoader(0, params, callbacks);
-        } else {
-            loaderManager.initLoader(0, params, callbacks);
-        }
+        model.saveInstanceState(outState);
     }
 
     private void setupVideos() {

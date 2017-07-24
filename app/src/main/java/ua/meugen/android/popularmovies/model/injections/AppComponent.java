@@ -7,6 +7,7 @@ import ua.meugen.android.popularmovies.services.UpdateService;
 import ua.meugen.android.popularmovies.view.activities.MoviesActivity;
 import ua.meugen.android.popularmovies.view.fragments.MovieDetailsFragment;
 import ua.meugen.android.popularmovies.view.fragments.MovieReviewsFragment;
+import ua.meugen.android.popularmovies.view.fragments.MovieVideosFragment;
 
 /**
  * @author meugen
@@ -25,6 +26,8 @@ public interface AppComponent {
     void inject(MovieDetailsFragment fragment);
 
     void inject(MovieReviewsFragment fragment);
+
+    void inject(MovieVideosFragment fragment);
 
     LoadersComponent loadersComponent();
 }

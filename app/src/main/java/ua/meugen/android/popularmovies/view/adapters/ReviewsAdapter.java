@@ -55,13 +55,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewIt
         return reviews.size();
     }
 
-    private void callOnClickReviewListener(final int position) {
-        if (listener != null) {
-            listener.onClickReview(reviews.get(position));
-        }
-    }
-
-    public class ReviewItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class ReviewItemViewHolder extends RecyclerView.ViewHolder {
 
         private final ItemReviewBinding binding;
 
@@ -76,11 +70,6 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewIt
             } else {
                 binding.getModel().setReview(dto);
             }
-        }
-
-        @Override
-        public void onClick(final View view) {
-            callOnClickReviewListener(getAdapterPosition());
         }
     }
 
