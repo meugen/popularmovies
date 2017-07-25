@@ -3,7 +3,6 @@ package ua.meugen.android.popularmovies.viewmodel.listeners;
 import android.databinding.ObservableField;
 import android.view.View;
 
-import ua.meugen.android.popularmovies.model.dto.MovieItemDto;
 import ua.meugen.android.popularmovies.model.dto.VideoItemDto;
 
 public class MovieVideoItemViewModel implements View.OnClickListener {
@@ -25,7 +24,7 @@ public class MovieVideoItemViewModel implements View.OnClickListener {
     @Override
     public void onClick(final View view) {
         if (listener != null) {
-            listener.onClickListener(video.get());
+            listener.onClick(video.get());
         }
     }
 }

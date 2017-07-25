@@ -30,7 +30,7 @@ import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickVideoListener;
  * @author meugen
  */
 
-public class MovieVideosFragment extends Fragment implements OnClickVideoListener {
+public class MovieVideosFragment extends Fragment {
 
     public static MovieVideosFragment newInstance(final int id) {
         final Bundle arguments = new Bundle();
@@ -65,8 +65,9 @@ public class MovieVideosFragment extends Fragment implements OnClickVideoListene
             final LayoutInflater inflater,
             @Nullable final ViewGroup container,
             @Nullable final Bundle savedInstanceState) {
-        binding = FragmentMovieVideosBinding.inflate(
-                inflater, container, false);
+        FragmentMovieVideosBinding binding = FragmentMovieVideosBinding
+                .inflate(inflater, container, false);
+        binding.setModel(model);
         return binding.getRoot();
     }
 
@@ -77,49 +78,14 @@ public class MovieVideosFragment extends Fragment implements OnClickVideoListene
     }
 
     @Override
-    public void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-        model.saveInstanceState(outState);
-    }
-
-    private void setupVideos() {
-        final VideosAdapter adapter = new VideosAdapter(getContext(),
-                videos.getResults());
-        adapter.setOnClickVideoListener(this);
-        binding.videos.setAdapter(adapter);
+    public void onDestroy() {
+        super.onDestroy();
+        model.reset();
     }
 
     @Override
-    public void onClickListener(final VideoItemDto dto) {
-        final Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("https://www.youtube.com/watch?v=" + dto.getKey()));
-        startActivity(intent);
-    }
-
-    private class VideosLoaderCallbacks extends AbstractCallbacks<VideosDto> {
-
-        @Override
-        protected void onData(final VideosDto data) {
-            videos = data;
-            setupVideos();
-        }
-
-        @Override
-        protected void onServerError(final String message, final int code) {}
-
-        @Override
-        protected void onNetworkError(final IOException ex) {}
-
-        @Override
-        protected void onNoNetwork() {}
-
-        @Override
-        public Loader<LoaderResult<VideosDto>> onCreateLoader(final int id, final Bundle args) {
-            final MovieVideosLoader loader = PopularMovies
-                    .loadersComponent(getContext())
-                    .movieVideosLoader();
-            loader.attachParams(args);
-            return loader;
-        }
+    public void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        model.saveInstanceState(outState);
     }
 }

@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
-    <FrameLayout
+    <data>
+        <import type="ua.meugen.android.popularmovies.viewmodel.MovieVideosViewModel"/>
+        <variable name="model" type="MovieVideosViewModel"/>
+    </data>
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/videos"
-            app:layoutManager="GridLayoutManager"
-            app:spanCount="@integer/videos_recycler_span_count"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/message"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
-
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:id="@+id/videos"
+        app:layoutManager="GridLayoutManager"
+        app:spanCount="@integer/videos_recycler_span_count"
+        app:adapter="@{model.adapter}"/>
 </layout>

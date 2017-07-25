@@ -11,7 +11,9 @@ import java.util.Collections;
 import java.util.List;
 
 import ua.meugen.android.popularmovies.R;
+import ua.meugen.android.popularmovies.databinding.ItemVideoBinding;
 import ua.meugen.android.popularmovies.model.dto.VideoItemDto;
+import ua.meugen.android.popularmovies.viewmodel.listeners.MovieVideoItemViewModel;
 import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickVideoListener;
 
 
@@ -36,8 +38,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
 
     @Override
     public VideoItemViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        final View view = inflater.inflate(R.layout.item_video, parent, false);
-        return new VideoItemViewHolder(view);
+        return new VideoItemViewHolder(ItemVideoBinding.inflate(inflater, parent, false));
     }
 
     @Override
@@ -50,23 +51,21 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
         return videos.size();
     }
 
-    public class VideoItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class VideoItemViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView nameView;
+        private final ItemVideoBinding binding;
 
-        public VideoItemViewHolder(final View itemView) {
-            super(itemView);
-            nameView = (TextView) itemView.findViewById(R.id.name);
+        public VideoItemViewHolder(final ItemVideoBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         public void bind(final VideoItemDto dto) {
-            nameView.setText(dto.getName());
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(final View view) {
-            callOnClickVideoListener(getAdapterPosition());
+            if (binding.getModel() == null) {
+                binding.setModel(new MovieVideoItemViewModel(dto, listener));
+            } else {
+                binding.getModel().setVideo(dto);
+            }
         }
     }
 
