@@ -18,15 +18,15 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.view.ListenersCollector;
 import ua.meugen.android.popularmovies.model.Session;
-import ua.meugen.android.popularmovies.view.dialogs.RateMovieDialog;
-import ua.meugen.android.popularmovies.view.dialogs.SelectSessionTypeDialog;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.dto.BaseDto;
 import ua.meugen.android.popularmovies.model.dto.MovieItemDto;
 import ua.meugen.android.popularmovies.model.dto.NewGuestSessionDto;
 import ua.meugen.android.popularmovies.utils.BundleUtils;
+import ua.meugen.android.popularmovies.view.ListenersCollector;
+import ua.meugen.android.popularmovies.view.dialogs.RateMovieDialog;
+import ua.meugen.android.popularmovies.view.dialogs.SelectSessionTypeDialog;
 
 /**
  * @author meugen
@@ -85,7 +85,7 @@ public class MovieDetailsViewModel extends Observable
     }
 
     public void registerListeners(final ListenersCollector collector) {
-        collector.registerListener(listenerUUID, this);
+        listenerUUID = collector.registerListener(listenerUUID, this);
     }
 
     public void load() {

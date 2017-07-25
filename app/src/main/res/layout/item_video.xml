@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="ua.meugen.android.popularmovies.viewmodel.listeners.MovieVideoItemViewModel"/>
+        <import type="ua.meugen.android.popularmovies.viewmodel.MovieVideoItemViewModel"/>
         <variable name="model" type="MovieVideoItemViewModel"/>
     </data>
     <LinearLayout

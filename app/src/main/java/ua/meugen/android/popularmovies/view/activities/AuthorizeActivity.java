@@ -1,35 +1,29 @@
 package ua.meugen.android.popularmovies.view.activities;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
-import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
 
 import javax.inject.Inject;
 
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.ActivityAuthorizeBinding;
-import ua.meugen.android.popularmovies.model.dto.NewSessionDto;
-import ua.meugen.android.popularmovies.model.dto.NewTokenDto;
+import ua.meugen.android.popularmovies.model.dto.BaseDto;
 import ua.meugen.android.popularmovies.viewmodel.AuthorizeViewModel;
 
-public class AuthorizeActivity extends AppCompatActivity {
+public class AuthorizeActivity extends AppCompatActivity implements Observer {
+
+    public static final int RESULT_SERVER_ERROR = 2;
+    public static final int RESULT_NETWORK_ERROR = 3;
 
     public static final String EXTRA_MESSAGE = "message";
     public static final String EXTRA_CODE = "code";
     public static final String EXTRA_SESSION = "session";
-
-    private static final String BASE_AUTH_URL = "https://www.themoviedb.org/authenticate/";
 
     @Inject AuthorizeViewModel model;
 
@@ -43,18 +37,13 @@ public class AuthorizeActivity extends AppCompatActivity {
         setupBinding();
         model.restoreInstanceState(savedInstanceState);
         model.load();
+        model.addObserver(this);
     }
 
     private void setupBinding() {
         this.binding = DataBindingUtil
                 .setContentView(this, R.layout.activity_authorize);
         model.setupWebView(binding.webview);
-    }
-
-    private void createSession() {
-        final Bundle params = NewSessionLoader.buildParams(token);
-        getSupportLoaderManager().initLoader(NEW_SESSION_LOADER_ID,
-                params, sessionCallbacks);
     }
 
     @Override
@@ -67,6 +56,7 @@ public class AuthorizeActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         model.reset();
+        model.deleteObserver(this);
     }
 
     private void serverError(final String message, final int code) {
@@ -83,21 +73,25 @@ public class AuthorizeActivity extends AppCompatActivity {
         finish();
     }
 
-    private void gotToken(final String token) {
-        this.token = token;
-        binding.webview.loadUrl(BASE_AUTH_URL + token);
-    }
-
-    private void gotAllowed() {
-        this.allowed = true;
-        createSession();
-    }
-
     private void gotSession(final String session) {
         final Intent intent = new Intent();
         intent.putExtra(EXTRA_SESSION, session);
 
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+    @Override
+    public void update(final Observable observable, final Object o) {
+        if (AuthorizeViewModel.ACTION_ERROR.equals(o)) {
+            error(RESULT_NETWORK_ERROR);
+        } else if (AuthorizeViewModel.ACTION_TOKEN.equals(o)) {
+            model.loadAuthUrl(binding.webview);
+        } if (o instanceof BaseDto) {
+            BaseDto baseDto = (BaseDto) o;
+            serverError(baseDto.getStatusMessage(), baseDto.getStatusCode());
+        } else if (o instanceof String) {
+            gotSession((String) o);
+        }
     }
 }

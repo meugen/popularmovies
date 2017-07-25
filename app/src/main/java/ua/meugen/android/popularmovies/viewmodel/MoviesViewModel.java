@@ -2,16 +2,13 @@ package ua.meugen.android.popularmovies.viewmodel;
 
 import android.content.Context;
 import android.databinding.ObservableBoolean;
-import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;

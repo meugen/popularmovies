@@ -17,9 +17,9 @@ import java.util.Observer;
 import javax.inject.Inject;
 
 import ua.meugen.android.popularmovies.PopularMovies;
-import ua.meugen.android.popularmovies.view.activities.AuthorizeActivity;
-import ua.meugen.android.popularmovies.view.ListenersCollector;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
+import ua.meugen.android.popularmovies.view.ListenersCollector;
+import ua.meugen.android.popularmovies.view.activities.AuthorizeActivity;
 import ua.meugen.android.popularmovies.viewmodel.MovieDetailsViewModel;
 
 

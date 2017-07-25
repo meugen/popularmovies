@@ -11,8 +11,8 @@ import android.support.v7.app.AlertDialog;
 import java.util.UUID;
 
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.view.ListenersCollector;
 import ua.meugen.android.popularmovies.utils.BundleUtils;
+import ua.meugen.android.popularmovies.view.ListenersCollector;
 
 
 public class SelectSessionTypeDialog extends DialogFragment

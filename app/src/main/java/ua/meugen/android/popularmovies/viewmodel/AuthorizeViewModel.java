@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -17,11 +18,15 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
+import ua.meugen.android.popularmovies.model.dto.NewSessionDto;
 import ua.meugen.android.popularmovies.model.dto.NewTokenDto;
 
 public class AuthorizeViewModel extends Observable {
 
     private static final String TAG = AuthorizeViewModel.class.getSimpleName();
+
+    public static final Integer ACTION_ERROR = 1;
+    public static final Integer ACTION_TOKEN = 2;
 
     private static final String PARAM_TOKEN = "token";
     private static final String PARAM_ALLOWED = "allowed";
@@ -39,6 +44,10 @@ public class AuthorizeViewModel extends Observable {
         this.modelApi = modelApi;
 
         compositeSubscription = new CompositeSubscription();
+    }
+
+    public void loadAuthUrl(final WebView webView) {
+        webView.loadUrl(BASE_AUTH_URL + token);
     }
 
     public void setupWebView(final WebView webView) {
@@ -61,30 +70,58 @@ public class AuthorizeViewModel extends Observable {
 
     public void load() {
         if (token == null) {
-            getToken();
+            loadToken();
         } else if (allowed) {
             createSession();
         }
     }
 
-    private void getToken() {
+    private void loadToken() {
         Subscription subscription = modelApi.newToken()
-                .map(NewTokenDto::getToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotToken, this::onError);
+        compositeSubscription.add(subscription);
     }
 
-    private void gotToken(final String token) {
-        this.token = token;
+    private void gotToken(final NewTokenDto dto) {
+        setChanged();
+        if (dto.isSuccess()) {
+            this.token = dto.getToken();
+            notifyObservers(ACTION_TOKEN);
+        } else {
+            notifyObservers(dto);
+        }
     }
 
     private void onError(final Throwable th) {
+        Log.e(TAG, th.getMessage(), th);
 
+        setChanged();
+        notifyObservers(ACTION_ERROR);
+    }
+
+    private void gotAllowed() {
+        this.allowed = true;
+        createSession();
     }
 
     private void createSession() {
+        Subscription subscription = modelApi.newSession(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::gotSession, this::onError);
+        compositeSubscription.add(subscription);
+    }
 
+    private void gotSession(final NewSessionDto dto) {
+        if (dto.isSuccess()) {
+            setChanged();
+            notifyObservers(dto.getSessionId());
+        } else {
+            setChanged();
+            notifyObservers(dto);
+        }
     }
 
     public void reset() {

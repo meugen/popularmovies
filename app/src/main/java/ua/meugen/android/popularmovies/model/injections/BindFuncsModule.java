@@ -6,8 +6,8 @@ import dagger.Binds;
 import dagger.Module;
 import okhttp3.RequestBody;
 import rx.functions.Func1;
-import ua.meugen.android.popularmovies.model.json.JsonWritable;
 import ua.meugen.android.popularmovies.model.functions.ModelToRequestFunc;
+import ua.meugen.android.popularmovies.model.json.JsonWritable;
 
 /**
  * @author meugen

@@ -5,13 +5,12 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.functions.Func1;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import rx.Observable;
+import rx.functions.Func1;
 import ua.meugen.android.popularmovies.model.RateMovieBody;
 import ua.meugen.android.popularmovies.model.Session;
-import ua.meugen.android.popularmovies.model.json.JsonWritable;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
 import ua.meugen.android.popularmovies.model.dto.BaseDto;
@@ -21,6 +20,7 @@ import ua.meugen.android.popularmovies.model.dto.NewTokenDto;
 import ua.meugen.android.popularmovies.model.dto.PagedMoviesDto;
 import ua.meugen.android.popularmovies.model.dto.PagedReviewsDto;
 import ua.meugen.android.popularmovies.model.dto.VideosDto;
+import ua.meugen.android.popularmovies.model.json.JsonWritable;
 
 /**
  * @author meugen

@@ -3,14 +3,11 @@ package ua.meugen.android.popularmovies.view.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
 
-import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.ItemReviewBinding;
 import ua.meugen.android.popularmovies.model.dto.ReviewItemDto;
 import ua.meugen.android.popularmovies.viewmodel.MovieReviewItemViewModel;
