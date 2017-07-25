@@ -1,7 +1,7 @@
 package ua.meugen.android.popularmovies.model.api;
 
 import rx.Observable;
-import ua.meugen.android.popularmovies.app.Session;
+import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.dto.BaseDto;
 import ua.meugen.android.popularmovies.model.dto.NewGuestSessionDto;
 import ua.meugen.android.popularmovies.model.dto.NewSessionDto;

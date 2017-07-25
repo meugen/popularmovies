@@ -1,8 +1,6 @@
-package ua.meugen.android.popularmovies.app;
+package ua.meugen.android.popularmovies.model;
 
 import java.util.Map;
-
-import okhttp3.HttpUrl;
 
 /**
  * @author meugen

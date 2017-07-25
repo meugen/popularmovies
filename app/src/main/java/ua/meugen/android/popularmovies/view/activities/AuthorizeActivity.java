@@ -14,20 +14,16 @@ import android.webkit.WebViewClient;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.ActivityAuthorizeBinding;
 import ua.meugen.android.popularmovies.model.dto.NewSessionDto;
 import ua.meugen.android.popularmovies.model.dto.NewTokenDto;
-import ua.meugen.android.popularmovies.loaders.AbstractCallbacks;
-import ua.meugen.android.popularmovies.loaders.LoaderResult;
-import ua.meugen.android.popularmovies.loaders.NewSessionLoader;
+import ua.meugen.android.popularmovies.viewmodel.AuthorizeViewModel;
 
 public class AuthorizeActivity extends AppCompatActivity {
-
-    public static final int RESULT_SERVER_ERROR = 2;
-    public static final int RESULT_NETWORK_ERROR = 3;
-    public static final int RESULT_NO_NETWORK = 4;
 
     public static final String EXTRA_MESSAGE = "message";
     public static final String EXTRA_CODE = "code";
@@ -35,40 +31,24 @@ public class AuthorizeActivity extends AppCompatActivity {
 
     private static final String BASE_AUTH_URL = "https://www.themoviedb.org/authenticate/";
 
-    private static final String PARAM_TOKEN = "token";
-    private static final String PARAM_ALLOWED = "allowed";
-
-    private static final int NEW_TOKEN_LOADER_ID = 1;
-    private static final int NEW_SESSION_LOADER_ID = 2;
-
-    private final NewTokenCallbacks tokenCallbacks
-            = new NewTokenCallbacks();
-    private final NewSessionCallbacks sessionCallbacks
-            = new NewSessionCallbacks();
+    @Inject AuthorizeViewModel model;
 
     private ActivityAuthorizeBinding binding;
-
-    private String token;
-    private boolean allowed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil
-                .setContentView(this, R.layout.activity_authorize);
-        binding.webview.setWebViewClient(new AuthorizeWebViewClient());
-        binding.webview.getSettings().setJavaScriptEnabled(true);
+        PopularMovies.appComponent(this).inject(this);
 
-        if (savedInstanceState != null) {
-            token = savedInstanceState.getString(PARAM_TOKEN);
-            allowed = savedInstanceState.getBoolean(PARAM_ALLOWED);
-        }
-        if (token == null) {
-            getSupportLoaderManager().initLoader(NEW_TOKEN_LOADER_ID,
-                    null, tokenCallbacks);
-        } else if (allowed) {
-            createSession();
-        }
+        setupBinding();
+        model.restoreInstanceState(savedInstanceState);
+        model.load();
+    }
+
+    private void setupBinding() {
+        this.binding = DataBindingUtil
+                .setContentView(this, R.layout.activity_authorize);
+        model.setupWebView(binding.webview);
     }
 
     private void createSession() {
@@ -80,8 +60,13 @@ public class AuthorizeActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(PARAM_TOKEN, token);
-        outState.putBoolean(PARAM_ALLOWED, allowed);
+        model.saveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        model.reset();
     }
 
     private void serverError(final String message, final int code) {
@@ -114,96 +99,5 @@ public class AuthorizeActivity extends AppCompatActivity {
 
         setResult(RESULT_OK, intent);
         finish();
-    }
-
-    private class AuthorizeWebViewClient extends WebViewClient {
-
-        @Override
-        public void onPageFinished(final WebView view, final String url) {
-            super.onPageFinished(view, url);
-            final Uri uri = Uri.parse(url);
-            if ("allow".equals(uri.getLastPathSegment())) {
-                gotAllowed();
-            }
-        }
-
-        @Override
-        public boolean shouldOverrideUrlLoading(final WebView view, final String url) {
-            return overrideUrl(view, Uri.parse(url));
-        }
-
-        @TargetApi(Build.VERSION_CODES.N)
-        @Override
-        public boolean shouldOverrideUrlLoading(
-                final WebView view, final WebResourceRequest request) {
-            return overrideUrl(view, request.getUrl());
-        }
-
-        private boolean overrideUrl(final WebView webView, final Uri uri) {
-            webView.loadUrl(uri.toString());
-            return true;
-        }
-    }
-
-    private class NewTokenCallbacks extends AbstractCallbacks<NewTokenDto> {
-
-        @Override
-        protected void onData(final NewTokenDto data) {
-            gotToken(data.getToken());
-        }
-
-        @Override
-        protected void onServerError(final String message, final int code) {
-            serverError(message, code);
-        }
-
-        @Override
-        protected void onNetworkError(final IOException ex) {
-            error(RESULT_NETWORK_ERROR);
-        }
-
-        @Override
-        protected void onNoNetwork() {
-            error(RESULT_NO_NETWORK);
-        }
-
-        @Override
-        public Loader<LoaderResult<NewTokenDto>> onCreateLoader(final int id, final Bundle args) {
-            return PopularMovies
-                    .loadersComponent(AuthorizeActivity.this)
-                    .newTokenLoader();
-        }
-    }
-
-    private class NewSessionCallbacks extends AbstractCallbacks<NewSessionDto> {
-
-        @Override
-        protected void onData(final NewSessionDto data) {
-            gotSession(data.getSessionId());
-        }
-
-        @Override
-        protected void onServerError(final String message, final int code) {
-            serverError(message, code);
-        }
-
-        @Override
-        protected void onNetworkError(final IOException ex) {
-            error(RESULT_NETWORK_ERROR);
-        }
-
-        @Override
-        protected void onNoNetwork() {
-            error(RESULT_NO_NETWORK);
-        }
-
-        @Override
-        public Loader<LoaderResult<NewSessionDto>> onCreateLoader(final int id, final Bundle args) {
-            final NewSessionLoader loader = PopularMovies
-                    .loadersComponent(AuthorizeActivity.this)
-                    .newSessionLoader();
-            loader.attachParams(args);
-            return loader;
-        }
     }
 }

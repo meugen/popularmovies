@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.app.ListenersCollector;
+import ua.meugen.android.popularmovies.view.ListenersCollector;
 import ua.meugen.android.popularmovies.databinding.ActivityMovieDetailsBinding;
 import ua.meugen.android.popularmovies.view.fragments.MovieDetailsFragment;
 import ua.meugen.android.popularmovies.view.fragments.MovieReviewsFragment;

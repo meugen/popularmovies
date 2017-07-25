@@ -34,17 +34,6 @@
             android:name=".view.activities.AuthorizeActivity"
             android:label="@string/activity_authorize_title"/>
 
-        <provider
-            android:name=".providers.MoviesProvider"
-            android:authorities="ua.meugen.android.popularmovies"
-            android:enabled="true"
-            android:exported="false">
-        </provider>
-
-        <service
-            android:name=".services.UpdateService"
-            android:exported="false">
-        </service>
     </application>
 
 </manifest>

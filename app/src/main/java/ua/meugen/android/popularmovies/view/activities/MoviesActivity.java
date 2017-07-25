@@ -1,15 +1,8 @@
 package ua.meugen.android.popularmovies.view.activities;
 
-import android.content.BroadcastReceiver;
-import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -18,11 +11,7 @@ import javax.inject.Inject;
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.ActivityMoviesBinding;
-import ua.meugen.android.popularmovies.view.adapters.MoviesAdapter;
 import ua.meugen.android.popularmovies.viewmodel.MoviesViewModel;
-import ua.meugen.android.popularmovies.viewmodel.listeners.OnMovieClickListener;
-import ua.meugen.android.popularmovies.providers.MoviesContract;
-import ua.meugen.android.popularmovies.services.UpdateService;
 
 public class MoviesActivity extends AppCompatActivity {
 
