@@ -12,7 +12,7 @@ import okhttp3.RequestBody;
 import rx.exceptions.Exceptions;
 import rx.functions.Func1;
 import ua.meugen.android.popularmovies.model.json.JsonWritable;
-import ua.meugen.android.popularmovies.utils.IOUtils;
+import ua.meugen.android.popularmovies.model.utils.IOUtils;
 
 /**
  * @author meugen

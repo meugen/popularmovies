@@ -23,7 +23,7 @@ import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.dto.BaseDto;
 import ua.meugen.android.popularmovies.model.dto.MovieItemDto;
 import ua.meugen.android.popularmovies.model.dto.NewGuestSessionDto;
-import ua.meugen.android.popularmovies.utils.BundleUtils;
+import ua.meugen.android.popularmovies.view.utils.BundleUtils;
 import ua.meugen.android.popularmovies.view.ListenersCollector;
 import ua.meugen.android.popularmovies.view.dialogs.RateMovieDialog;
 import ua.meugen.android.popularmovies.view.dialogs.SelectSessionTypeDialog;

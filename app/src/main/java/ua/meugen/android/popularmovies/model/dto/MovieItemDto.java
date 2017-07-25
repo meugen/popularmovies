@@ -9,7 +9,7 @@ import java.util.List;
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
-import ua.meugen.android.popularmovies.utils.ParcelUtils;
+import ua.meugen.android.popularmovies.view.utils.ParcelUtils;
 
 /**
  * Created by meugen on 28.03.17.

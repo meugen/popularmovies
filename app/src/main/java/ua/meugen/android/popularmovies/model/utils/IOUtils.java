@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.utils;
+package ua.meugen.android.popularmovies.model.utils;
 
 import java.io.Closeable;
 import java.io.IOException;

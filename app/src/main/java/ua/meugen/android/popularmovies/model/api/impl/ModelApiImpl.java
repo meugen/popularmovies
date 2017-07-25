@@ -9,7 +9,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.functions.Func1;
-import ua.meugen.android.popularmovies.model.RateMovieBody;
+import ua.meugen.android.popularmovies.model.body.RateMovieBody;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.api.ServerApi;

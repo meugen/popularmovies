@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.DialogRateMovieBinding;
-import ua.meugen.android.popularmovies.utils.BundleUtils;
+import ua.meugen.android.popularmovies.view.utils.BundleUtils;
 import ua.meugen.android.popularmovies.view.ListenersCollector;
 
 /**

@@ -32,7 +32,7 @@ import ua.meugen.android.popularmovies.model.json.readables.PagedReviewsDtoReada
 import ua.meugen.android.popularmovies.model.json.readables.ReviewItemDtoReadable;
 import ua.meugen.android.popularmovies.model.json.readables.VideoItemDtoReadable;
 import ua.meugen.android.popularmovies.model.json.readables.VideosDtoReadable;
-import ua.meugen.android.popularmovies.utils.IOUtils;
+import ua.meugen.android.popularmovies.model.utils.IOUtils;
 
 @RunWith(AndroidJUnit4.class)
 public class JsonReadablesTest {

@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.utils;
+package ua.meugen.android.popularmovies.view.utils;
 
 import android.os.Parcel;
 

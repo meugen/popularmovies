@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.model;
+package ua.meugen.android.popularmovies.model.body;
 
 import android.util.JsonWriter;
 
