@@ -18,8 +18,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
-import ua.meugen.android.popularmovies.model.dto.NewSessionDto;
-import ua.meugen.android.popularmovies.model.dto.NewTokenDto;
+import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
 
 public class AuthorizeViewModel extends Observable {
 
@@ -77,7 +77,7 @@ public class AuthorizeViewModel extends Observable {
     }
 
     private void loadToken() {
-        Subscription subscription = modelApi.newToken()
+        Subscription subscription = modelApi.createNewToken()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotToken, this::onError);
@@ -107,7 +107,7 @@ public class AuthorizeViewModel extends Observable {
     }
 
     private void createSession() {
-        Subscription subscription = modelApi.newSession(token)
+        Subscription subscription = modelApi.createNewSession(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotSession, this::onError);

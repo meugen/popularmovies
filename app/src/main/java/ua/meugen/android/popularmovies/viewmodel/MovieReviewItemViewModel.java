@@ -3,7 +3,7 @@ package ua.meugen.android.popularmovies.viewmodel;
 import android.databinding.ObservableField;
 import android.view.View;
 
-import ua.meugen.android.popularmovies.model.dto.ReviewItemDto;
+import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
 import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickReviewListener;
 
 /**

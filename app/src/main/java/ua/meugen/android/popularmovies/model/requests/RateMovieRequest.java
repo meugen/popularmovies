@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.model.body;
+package ua.meugen.android.popularmovies.model.requests;
 
 import android.util.JsonWriter;
 
@@ -10,7 +10,7 @@ import ua.meugen.android.popularmovies.model.json.JsonWritable;
  * @author meugen
  */
 
-public class RateMovieBody implements JsonWritable {
+public class RateMovieRequest implements JsonWritable {
 
     private double value;
 

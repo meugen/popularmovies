@@ -15,8 +15,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
-import ua.meugen.android.popularmovies.model.dto.PagedReviewsDto;
-import ua.meugen.android.popularmovies.model.dto.ReviewItemDto;
+import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
+import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
 import ua.meugen.android.popularmovies.view.adapters.ReviewsAdapter;
 import ua.meugen.android.popularmovies.view.dialogs.ReviewDetailDialog;
 import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickReviewListener;
@@ -61,7 +61,7 @@ public class MovieReviewsViewModel extends Observable implements OnClickReviewLi
 
     public void load() {
         Subscription subscription = modelApi
-                .movieReviews(movieId)
+                .getMovieReviews(movieId)
                 .map(PagedReviewsDto::getResults)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import ua.meugen.android.popularmovies.model.dto.BaseDto;
+import ua.meugen.android.popularmovies.model.responses.BaseDto;
 
 public class BaseDtoReadable extends AbstractResponseReadable<BaseDto> {
 

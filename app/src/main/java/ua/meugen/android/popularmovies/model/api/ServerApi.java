@@ -18,33 +18,33 @@ import rx.Observable;
 public interface ServerApi {
 
     @GET("movie/popular")
-    Observable<ResponseBody> popularMovies(
+    Observable<ResponseBody> getPopularMovies(
             @QueryMap Map<String, String> params);
 
     @GET("movie/top_rated")
-    Observable<ResponseBody> topRatedMovies(
+    Observable<ResponseBody> getTopRatedMovies(
             @QueryMap Map<String, String> params);
 
     @GET("movie/{id}/videos")
-    Observable<ResponseBody> movieVideos(
+    Observable<ResponseBody> getMovieVideos(
             @Path("id") int id,
             @QueryMap Map<String, String> params);
 
     @GET("movie/{id}/reviews")
-    Observable<ResponseBody> movieReviews(
+    Observable<ResponseBody> getMovieReviews(
             @Path("id") int id,
             @QueryMap Map<String, String> params);
 
     @GET("authentication/token/new")
-    Observable<ResponseBody> newToken(
+    Observable<ResponseBody> createNewToken(
             @QueryMap Map<String, String> params);
 
     @GET("authentication/session/new")
-    Observable<ResponseBody> newSession(
+    Observable<ResponseBody> createNewSession(
             @QueryMap Map<String, String> params);
 
     @GET("authentication/guest_session/new")
-    Observable<ResponseBody> newGuestSession(
+    Observable<ResponseBody> createNewGuestSession(
             @QueryMap Map<String, String> params);
 
     @POST("movie/{id}/rating")

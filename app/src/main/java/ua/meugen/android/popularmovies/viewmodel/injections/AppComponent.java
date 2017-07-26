@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.model.injections;
+package ua.meugen.android.popularmovies.viewmodel.injections;
 
 import javax.inject.Singleton;
 

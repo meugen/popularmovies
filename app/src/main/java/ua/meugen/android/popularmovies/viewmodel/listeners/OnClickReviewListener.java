@@ -1,6 +1,6 @@
 package ua.meugen.android.popularmovies.viewmodel.listeners;
 
-import ua.meugen.android.popularmovies.model.dto.ReviewItemDto;
+import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
 
 /**
  * @author meugen

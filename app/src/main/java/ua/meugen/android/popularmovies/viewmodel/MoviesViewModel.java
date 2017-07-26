@@ -16,8 +16,8 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
-import ua.meugen.android.popularmovies.model.dto.MovieItemDto;
-import ua.meugen.android.popularmovies.model.dto.PagedMoviesDto;
+import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
+import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
 import ua.meugen.android.popularmovies.model.transactions.MergeMoviesTransaction;
 import ua.meugen.android.popularmovies.view.activities.MovieDetailsActivity;
 import ua.meugen.android.popularmovies.view.adapters.MoviesAdapter;
@@ -62,11 +62,11 @@ public class MoviesViewModel implements SwipeRefreshLayout.OnRefreshListener,
 
         Observable<? extends List<MovieItemDto>> observable;
         if (sortType == PopularMovies.SORT_TYPE_POPULAR) {
-            observable = modelApi.popularMovies()
+            observable = modelApi.getPopularMovies()
                     .map(PagedMoviesDto::getResults)
                     .subscribeOn(Schedulers.io());
         } else if (sortType == PopularMovies.SORT_TYPE_TOP_RATED) {
-            observable = modelApi.topRatedMovies()
+            observable = modelApi.getTopRatedMovies()
                     .map(PagedMoviesDto::getResults)
                     .subscribeOn(Schedulers.io());
         } else if (sortType == PopularMovies.SORT_TYPE_FAVORITES) {

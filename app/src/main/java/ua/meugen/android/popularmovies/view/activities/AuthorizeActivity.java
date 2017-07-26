@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.ActivityAuthorizeBinding;
-import ua.meugen.android.popularmovies.model.dto.BaseDto;
+import ua.meugen.android.popularmovies.model.responses.BaseDto;
 import ua.meugen.android.popularmovies.viewmodel.AuthorizeViewModel;
 
 public class AuthorizeActivity extends AppCompatActivity implements Observer {

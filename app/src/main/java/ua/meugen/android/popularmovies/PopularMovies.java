@@ -10,9 +10,9 @@ import java.util.Date;
 
 import io.realm.Realm;
 import ua.meugen.android.popularmovies.model.Session;
-import ua.meugen.android.popularmovies.model.injections.AppComponent;
-import ua.meugen.android.popularmovies.model.injections.AppModule;
-import ua.meugen.android.popularmovies.model.injections.DaggerAppComponent;
+import ua.meugen.android.popularmovies.viewmodel.injections.AppComponent;
+import ua.meugen.android.popularmovies.viewmodel.injections.AppModule;
+import ua.meugen.android.popularmovies.viewmodel.injections.DaggerAppComponent;
 
 
 public class PopularMovies extends Application {

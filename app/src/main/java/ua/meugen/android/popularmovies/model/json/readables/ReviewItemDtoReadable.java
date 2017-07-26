@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import ua.meugen.android.popularmovies.model.dto.ReviewItemDto;
+import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
 import ua.meugen.android.popularmovies.model.json.JsonReadable;
 
 public class ReviewItemDtoReadable implements JsonReadable<ReviewItemDto> {

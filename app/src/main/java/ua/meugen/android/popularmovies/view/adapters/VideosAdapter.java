@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ua.meugen.android.popularmovies.databinding.ItemVideoBinding;
-import ua.meugen.android.popularmovies.model.dto.VideoItemDto;
+import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
 import ua.meugen.android.popularmovies.viewmodel.MovieVideoItemViewModel;
 import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickVideoListener;
 

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import ua.meugen.android.popularmovies.model.dto.NewTokenDto;
+import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
 import ua.meugen.android.popularmovies.model.json.JsonUtils;
 
 public class NewTokenDtoReadable extends AbstractResponseReadable<NewTokenDto> {

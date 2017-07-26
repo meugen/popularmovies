@@ -1,19 +1,19 @@
-package ua.meugen.android.popularmovies.model.injections;
+package ua.meugen.android.popularmovies.viewmodel.injections;
 
 import javax.inject.Singleton;
 
 import dagger.Binds;
 import dagger.Module;
-import ua.meugen.android.popularmovies.model.dto.BaseDto;
-import ua.meugen.android.popularmovies.model.dto.MovieItemDto;
-import ua.meugen.android.popularmovies.model.dto.NewGuestSessionDto;
-import ua.meugen.android.popularmovies.model.dto.NewSessionDto;
-import ua.meugen.android.popularmovies.model.dto.NewTokenDto;
-import ua.meugen.android.popularmovies.model.dto.PagedMoviesDto;
-import ua.meugen.android.popularmovies.model.dto.PagedReviewsDto;
-import ua.meugen.android.popularmovies.model.dto.ReviewItemDto;
-import ua.meugen.android.popularmovies.model.dto.VideoItemDto;
-import ua.meugen.android.popularmovies.model.dto.VideosDto;
+import ua.meugen.android.popularmovies.model.responses.BaseDto;
+import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
+import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
+import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
+import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
+import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
+import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
+import ua.meugen.android.popularmovies.model.responses.VideosDto;
 import ua.meugen.android.popularmovies.model.json.JsonReadable;
 import ua.meugen.android.popularmovies.model.json.readables.BaseDtoReadable;
 import ua.meugen.android.popularmovies.model.json.readables.MovieItemDtoReadable;

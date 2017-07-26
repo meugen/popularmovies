@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import ua.meugen.android.popularmovies.model.dto.MovieItemDto;
-import ua.meugen.android.popularmovies.model.dto.PagedMoviesDto;
+import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
+import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
 import ua.meugen.android.popularmovies.model.json.JsonReadable;
 import ua.meugen.android.popularmovies.model.json.JsonUtils;
 

@@ -15,16 +15,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
-import ua.meugen.android.popularmovies.model.dto.BaseDto;
-import ua.meugen.android.popularmovies.model.dto.MovieItemDto;
-import ua.meugen.android.popularmovies.model.dto.NewGuestSessionDto;
-import ua.meugen.android.popularmovies.model.dto.NewSessionDto;
-import ua.meugen.android.popularmovies.model.dto.NewTokenDto;
-import ua.meugen.android.popularmovies.model.dto.PagedMoviesDto;
-import ua.meugen.android.popularmovies.model.dto.PagedReviewsDto;
-import ua.meugen.android.popularmovies.model.dto.ReviewItemDto;
-import ua.meugen.android.popularmovies.model.dto.VideoItemDto;
-import ua.meugen.android.popularmovies.model.dto.VideosDto;
+import ua.meugen.android.popularmovies.model.responses.BaseDto;
+import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
+import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
+import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
+import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
+import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
+import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
+import ua.meugen.android.popularmovies.model.responses.VideosDto;
 
 @RunWith(AndroidJUnit4.class)
 public class ParcelablesTest {

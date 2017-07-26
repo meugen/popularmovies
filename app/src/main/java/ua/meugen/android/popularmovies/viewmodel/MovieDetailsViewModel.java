@@ -20,9 +20,9 @@ import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
-import ua.meugen.android.popularmovies.model.dto.BaseDto;
-import ua.meugen.android.popularmovies.model.dto.MovieItemDto;
-import ua.meugen.android.popularmovies.model.dto.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.model.responses.BaseDto;
+import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
+import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
 import ua.meugen.android.popularmovies.view.utils.BundleUtils;
 import ua.meugen.android.popularmovies.view.ListenersCollector;
 import ua.meugen.android.popularmovies.view.dialogs.RateMovieDialog;
@@ -182,7 +182,7 @@ public class MovieDetailsViewModel extends Observable
     @Override
     public void onGuestSessionSelected() {
         Subscription subscription = modelApi
-                .newGuestSession()
+                .createNewGuestSession()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGuestSessionSuccess, this::onGuestSessionError);

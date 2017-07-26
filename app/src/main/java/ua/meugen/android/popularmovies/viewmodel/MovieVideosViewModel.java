@@ -15,8 +15,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
-import ua.meugen.android.popularmovies.model.dto.VideoItemDto;
-import ua.meugen.android.popularmovies.model.dto.VideosDto;
+import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
+import ua.meugen.android.popularmovies.model.responses.VideosDto;
 import ua.meugen.android.popularmovies.view.adapters.VideosAdapter;
 import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickVideoListener;
 
@@ -58,7 +58,7 @@ public class MovieVideosViewModel implements OnClickVideoListener {
     }
 
     public void load() {
-        Subscription subscription = modelApi.movieVideos(movieId)
+        Subscription subscription = modelApi.getMovieVideos(movieId)
                 .map(VideosDto::getResults)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

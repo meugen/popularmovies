@@ -3,7 +3,7 @@ package ua.meugen.android.popularmovies.model.transactions;
 import java.util.List;
 
 import io.realm.Realm;
-import ua.meugen.android.popularmovies.model.dto.MovieItemDto;
+import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 
 /**
  * @author meugen

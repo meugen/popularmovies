@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import ua.meugen.android.popularmovies.model.dto.NewSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
 
 public class NewSessionDtoReadable extends AbstractResponseReadable<NewSessionDto> {
 

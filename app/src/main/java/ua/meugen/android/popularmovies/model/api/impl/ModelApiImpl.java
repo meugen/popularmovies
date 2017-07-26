@@ -9,17 +9,17 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.functions.Func1;
-import ua.meugen.android.popularmovies.model.body.RateMovieBody;
+import ua.meugen.android.popularmovies.model.requests.RateMovieRequest;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
-import ua.meugen.android.popularmovies.model.dto.BaseDto;
-import ua.meugen.android.popularmovies.model.dto.NewGuestSessionDto;
-import ua.meugen.android.popularmovies.model.dto.NewSessionDto;
-import ua.meugen.android.popularmovies.model.dto.NewTokenDto;
-import ua.meugen.android.popularmovies.model.dto.PagedMoviesDto;
-import ua.meugen.android.popularmovies.model.dto.PagedReviewsDto;
-import ua.meugen.android.popularmovies.model.dto.VideosDto;
+import ua.meugen.android.popularmovies.model.responses.BaseDto;
+import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
+import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
+import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
+import ua.meugen.android.popularmovies.model.responses.VideosDto;
 import ua.meugen.android.popularmovies.model.json.JsonWritable;
 
 /**
@@ -51,46 +51,46 @@ public class ModelApiImpl implements ModelApi {
     }
 
     @Override
-    public Observable<PagedMoviesDto> popularMovies() {
-        return serverApi.popularMovies(createQueryMap())
+    public Observable<PagedMoviesDto> getPopularMovies() {
+        return serverApi.getPopularMovies(createQueryMap())
                 .map(responseMoviesFunc);
     }
 
     @Override
-    public Observable<PagedMoviesDto> topRatedMovies() {
-        return serverApi.topRatedMovies(createQueryMap())
+    public Observable<PagedMoviesDto> getTopRatedMovies() {
+        return serverApi.getTopRatedMovies(createQueryMap())
                 .map(responseMoviesFunc);
     }
 
     @Override
-    public Observable<VideosDto> movieVideos(final int id) {
-        return serverApi.movieVideos(id, createQueryMap())
+    public Observable<VideosDto> getMovieVideos(final int id) {
+        return serverApi.getMovieVideos(id, createQueryMap())
                 .map(responseVideosFunc);
     }
 
     @Override
-    public Observable<PagedReviewsDto> movieReviews(final int id) {
-        return serverApi.movieReviews(id, createQueryMap())
+    public Observable<PagedReviewsDto> getMovieReviews(final int id) {
+        return serverApi.getMovieReviews(id, createQueryMap())
                 .map(responseReviewsFunc);
     }
 
     @Override
-    public Observable<NewTokenDto> newToken() {
-        return serverApi.newToken(createQueryMap())
+    public Observable<NewTokenDto> createNewToken() {
+        return serverApi.createNewToken(createQueryMap())
                 .map(responseTokenFunc);
     }
 
     @Override
-    public Observable<NewSessionDto> newSession(final String token) {
+    public Observable<NewSessionDto> createNewSession(final String token) {
         final Map<String, String> params = createQueryMap();
         params.put("request_token", token);
-        return serverApi.newSession(params)
+        return serverApi.createNewSession(params)
                 .map(responseSessionFunc);
     }
 
     @Override
-    public Observable<NewGuestSessionDto> newGuestSession() {
-        return serverApi.newGuestSession(createQueryMap())
+    public Observable<NewGuestSessionDto> createNewGuestSession() {
+        return serverApi.createNewGuestSession(createQueryMap())
                 .map(responseGuestSessionFunc);
     }
 
@@ -99,7 +99,7 @@ public class ModelApiImpl implements ModelApi {
             final Session session,
             final int id,
             final double value) {
-        final RateMovieBody body = new RateMovieBody();
+        final RateMovieRequest body = new RateMovieRequest();
         body.setValue(value);
 
         final Map<String, String> params = createQueryMap();
