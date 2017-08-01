@@ -1,10 +1,10 @@
-package ua.meugen.android.popularmovies.viewmodel;
+package ua.meugen.android.popularmovies.presenter;
 
 import android.databinding.ObservableField;
 import android.view.View;
 
 import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
-import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickVideoListener;
+import ua.meugen.android.popularmovies.presenter.listeners.OnClickVideoListener;
 
 public class MovieVideoItemViewModel implements View.OnClickListener {
 

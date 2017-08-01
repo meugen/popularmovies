@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieReviewsBinding;
 import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
-import ua.meugen.android.popularmovies.viewmodel.MovieReviewsViewModel;
+import ua.meugen.android.popularmovies.presenter.MovieReviewsViewModel;
 
 /**
  * @author meugen

@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.viewmodel;
+package ua.meugen.android.popularmovies.presenter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
 import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
 import ua.meugen.android.popularmovies.view.adapters.ReviewsAdapter;
 import ua.meugen.android.popularmovies.view.dialogs.ReviewDetailDialog;
-import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickReviewListener;
+import ua.meugen.android.popularmovies.presenter.listeners.OnClickReviewListener;
 
 /**
  * @author meugen

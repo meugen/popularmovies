@@ -10,8 +10,8 @@ import java.util.List;
 
 import ua.meugen.android.popularmovies.databinding.ItemVideoBinding;
 import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
-import ua.meugen.android.popularmovies.viewmodel.MovieVideoItemViewModel;
-import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickVideoListener;
+import ua.meugen.android.popularmovies.presenter.MovieVideoItemViewModel;
+import ua.meugen.android.popularmovies.presenter.listeners.OnClickVideoListener;
 
 
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemViewHolder> {

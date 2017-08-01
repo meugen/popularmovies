@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.viewmodel;
+package ua.meugen.android.popularmovies.presenter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,11 +18,11 @@ import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
 import ua.meugen.android.popularmovies.model.responses.VideosDto;
 import ua.meugen.android.popularmovies.view.adapters.VideosAdapter;
-import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickVideoListener;
+import ua.meugen.android.popularmovies.presenter.listeners.OnClickVideoListener;
 
-public class MovieVideosViewModel implements OnClickVideoListener {
+public class MovieVideosPresenter {
 
-    private static final String TAG = MovieVideosViewModel.class.getSimpleName();
+    private static final String TAG = MovieVideosPresenter.class.getSimpleName();
 
     private static final String PARAM_MOVIE_ID = "movieId";
 
@@ -30,23 +30,17 @@ public class MovieVideosViewModel implements OnClickVideoListener {
         args.putInt(PARAM_MOVIE_ID, movieId);
     }
 
-    public final VideosAdapter adapter;
-
-    private final Context context;
     private final ModelApi modelApi;
     private final CompositeSubscription compositeSubscription;
 
     private int movieId;
 
     @Inject
-    public MovieVideosViewModel(
-            final Context context,
+    public MovieVideosPresenter(
             final ModelApi modelApi) {
-        this.context = context;
         this.modelApi = modelApi;
-
-        this.adapter = new VideosAdapter(context, this);
-        this.compositeSubscription = new CompositeSubscription();
+        this.compositeSubscription
+                = new CompositeSubscription();
     }
 
     public void restoreInstanceState(final Bundle state) {

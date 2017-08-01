@@ -10,8 +10,8 @@ import java.util.List;
 
 import ua.meugen.android.popularmovies.databinding.ItemReviewBinding;
 import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
-import ua.meugen.android.popularmovies.viewmodel.MovieReviewItemViewModel;
-import ua.meugen.android.popularmovies.viewmodel.listeners.OnClickReviewListener;
+import ua.meugen.android.popularmovies.presenter.MovieReviewItemViewModel;
+import ua.meugen.android.popularmovies.presenter.listeners.OnClickReviewListener;
 
 /**
  * @author meugen

@@ -10,18 +10,13 @@ import java.util.Date;
 
 import io.realm.Realm;
 import ua.meugen.android.popularmovies.model.Session;
-import ua.meugen.android.popularmovies.viewmodel.injections.AppComponent;
-import ua.meugen.android.popularmovies.viewmodel.injections.AppModule;
-import ua.meugen.android.popularmovies.viewmodel.injections.DaggerAppComponent;
+import ua.meugen.android.popularmovies.presenter.annotations.SortType;
+import ua.meugen.android.popularmovies.presenter.injections.AppComponent;
+import ua.meugen.android.popularmovies.presenter.injections.AppModule;
+import ua.meugen.android.popularmovies.presenter.injections.DaggerAppComponent;
 
 
 public class PopularMovies extends Application {
-
-    @IntDef({SORT_TYPE_POPULAR, SORT_TYPE_TOP_RATED, SORT_TYPE_FAVORITES})
-    public @interface SortType {}
-    public static final int SORT_TYPE_POPULAR = 1;
-    public static final int SORT_TYPE_TOP_RATED = 2;
-    public static final int SORT_TYPE_FAVORITES = 3;
 
     private static final String PREF_SORT_TYPE_INT = "sortTypeInt";
     private static final String PREF_SESSION_ID = "sessionId";
@@ -58,7 +53,7 @@ public class PopularMovies extends Application {
     @SortType
     @SuppressWarnings("ResourceType")
     public int getSortType() {
-        return getPrefs().getInt(PREF_SORT_TYPE_INT, SORT_TYPE_POPULAR);
+        return getPrefs().getInt(PREF_SORT_TYPE_INT, SortType.POPULAR);
     }
 
     public void setSortType(@SortType final int sortType) {

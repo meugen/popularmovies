@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.viewmodel;
+package ua.meugen.android.popularmovies.presenter;
 
 import android.annotation.TargetApi;
 import android.net.Uri;

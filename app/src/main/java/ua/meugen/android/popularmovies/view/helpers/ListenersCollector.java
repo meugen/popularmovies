@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.view;
+package ua.meugen.android.popularmovies.view.helpers;
 
 import android.support.annotation.NonNull;
 

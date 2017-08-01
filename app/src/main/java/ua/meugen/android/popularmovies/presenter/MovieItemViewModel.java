@@ -1,10 +1,10 @@
-package ua.meugen.android.popularmovies.viewmodel;
+package ua.meugen.android.popularmovies.presenter;
 
 import android.databinding.ObservableField;
 import android.view.View;
 
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.viewmodel.listeners.OnMovieClickListener;
+import ua.meugen.android.popularmovies.presenter.listeners.OnMovieClickListener;
 
 /**
  * @author meugen

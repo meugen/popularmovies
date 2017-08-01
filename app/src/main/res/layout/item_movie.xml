@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
+<ImageView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <data>
-        <import type="ua.meugen.android.popularmovies.viewmodel.MovieItemViewModel"/>
-        <variable name="model" type="MovieItemViewModel"/>
-    </data>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/poster"
-        android:scaleType="fitXY"
-        android:contentDescription="@{model.movie.title}"
-        android:onClick="@{model}"
-        app:path="@{model.movie.posterPath}"/>
-</layout>
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/poster"
+    android:scaleType="fitXY"/>

@@ -23,9 +23,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    dataBinding {
-        enabled = true
-    }
 }
 
 dependencies {
@@ -49,6 +46,11 @@ dependencies {
 
     compile rx.java
     compile rx.android
+
+    compile mosby.mvp
+
+    compile butterknife.core
+    compile butterknife.compiler
 
     androidTestCompile(espresso.core, {
         exclude group: SupportPackage, module: 'support-annotations'

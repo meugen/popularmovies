@@ -11,8 +11,8 @@ import java.util.List;
 
 import ua.meugen.android.popularmovies.databinding.ItemMovieBinding;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.viewmodel.MovieItemViewModel;
-import ua.meugen.android.popularmovies.viewmodel.listeners.OnMovieClickListener;
+import ua.meugen.android.popularmovies.presenter.MovieItemViewModel;
+import ua.meugen.android.popularmovies.presenter.listeners.OnMovieClickListener;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 

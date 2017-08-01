@@ -1,7 +1,6 @@
 package ua.meugen.android.popularmovies.view.activities;
 
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -12,9 +11,8 @@ import javax.inject.Inject;
 
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.databinding.ActivityAuthorizeBinding;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
-import ua.meugen.android.popularmovies.viewmodel.AuthorizeViewModel;
+import ua.meugen.android.popularmovies.presenter.AuthorizeViewModel;
 
 public class AuthorizeActivity extends AppCompatActivity implements Observer {
 

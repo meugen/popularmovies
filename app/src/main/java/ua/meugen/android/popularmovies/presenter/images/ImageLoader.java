@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.viewmodel.images;
+package ua.meugen.android.popularmovies.presenter.images;
 
 import android.content.Context;
 

@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieVideosBinding;
-import ua.meugen.android.popularmovies.viewmodel.MovieVideosViewModel;
+import ua.meugen.android.popularmovies.presenter.MovieVideosPresenter;
 
 /**
  * @author meugen
@@ -22,14 +22,15 @@ public class MovieVideosFragment extends Fragment {
 
     public static MovieVideosFragment newInstance(final int id) {
         final Bundle arguments = new Bundle();
-        MovieVideosViewModel.bindMovieId(arguments, id);
+        MovieVideosPresenter.bindMovieId(arguments, id);
 
         final MovieVideosFragment fragment = new MovieVideosFragment();
         fragment.setArguments(arguments);
         return fragment;
     }
 
-    @Inject MovieVideosViewModel model;
+    @Inject
+    MovieVideosPresenter model;
 
     @Override
     public void onAttach(final Context context) {

@@ -1,13 +1,15 @@
-package ua.meugen.android.popularmovies.viewmodel.injections;
+package ua.meugen.android.popularmovies.presenter.injections;
 
 import javax.inject.Singleton;
 
 import dagger.Component;
+import ua.meugen.android.popularmovies.presenter.MoviesPresenter;
 import ua.meugen.android.popularmovies.view.activities.AuthorizeActivity;
 import ua.meugen.android.popularmovies.view.activities.MoviesActivity;
 import ua.meugen.android.popularmovies.view.fragments.MovieDetailsFragment;
 import ua.meugen.android.popularmovies.view.fragments.MovieReviewsFragment;
 import ua.meugen.android.popularmovies.view.fragments.MovieVideosFragment;
+import ua.meugen.android.popularmovies.view.fragments.MoviesFragment;
 
 /**
  * @author meugen
@@ -28,4 +30,6 @@ public interface AppComponent {
     void inject(MovieVideosFragment fragment);
 
     void inject(AuthorizeActivity activity);
+
+    MoviesPresenter createMoviesPresenter();
 }

@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.viewmodel.injections;
+package ua.meugen.android.popularmovies.presenter.injections;
 
 import android.content.Context;
 

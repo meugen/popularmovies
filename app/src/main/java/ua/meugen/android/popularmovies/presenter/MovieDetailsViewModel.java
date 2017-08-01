@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.viewmodel;
+package ua.meugen.android.popularmovies.presenter;
 
 import android.content.Context;
 import android.databinding.ObservableField;
@@ -24,7 +24,7 @@ import ua.meugen.android.popularmovies.model.responses.BaseDto;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
 import ua.meugen.android.popularmovies.view.utils.BundleUtils;
-import ua.meugen.android.popularmovies.view.ListenersCollector;
+import ua.meugen.android.popularmovies.view.helpers.ListenersCollector;
 import ua.meugen.android.popularmovies.view.dialogs.RateMovieDialog;
 import ua.meugen.android.popularmovies.view.dialogs.SelectSessionTypeDialog;
 

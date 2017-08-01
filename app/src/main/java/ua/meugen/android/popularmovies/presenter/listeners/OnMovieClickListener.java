@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.viewmodel.listeners;
+package ua.meugen.android.popularmovies.presenter.listeners;
 
 public interface OnMovieClickListener {
 

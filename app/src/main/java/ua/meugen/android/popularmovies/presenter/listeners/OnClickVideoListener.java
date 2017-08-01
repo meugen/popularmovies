@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.viewmodel.listeners;
+package ua.meugen.android.popularmovies.presenter.listeners;
 
 import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
 

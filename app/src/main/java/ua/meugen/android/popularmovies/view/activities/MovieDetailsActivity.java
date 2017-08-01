@@ -2,7 +2,6 @@ package ua.meugen.android.popularmovies.view.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -10,9 +9,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.databinding.ActivityMovieDetailsBinding;
-import ua.meugen.android.popularmovies.view.ListenersCollector;
+import ua.meugen.android.popularmovies.view.helpers.ListenersCollector;
 import ua.meugen.android.popularmovies.view.fragments.MovieDetailsFragment;
 import ua.meugen.android.popularmovies.view.fragments.MovieReviewsFragment;
 import ua.meugen.android.popularmovies.view.fragments.MovieVideosFragment;
@@ -38,7 +38,9 @@ public class MovieDetailsActivity extends AppCompatActivity
     private final ListenersCollector listenersCollector
             = new ListenersCollector();
 
-    private ActivityMovieDetailsBinding binding;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
+
     private MovieDetailsFragment detailsFragment;
     private MovieVideosFragment videosFragment;
     private MovieReviewsFragment reviewsFragment;
@@ -46,8 +48,8 @@ public class MovieDetailsActivity extends AppCompatActivity
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil
-                .setContentView(this, R.layout.activity_movie_details);
+        setContentView(R.layout.activity_movie_details);
+        ButterKnife.bind(this);
 
         if (savedInstanceState == null) {
             final int movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, 0);
@@ -69,12 +71,12 @@ public class MovieDetailsActivity extends AppCompatActivity
                     .findFragmentByTag(TAG_VIDEOS);
             reviewsFragment = (MovieReviewsFragment) fragmentManager
                     .findFragmentByTag(TAG_REVIEWS);
-            binding.tabLayout
+            tabLayout
                     .getTabAt(savedInstanceState.getInt(PARAM_ACTIVE_TAB))
                     .select();
         }
 
-        binding.tabLayout.addOnTabSelectedListener(this);
+        tabLayout.addOnTabSelectedListener(this);
     }
 
     private Fragment getFragmentByTabIndex(final int index) {
@@ -110,7 +112,7 @@ public class MovieDetailsActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(PARAM_ACTIVE_TAB, binding.tabLayout.getSelectedTabPosition());
+        outState.putInt(PARAM_ACTIVE_TAB, tabLayout.getSelectedTabPosition());
     }
 
     @NonNull
