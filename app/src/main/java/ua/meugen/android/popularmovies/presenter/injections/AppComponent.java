@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import ua.meugen.android.popularmovies.presenter.AuthorizePresenter;
+import ua.meugen.android.popularmovies.presenter.MovieDetailsPresenter;
 import ua.meugen.android.popularmovies.presenter.MoviesPresenter;
 import ua.meugen.android.popularmovies.view.activities.AuthorizeActivity;
 import ua.meugen.android.popularmovies.view.activities.MoviesActivity;
@@ -17,8 +18,7 @@ import ua.meugen.android.popularmovies.view.fragments.MovieVideosFragment;
 
 @Singleton
 @Component(modules = { AppModule.class, ReadablesModule.class,
-        ProvideFuncsModule.class, BindFuncsModule.class,
-        ModelApiModule.class })
+        ProvideFuncsModule.class, BindsModule.class })
 public interface AppComponent {
 
     void inject(MoviesActivity activity);
@@ -34,4 +34,6 @@ public interface AppComponent {
     MoviesPresenter createMoviesPresenter();
 
     AuthorizePresenter createAuthorizePresenter();
+
+    MovieDetailsPresenter createMovieDetailsPresenter();
 }
