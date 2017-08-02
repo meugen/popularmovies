@@ -18,9 +18,9 @@ import javax.inject.Inject;
 
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
-import ua.meugen.android.popularmovies.view.helpers.ListenersCollector;
-import ua.meugen.android.popularmovies.view.activities.AuthorizeActivity;
 import ua.meugen.android.popularmovies.presenter.MovieDetailsViewModel;
+import ua.meugen.android.popularmovies.view.activities.AuthorizeActivity;
+import ua.meugen.android.popularmovies.view.helpers.ListenersCollector;
 
 
 public class MovieDetailsFragment extends Fragment

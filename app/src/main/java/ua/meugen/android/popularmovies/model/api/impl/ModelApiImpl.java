@@ -9,10 +9,11 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.functions.Func1;
-import ua.meugen.android.popularmovies.model.requests.RateMovieRequest;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
+import ua.meugen.android.popularmovies.model.json.JsonWritable;
+import ua.meugen.android.popularmovies.model.requests.RateMovieRequest;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
 import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
 import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
@@ -20,7 +21,6 @@ import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
 import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
 import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
 import ua.meugen.android.popularmovies.model.responses.VideosDto;
-import ua.meugen.android.popularmovies.model.json.JsonWritable;
 
 /**
  * @author meugen

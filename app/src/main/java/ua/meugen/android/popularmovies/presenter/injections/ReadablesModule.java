@@ -4,16 +4,6 @@ import javax.inject.Singleton;
 
 import dagger.Binds;
 import dagger.Module;
-import ua.meugen.android.popularmovies.model.responses.BaseDto;
-import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
-import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
-import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
-import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
-import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
-import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
-import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
-import ua.meugen.android.popularmovies.model.responses.VideosDto;
 import ua.meugen.android.popularmovies.model.json.JsonReadable;
 import ua.meugen.android.popularmovies.model.json.readables.BaseDtoReadable;
 import ua.meugen.android.popularmovies.model.json.readables.MovieItemDtoReadable;
@@ -25,6 +15,16 @@ import ua.meugen.android.popularmovies.model.json.readables.PagedReviewsDtoReada
 import ua.meugen.android.popularmovies.model.json.readables.ReviewItemDtoReadable;
 import ua.meugen.android.popularmovies.model.json.readables.VideoItemDtoReadable;
 import ua.meugen.android.popularmovies.model.json.readables.VideosDtoReadable;
+import ua.meugen.android.popularmovies.model.responses.BaseDto;
+import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
+import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
+import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
+import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
+import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
+import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
+import ua.meugen.android.popularmovies.model.responses.VideosDto;
 
 @Module
 public abstract class ReadablesModule {

@@ -4,8 +4,8 @@ import android.util.JsonReader;
 
 import java.io.IOException;
 
-import ua.meugen.android.popularmovies.model.responses.BaseResponse;
 import ua.meugen.android.popularmovies.model.json.JsonReadable;
+import ua.meugen.android.popularmovies.model.responses.BaseResponse;
 
 
 abstract class AbstractResponseReadable<T extends BaseResponse> implements JsonReadable<T> {

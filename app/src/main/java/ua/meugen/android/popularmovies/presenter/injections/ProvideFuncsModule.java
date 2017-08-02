@@ -6,6 +6,8 @@ import dagger.Module;
 import dagger.Provides;
 import okhttp3.ResponseBody;
 import rx.functions.Func1;
+import ua.meugen.android.popularmovies.model.functions.ResponseToModelFunc;
+import ua.meugen.android.popularmovies.model.json.JsonReadable;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
 import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
 import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
@@ -13,8 +15,6 @@ import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
 import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
 import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
 import ua.meugen.android.popularmovies.model.responses.VideosDto;
-import ua.meugen.android.popularmovies.model.functions.ResponseToModelFunc;
-import ua.meugen.android.popularmovies.model.json.JsonReadable;
 
 /**
  * @author meugen

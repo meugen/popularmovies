@@ -12,10 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.view.helpers.ListenersCollector;
 import ua.meugen.android.popularmovies.view.fragments.MovieDetailsFragment;
 import ua.meugen.android.popularmovies.view.fragments.MovieReviewsFragment;
 import ua.meugen.android.popularmovies.view.fragments.MovieVideosFragment;
+import ua.meugen.android.popularmovies.view.helpers.ListenersCollector;
 
 public class MovieDetailsActivity extends AppCompatActivity
         implements TabLayout.OnTabSelectedListener, ListenersCollector.Container {

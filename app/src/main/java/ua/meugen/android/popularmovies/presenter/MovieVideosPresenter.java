@@ -1,6 +1,5 @@
 package ua.meugen.android.popularmovies.presenter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,8 +16,6 @@ import rx.subscriptions.CompositeSubscription;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
 import ua.meugen.android.popularmovies.model.responses.VideosDto;
-import ua.meugen.android.popularmovies.view.adapters.VideosAdapter;
-import ua.meugen.android.popularmovies.presenter.listeners.OnClickVideoListener;
 
 public class MovieVideosPresenter {
 

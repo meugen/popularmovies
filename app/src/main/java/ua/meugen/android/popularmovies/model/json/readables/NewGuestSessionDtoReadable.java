@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
 import ua.meugen.android.popularmovies.model.json.JsonUtils;
+import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
 
 public class NewGuestSessionDtoReadable extends AbstractResponseReadable<NewGuestSessionDto> {
 

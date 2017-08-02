@@ -6,8 +6,8 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
 import ua.meugen.android.popularmovies.model.json.JsonReadable;
+import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
 
 public class VideoItemDtoReadable implements JsonReadable<VideoItemDto> {
 

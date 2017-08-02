@@ -17,9 +17,9 @@ import rx.subscriptions.CompositeSubscription;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
 import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
+import ua.meugen.android.popularmovies.presenter.listeners.OnClickReviewListener;
 import ua.meugen.android.popularmovies.view.adapters.ReviewsAdapter;
 import ua.meugen.android.popularmovies.view.dialogs.ReviewDetailDialog;
-import ua.meugen.android.popularmovies.presenter.listeners.OnClickReviewListener;
 
 /**
  * @author meugen

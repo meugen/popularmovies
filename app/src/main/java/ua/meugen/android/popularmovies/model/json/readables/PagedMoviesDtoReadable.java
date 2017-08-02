@@ -6,10 +6,10 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
 import ua.meugen.android.popularmovies.model.json.JsonReadable;
 import ua.meugen.android.popularmovies.model.json.JsonUtils;
+import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
+import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
 
 public class PagedMoviesDtoReadable extends AbstractResponseReadable<PagedMoviesDto> {
 
