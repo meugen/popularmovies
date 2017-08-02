@@ -5,27 +5,29 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
+import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.Date;
-import java.util.Observable;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.presenter.MovieDetailsPresenter;
+import ua.meugen.android.popularmovies.presenter.images.FileSize;
+import ua.meugen.android.popularmovies.presenter.images.ImageLoader;
 import ua.meugen.android.popularmovies.view.MovieDetailsView;
 import ua.meugen.android.popularmovies.view.activities.AuthorizeActivity;
 import ua.meugen.android.popularmovies.view.dialogs.RateMovieDialog;
@@ -50,6 +52,11 @@ public class MovieDetailsFragment extends MvpFragment<MovieDetailsView, MovieDet
         fragment.setArguments(arguments);
         return fragment;
     }
+
+    @BindView(R.id.poster) ImageView posterView;
+    @BindView(R.id.release_date) TextView releaseDateView;
+    @BindView(R.id.vote_average) TextView voteAverageView;
+    @BindView(R.id.overview) TextView overviewView;
 
     private UUID listenerUUID;
 
@@ -112,8 +119,7 @@ public class MovieDetailsFragment extends MvpFragment<MovieDetailsView, MovieDet
             final Intent data) {
         if (resultCode == AuthorizeActivity.RESULT_OK) {
             final String session = data.getStringExtra(AuthorizeActivity.EXTRA_SESSION);
-            final PopularMovies popularMovies = PopularMovies.from(getContext());
-            popularMovies.storeSession(session, false, new Date(Long.MAX_VALUE));
+            presenter.storeUserSession(session);
             rateMovieWithSession();
         } else {
             Toast.makeText(getContext(), "Error", Toast.LENGTH_LONG).show();
@@ -122,7 +128,14 @@ public class MovieDetailsFragment extends MvpFragment<MovieDetailsView, MovieDet
 
     @Override
     public void gotMovie(final MovieItemDto movie) {
-
+        ImageLoader.from(getContext())
+                .load(FileSize.w(500), movie.getPosterPath())
+                .into(posterView);
+        releaseDateView.setText(DateFormat.getDateInstance()
+                .format(movie.getReleaseDate()));
+        voteAverageView.setText(getString(R.string.activity_movie_details_vote_average,
+                movie.getVoteAverage()));
+        overviewView.setText(movie.getOverview());
     }
 
     @Override
@@ -156,22 +169,32 @@ public class MovieDetailsFragment extends MvpFragment<MovieDetailsView, MovieDet
         dialog.show(getFragmentManager(), "rate_movie");
     }
 
+    @Override
+    public void onMovieRatedSuccess() {
+        showMessage(getText(R.string.result_rate_movie_ok));
+    }
+
+    @Override
+    public void onServerError(final String message) {
+        showMessage(getString(R.string.result_server_error, message));
+    }
+
+    @Override
+    public void onError() {
+        showMessage(getText(R.string.result_network_error));
+    }
+
+    private void showMessage(final CharSequence message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
     @OnClick(R.id.rate_movie)
-    public void rateMovie() {
+    public void onRateMovie() {
         presenter.rateMovie();
     }
 
-    //    @Override
-//    public void update(final Observable observable, final Object o) {
-//        if (MovieDetailsPresenter.ACTION_SELECT_SESSION.equals(o)) {
-//            model.selectSessionType(getFragmentManager());
-//        } else if (MovieDetailsPresenter.ACTION_RATE_MOVIE.equals(o)) {
-//            model.rateMovieWithSession(getFragmentManager());
-//        } else if (MovieDetailsPresenter.ACTION_AUTH_USER_SESSION.equals(o)) {
-//            Intent intent = new Intent(getContext(), AuthorizeActivity.class);
-//            startActivityForResult(intent, 0);
-//        } else if (o instanceof CharSequence) {
-//            Toast.makeText(getContext(), (CharSequence) o, Toast.LENGTH_LONG).show();
-//        }
-//    }
+    @OnClick(R.id.switch_favorites)
+    public void onSwitchFavorites() {
+        presenter.switchFavorites();
+    }
 }

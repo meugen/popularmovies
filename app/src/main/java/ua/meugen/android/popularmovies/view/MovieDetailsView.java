@@ -13,5 +13,9 @@ public interface MovieDetailsView extends MvpView {
 
     void selectSession();
 
-    void sendMessage(CharSequence message);
+    void onMovieRatedSuccess();
+
+    void onServerError(String message);
+
+    void onError();
 }

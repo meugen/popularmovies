@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import java.util.Date;
-
 import io.realm.Realm;
-import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.presenter.annotations.SortType;
 import ua.meugen.android.popularmovies.presenter.injections.AppComponent;
 import ua.meugen.android.popularmovies.presenter.injections.AppModule;

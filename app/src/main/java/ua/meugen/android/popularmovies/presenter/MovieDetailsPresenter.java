@@ -1,14 +1,10 @@
 package ua.meugen.android.popularmovies.presenter;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 
-import java.util.Observable;
-import java.util.UUID;
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -17,7 +13,6 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import ua.meugen.android.popularmovies.PopularMovies;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
@@ -26,8 +21,6 @@ import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
 import ua.meugen.android.popularmovies.presenter.helpers.SessionStorage;
 import ua.meugen.android.popularmovies.view.MovieDetailsView;
-import ua.meugen.android.popularmovies.view.dialogs.RateMovieDialog;
-import ua.meugen.android.popularmovies.view.dialogs.SelectSessionTypeDialog;
 
 /**
  * @author meugen
@@ -108,6 +101,11 @@ public class MovieDetailsPresenter implements
         }
     }
 
+    public void storeUserSession(final String session) {
+        sessionStorage.storeSession(session, false,
+                new Date(Long.MAX_VALUE));
+    }
+
     public void switchFavorites() {
         if (movie != null) {
             realm.beginTransaction();
@@ -128,17 +126,15 @@ public class MovieDetailsPresenter implements
 
     private void rateMovieSuccess(final BaseDto dto) {
         if (dto.isSuccess()) {
-            view.sendMessage(context.getText(R.string.rate_movie_result_ok));
+            view.onMovieRatedSuccess();
         } else {
-            view.sendMessage(context.getString(
-                    R.string.rate_movie_result_server_error,
-                    dto.getStatusMessage()));
+            view.onServerError(dto.getStatusMessage());
         }
     }
 
     private void rateMovieError(final Throwable th) {
         Log.e(TAG, th.getMessage(), th);
-        view.sendMessage(context.getText(R.string.rate_movie_result_network_error));
+        view.onError();
     }
 
     public void createGuestSession() {
@@ -157,14 +153,12 @@ public class MovieDetailsPresenter implements
                     dto.getExpiresAt());
             view.rateMovieWithSession();
         } else {
-            view.sendMessage(context.getString(
-                    R.string.guest_session_result_server_error,
-                    dto.getStatusMessage()));
+            view.onServerError(dto.getStatusMessage());
         }
     }
 
     private void onGuestSessionError(final Throwable th) {
         Log.e(TAG, th.getMessage(), th);
-        view.sendMessage(context.getText(R.string.guest_session_result_network_error));
+        view.onError();
     }
 }
