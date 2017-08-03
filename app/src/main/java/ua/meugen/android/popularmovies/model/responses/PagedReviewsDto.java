@@ -3,6 +3,8 @@ package ua.meugen.android.popularmovies.model.responses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +14,15 @@ public class PagedReviewsDto extends BaseResponse implements Parcelable {
     public static final Creator<PagedReviewsDto> CREATOR
             = new PagedReviewsDtoCreator();
 
+    @SerializedName("id")
     private int id;
+    @SerializedName("page")
     private int page;
+    @SerializedName("total_pages")
     private int totalPages;
+    @SerializedName("total_results")
     private int totalResults;
+    @SerializedName("results")
     private List<ReviewItemDto> results;
 
     public int getId() {

@@ -3,6 +3,8 @@ package ua.meugen.android.popularmovies.model.responses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author meugen
  */
@@ -12,7 +14,9 @@ public class NewSessionDto extends BaseResponse implements Parcelable {
     public static final Creator<NewSessionDto> CREATOR
             = new NewSessionDtoCreator();
 
+    @SerializedName("success")
     private boolean success;
+    @SerializedName("session_id")
     private String sessionId;
 
     @Override

@@ -2,14 +2,19 @@ package ua.meugen.android.popularmovies.model.responses;
 
 import android.os.Parcel;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * @author meugen
  */
 
 public class BaseResponse {
 
+    @SerializedName("status_message")
     private String statusMessage = "";
+    @SerializedName("status_code")
     private int statusCode = 0;
+    @SerializedName("success")
     private boolean success = true;
 
     public String getStatusMessage() {

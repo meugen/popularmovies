@@ -3,12 +3,17 @@ package ua.meugen.android.popularmovies.model.responses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 import java.util.List;
 
 import io.realm.RealmObject;
 import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
+import ua.meugen.android.popularmovies.model.typeadapters.DateTypeAdapter;
 import ua.meugen.android.popularmovies.ui.utils.ParcelUtils;
 
 /**
@@ -20,22 +25,38 @@ public class MovieItemDto extends RealmObject implements Parcelable {
     public static final Creator<MovieItemDto> CREATOR
             = new MovieItemDtoCreator();
 
+    @SerializedName("poster_path")
     private String posterPath;
+    @SerializedName("adult")
     private boolean adult;
+    @SerializedName("overview")
     private String overview;
+    @SerializedName("release_date")
+    @JsonAdapter(DateTypeAdapter.class)
     private Date releaseDate;
+    @SerializedName("genre_ids")
     @Ignore
     private List<Integer> genreIds;
+    @SerializedName("id")
     @PrimaryKey
     private int id;
+    @SerializedName("original_title")
     private String originalTitle;
+    @SerializedName("original_language")
     private String originalLanguage;
+    @SerializedName("title")
     private String title;
+    @SerializedName("backdrop_path")
     private String backdropPath;
+    @SerializedName("popularity")
     private double popularity;
+    @SerializedName("vote_count")
     private int voteCount;
+    @SerializedName("video")
     private boolean video;
+    @SerializedName("vote_average")
     private double voteAverage;
+    @Expose(serialize = false, deserialize = false)
     private boolean favorite = false;
 
     public boolean isFavorite() {

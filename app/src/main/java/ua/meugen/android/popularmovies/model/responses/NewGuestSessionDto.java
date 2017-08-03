@@ -3,7 +3,12 @@ package ua.meugen.android.popularmovies.model.responses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
+
+import ua.meugen.android.popularmovies.model.typeadapters.DateTimeTypeAdapter;
 
 /**
  * @author meugen
@@ -14,8 +19,12 @@ public class NewGuestSessionDto extends BaseResponse implements Parcelable {
     public static final Creator<NewGuestSessionDto> CREATOR
             = new NewGuestSessionDtoCreator();
 
+    @SerializedName("success")
     private boolean success;
+    @SerializedName("guest_session_id")
     private String guestSessionId;
+    @SerializedName("expires_at")
+    @JsonAdapter(DateTimeTypeAdapter.class)
     private Date expiresAt;
 
     @Override

@@ -2,14 +2,20 @@ package ua.meugen.android.popularmovies.presenter.api;
 
 import java.util.Map;
 
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 import rx.Observable;
+import ua.meugen.android.popularmovies.model.requests.RateMovieRequest;
+import ua.meugen.android.popularmovies.model.responses.BaseDto;
+import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
+import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
+import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
+import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
+import ua.meugen.android.popularmovies.model.responses.VideosDto;
 
 /**
  * @author meugen
@@ -18,39 +24,39 @@ import rx.Observable;
 public interface ServerApi {
 
     @GET("movie/popular")
-    Observable<ResponseBody> getPopularMovies(
+    Observable<PagedMoviesDto> getPopularMovies(
             @QueryMap Map<String, String> params);
 
     @GET("movie/top_rated")
-    Observable<ResponseBody> getTopRatedMovies(
+    Observable<PagedMoviesDto> getTopRatedMovies(
             @QueryMap Map<String, String> params);
 
     @GET("movie/{id}/videos")
-    Observable<ResponseBody> getMovieVideos(
+    Observable<VideosDto> getMovieVideos(
             @Path("id") int id,
             @QueryMap Map<String, String> params);
 
     @GET("movie/{id}/reviews")
-    Observable<ResponseBody> getMovieReviews(
+    Observable<PagedReviewsDto> getMovieReviews(
             @Path("id") int id,
             @QueryMap Map<String, String> params);
 
     @GET("authentication/token/new")
-    Observable<ResponseBody> createNewToken(
+    Observable<NewTokenDto> createNewToken(
             @QueryMap Map<String, String> params);
 
     @GET("authentication/session/new")
-    Observable<ResponseBody> createNewSession(
+    Observable<NewSessionDto> createNewSession(
             @QueryMap Map<String, String> params);
 
     @GET("authentication/guest_session/new")
-    Observable<ResponseBody> createNewGuestSession(
+    Observable<NewGuestSessionDto> createNewGuestSession(
             @QueryMap Map<String, String> params);
 
     @POST("movie/{id}/rating")
-    Observable<ResponseBody> rateMovie(
+    Observable<BaseDto> rateMovie(
             @Path("id") int id,
             @QueryMap Map<String, String> params,
-            @Body RequestBody body);
+            @Body RateMovieRequest body);
 
 }

@@ -3,7 +3,12 @@ package ua.meugen.android.popularmovies.model.responses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
+
+import ua.meugen.android.popularmovies.model.typeadapters.DateTimeTypeAdapter;
 
 /**
  * @author meugen
@@ -14,8 +19,12 @@ public class NewTokenDto extends BaseResponse implements Parcelable {
     public static final Creator<NewTokenDto> CREATOR
             = new NewTokenDtoCreator();
 
+    @SerializedName("success")
     private boolean success;
+    @SerializedName("expires_at")
+    @JsonAdapter(DateTimeTypeAdapter.class)
     private Date expiresAt;
+    @SerializedName("token")
     private String token;
 
     @Override

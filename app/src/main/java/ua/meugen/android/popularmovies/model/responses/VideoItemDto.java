@@ -3,18 +3,28 @@ package ua.meugen.android.popularmovies.model.responses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class VideoItemDto implements Parcelable {
 
     public static final Creator<VideoItemDto> CREATOR
             = new VideoItemDtoCreator();
 
+    @SerializedName("id")
     private String id;
+    @SerializedName("iso_639_1")
     private String iso6391;
+    @SerializedName("iso_3166_1")
     private String iso31661;
+    @SerializedName("key")
     private String key;
+    @SerializedName("name")
     private String name;
+    @SerializedName("site")
     private String site;
+    @SerializedName("size")
     private int size;
+    @SerializedName("type")
     private String type;
 
     public String getId() {

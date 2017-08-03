@@ -3,6 +3,8 @@ package ua.meugen.android.popularmovies.model.responses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +14,9 @@ public class VideosDto extends BaseResponse implements Parcelable {
     public static final Creator<VideosDto> CREATOR
             = new VideosDtoCreator();
 
+    @SerializedName("id")
     private int id;
+    @SerializedName("results")
     private List<VideoItemDto> results;
 
     public int getId() {

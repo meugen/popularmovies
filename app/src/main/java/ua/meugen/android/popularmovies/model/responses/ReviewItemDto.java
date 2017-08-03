@@ -3,15 +3,21 @@ package ua.meugen.android.popularmovies.model.responses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 
 public class ReviewItemDto implements Parcelable {
 
     public static final Creator<ReviewItemDto> CREATOR
             = new ReviewItemDtoCreator();
 
+    @SerializedName("id")
     private String id;
+    @SerializedName("author")
     private String author;
+    @SerializedName("content")
     private String content;
+    @SerializedName("url")
     private String url;
 
     public String getId() {

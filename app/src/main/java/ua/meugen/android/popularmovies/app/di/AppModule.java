@@ -2,8 +2,12 @@ package ua.meugen.android.popularmovies.app.di;
 
 import android.content.Context;
 
+import java.util.List;
+
+import javax.inject.Named;
 import javax.inject.Singleton;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import io.realm.Realm;
@@ -12,12 +16,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import ua.meugen.android.popularmovies.BuildConfig;
+import ua.meugen.android.popularmovies.app.executors.MergeMoviesExecutor;
 import ua.meugen.android.popularmovies.app.impls.ModelApiImpl;
 import ua.meugen.android.popularmovies.app.impls.SessionStorageImpl;
+import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.presenter.api.ModelApi;
 import ua.meugen.android.popularmovies.presenter.api.ServerApi;
 import ua.meugen.android.popularmovies.presenter.helpers.SessionStorage;
+import ua.meugen.android.popularmovies.presenter.helpers.TransactionExecutor;
 
 /**
  * @author meugen
@@ -54,6 +62,7 @@ public class AppModule {
     public ServerApi provideApi(final OkHttpClient client) {
         return new Retrofit.Builder()
                 .client(client).baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .build().create(ServerApi.class);
     }
@@ -73,5 +82,11 @@ public class AppModule {
         final RealmConfiguration configuration = new RealmConfiguration.Builder()
                 .deleteRealmIfMigrationNeeded().build();
         return Realm.getInstance(configuration);
+    }
+
+    @Provides @Named("merge-movies") @Singleton
+    public TransactionExecutor<List<MovieItemDto>> bindMergeMoviesExecutor(
+            final MergeMoviesExecutor executor) {
+        return executor;
     }
 }
