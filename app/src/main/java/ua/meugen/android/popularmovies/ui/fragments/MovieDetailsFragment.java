@@ -100,7 +100,7 @@ public class MovieDetailsFragment extends MvpFragment<MovieDetailsView, MovieDet
         presenter.setMovieId(state.getInt(PARAM_MOVIE_ID));
         listenerUUID = BundleUtils.getUUID(state, PARAM_LISTENER_UUID);
         ListenersCollector collector = ListenersCollector.from(getActivity());
-        listenerUUID = collector.registerListener(listenerUUID, presenter);
+        listenerUUID = collector.registerListener(listenerUUID, this);
     }
 
     @Override
