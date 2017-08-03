@@ -11,36 +11,31 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import ua.meugen.android.popularmovies.model.api.ModelApi;
-import ua.meugen.android.popularmovies.model.responses.VideosDto;
-import ua.meugen.android.popularmovies.view.MovieVideosView;
+import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
+import ua.meugen.android.popularmovies.view.MovieReviewsView;
 
-public class MovieVideosPresenter implements MvpPresenter<MovieVideosView> {
+/**
+ * @author meugen
+ */
 
-    private static final String TAG = MovieVideosPresenter.class.getSimpleName();
+public class MovieReviewsPresenter implements MvpPresenter<MovieReviewsView> {
+
+    private static final String TAG = MovieReviewsPresenter.class.getSimpleName();
 
     private final ModelApi modelApi;
 
-    private MovieVideosView view;
     private CompositeSubscription compositeSubscription;
 
+    private MovieReviewsView view;
     private int movieId;
 
     @Inject
-    public MovieVideosPresenter(
-            final ModelApi modelApi) {
+    public MovieReviewsPresenter(final ModelApi modelApi) {
         this.modelApi = modelApi;
     }
 
-    public int getMovieId() {
-        return movieId;
-    }
-
-    public void setMovieId(final int movieId) {
-        this.movieId = movieId;
-    }
-
     @Override
-    public void attachView(final MovieVideosView view) {
+    public void attachView(final MovieReviewsView view) {
         this.view = view;
         compositeSubscription = new CompositeSubscription();
     }
@@ -54,16 +49,25 @@ public class MovieVideosPresenter implements MvpPresenter<MovieVideosView> {
         }
     }
 
+    public int getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(final int movieId) {
+        this.movieId = movieId;
+    }
+
     public void load() {
-        Subscription subscription = modelApi.getMovieVideos(movieId)
-                .map(VideosDto::getResults)
+        Subscription subscription = modelApi
+                .getMovieReviews(movieId)
+                .map(PagedReviewsDto::getResults)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(view::onVideosLoaded, this::onVideosError);
+                .subscribe(view::onReviewsLoaded, this::onReviewsError);
         compositeSubscription.add(subscription);
     }
 
-    private void onVideosError(final Throwable th) {
+    private void onReviewsError(final Throwable th) {
         Log.e(TAG, th.getMessage(), th);
     }
 }

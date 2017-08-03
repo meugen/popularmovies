@@ -3,14 +3,17 @@ package ua.meugen.android.popularmovies.view.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
 
-import ua.meugen.android.popularmovies.databinding.ItemVideoBinding;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
-import ua.meugen.android.popularmovies.presenter.MovieVideoItemViewModel;
 import ua.meugen.android.popularmovies.presenter.listeners.OnClickVideoListener;
 
 
@@ -35,7 +38,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
 
     @Override
     public VideoItemViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        return new VideoItemViewHolder(ItemVideoBinding.inflate(inflater, parent, false));
+        return new VideoItemViewHolder(inflater.inflate(R.layout.item_video, parent, false));
     }
 
     @Override
@@ -50,19 +53,15 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
 
     public class VideoItemViewHolder extends RecyclerView.ViewHolder {
 
-        private final ItemVideoBinding binding;
+        @BindView(R.id.name) TextView nameView;
 
-        public VideoItemViewHolder(final ItemVideoBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
+        public VideoItemViewHolder(final View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
 
         public void bind(final VideoItemDto dto) {
-            if (binding.getModel() == null) {
-                binding.setModel(new MovieVideoItemViewModel(dto, listener));
-            } else {
-                binding.getModel().setVideo(dto);
-            }
+            nameView.setText(dto.getName());
         }
     }
 

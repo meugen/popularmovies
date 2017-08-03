@@ -9,12 +9,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.RatingBar;
 
 import java.util.UUID;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.databinding.DialogRateMovieBinding;
 import ua.meugen.android.popularmovies.view.helpers.ListenersCollector;
 import ua.meugen.android.popularmovies.view.utils.BundleUtils;
 
@@ -36,6 +38,8 @@ public class RateMovieDialog extends DialogFragment
         dialog.setArguments(arguments);
         return dialog;
     }
+
+    @BindView(R.id.movie_rate) RatingBar ratingBar;
 
     private UUID listenerUUID;
     private float movieRate;
@@ -66,13 +70,14 @@ public class RateMovieDialog extends DialogFragment
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final LayoutInflater inflater = LayoutInflater.from(getContext());
-        final DialogRateMovieBinding binding = DialogRateMovieBinding.inflate(inflater);
-        binding.setRating(movieRate);
-        binding.movieRate.setOnRatingBarChangeListener(this);
+        final View view = inflater.inflate(R.layout.dialog_rate_movie, null, false);
+        ButterKnife.bind(this, view);
+        ratingBar.setRating(movieRate);
+        ratingBar.setOnRatingBarChangeListener(this);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.rate_movie_text);
-        builder.setView(binding.getRoot());
+        builder.setView(view);
         builder.setNegativeButton(R.string.button_cancel, this);
         builder.setPositiveButton(R.string.button_ok, this);
         return builder.create();

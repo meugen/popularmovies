@@ -3,14 +3,17 @@ package ua.meugen.android.popularmovies.view.adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
 
-import ua.meugen.android.popularmovies.databinding.ItemReviewBinding;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
-import ua.meugen.android.popularmovies.presenter.MovieReviewItemViewModel;
 import ua.meugen.android.popularmovies.presenter.listeners.OnClickReviewListener;
 
 /**
@@ -38,8 +41,10 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewIt
     }
 
     @Override
-    public ReviewItemViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-        return new ReviewItemViewHolder(ItemReviewBinding.inflate(inflater, parent, false));
+    public ReviewItemViewHolder onCreateViewHolder(
+            final ViewGroup parent, final int viewType) {
+        return new ReviewItemViewHolder(inflater.inflate(
+                R.layout.item_review, parent, false));
     }
 
     @Override
@@ -54,19 +59,17 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewIt
 
     public class ReviewItemViewHolder extends RecyclerView.ViewHolder {
 
-        private final ItemReviewBinding binding;
+        @BindView(R.id.content) TextView contentView;
+        @BindView(R.id.author) TextView authorView;
 
-        public ReviewItemViewHolder(final ItemReviewBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
+        public ReviewItemViewHolder(final View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
 
         public void bind(final ReviewItemDto dto) {
-            if (binding.getModel() == null) {
-                binding.setModel(new MovieReviewItemViewModel(dto, listener));
-            } else {
-                binding.getModel().setReview(dto);
-            }
+            contentView.setText(dto.getContent());
+            authorView.setText(dto.getAuthor());
         }
     }
 

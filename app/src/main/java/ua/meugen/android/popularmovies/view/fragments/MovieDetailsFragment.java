@@ -13,10 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby3.mvp.MvpFragment;
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import butterknife.BindView;

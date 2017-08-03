@@ -5,6 +5,8 @@ import javax.inject.Singleton;
 import dagger.Component;
 import ua.meugen.android.popularmovies.presenter.AuthorizePresenter;
 import ua.meugen.android.popularmovies.presenter.MovieDetailsPresenter;
+import ua.meugen.android.popularmovies.presenter.MovieReviewsPresenter;
+import ua.meugen.android.popularmovies.presenter.MovieVideosPresenter;
 import ua.meugen.android.popularmovies.presenter.MoviesPresenter;
 import ua.meugen.android.popularmovies.view.activities.AuthorizeActivity;
 import ua.meugen.android.popularmovies.view.activities.MoviesActivity;
@@ -36,4 +38,8 @@ public interface AppComponent {
     AuthorizePresenter createAuthorizePresenter();
 
     MovieDetailsPresenter createMovieDetailsPresenter();
+
+    MovieReviewsPresenter createMovieReviewsPresenter();
+
+    MovieVideosPresenter createMovieVideosPresenter();
 }
