@@ -22,17 +22,17 @@ import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
 import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
 import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
 import ua.meugen.android.popularmovies.model.responses.VideosDto;
-import ua.meugen.android.popularmovies.model.json.JsonReadable;
-import ua.meugen.android.popularmovies.model.json.readables.MovieItemDtoReadable;
-import ua.meugen.android.popularmovies.model.json.readables.NewGuestSessionDtoReadable;
-import ua.meugen.android.popularmovies.model.json.readables.NewSessionDtoReadable;
-import ua.meugen.android.popularmovies.model.json.readables.NewTokenDtoReadable;
-import ua.meugen.android.popularmovies.model.json.readables.PagedMoviesDtoReadable;
-import ua.meugen.android.popularmovies.model.json.readables.PagedReviewsDtoReadable;
-import ua.meugen.android.popularmovies.model.json.readables.ReviewItemDtoReadable;
-import ua.meugen.android.popularmovies.model.json.readables.VideoItemDtoReadable;
-import ua.meugen.android.popularmovies.model.json.readables.VideosDtoReadable;
-import ua.meugen.android.popularmovies.model.utils.IOUtils;
+import ua.meugen.android.popularmovies.app.json.JsonReadable;
+import ua.meugen.android.popularmovies.app.json.readables.MovieItemDtoReadable;
+import ua.meugen.android.popularmovies.app.json.readables.NewGuestSessionDtoReadable;
+import ua.meugen.android.popularmovies.app.json.readables.NewSessionDtoReadable;
+import ua.meugen.android.popularmovies.app.json.readables.NewTokenDtoReadable;
+import ua.meugen.android.popularmovies.app.json.readables.PagedMoviesDtoReadable;
+import ua.meugen.android.popularmovies.app.json.readables.PagedReviewsDtoReadable;
+import ua.meugen.android.popularmovies.app.json.readables.ReviewItemDtoReadable;
+import ua.meugen.android.popularmovies.app.json.readables.VideoItemDtoReadable;
+import ua.meugen.android.popularmovies.app.json.readables.VideosDtoReadable;
+import ua.meugen.android.popularmovies.app.utils.IOUtils;
 
 @RunWith(AndroidJUnit4.class)
 public class JsonReadablesTest {

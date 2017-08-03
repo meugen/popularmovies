@@ -10,9 +10,9 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
-import ua.meugen.android.popularmovies.view.MovieReviewsView;
+import ua.meugen.android.popularmovies.presenter.api.ModelApi;
+import ua.meugen.android.popularmovies.ui.MovieReviewsView;
 
 /**
  * @author meugen

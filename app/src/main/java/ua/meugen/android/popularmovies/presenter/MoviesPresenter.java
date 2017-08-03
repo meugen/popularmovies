@@ -5,6 +5,7 @@ import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.realm.Realm;
 import rx.Observable;
@@ -12,12 +13,12 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
-import ua.meugen.android.popularmovies.model.transactions.MergeMoviesTransaction;
 import ua.meugen.android.popularmovies.presenter.annotations.SortType;
-import ua.meugen.android.popularmovies.view.MoviesView;
+import ua.meugen.android.popularmovies.presenter.api.ModelApi;
+import ua.meugen.android.popularmovies.presenter.helpers.TransactionExecutor;
+import ua.meugen.android.popularmovies.ui.MoviesView;
 
 /**
  * @author meugen
@@ -27,6 +28,7 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
 
     private final ModelApi modelApi;
     private final Realm realm;
+    private final TransactionExecutor<List<MovieItemDto>> mergeMoviesExecutor;
 
     private MoviesView view;
     private CompositeSubscription compositeSubscription;
@@ -37,9 +39,12 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
     @Inject
     public MoviesPresenter(
             final ModelApi modelApi,
-            final Realm realm) {
+            final Realm realm,
+            @Named("merge-movies")
+            final TransactionExecutor<List<MovieItemDto>> mergeMoviesExecutor) {
         this.modelApi = modelApi;
         this.realm = realm;
+        this.mergeMoviesExecutor = mergeMoviesExecutor;
     }
 
     @Override
@@ -81,8 +86,7 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
 
     private void onMovies(final List<MovieItemDto> movies) {
         if (sortType != SortType.FAVORITES) {
-            realm.executeTransactionAsync(
-                    new MergeMoviesTransaction(movies));
+            mergeMoviesExecutor.executeTransactionAsync(realm, movies);
         }
         view.showMovies(movies);
     }

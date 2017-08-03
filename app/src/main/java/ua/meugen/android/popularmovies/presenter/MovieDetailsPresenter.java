@@ -14,12 +14,12 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 import ua.meugen.android.popularmovies.model.Session;
-import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.presenter.api.ModelApi;
 import ua.meugen.android.popularmovies.presenter.helpers.SessionStorage;
-import ua.meugen.android.popularmovies.view.MovieDetailsView;
+import ua.meugen.android.popularmovies.ui.MovieDetailsView;
 
 /**
  * @author meugen

@@ -4,5 +4,5 @@ import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
 
 public interface OnClickVideoListener {
 
-    void onClick(VideoItemDto dto);
+    void onClickVideo(VideoItemDto dto);
 }

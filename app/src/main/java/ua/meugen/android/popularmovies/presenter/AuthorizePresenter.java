@@ -10,10 +10,10 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-import ua.meugen.android.popularmovies.model.api.ModelApi;
 import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
 import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
-import ua.meugen.android.popularmovies.view.AuthorizeView;
+import ua.meugen.android.popularmovies.presenter.api.ModelApi;
+import ua.meugen.android.popularmovies.ui.AuthorizeView;
 
 public class AuthorizePresenter implements MvpPresenter<AuthorizeView> {
 
