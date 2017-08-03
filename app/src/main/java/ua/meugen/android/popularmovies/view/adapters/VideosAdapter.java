@@ -12,6 +12,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
 import ua.meugen.android.popularmovies.presenter.listeners.OnClickVideoListener;
@@ -55,13 +56,23 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
 
         @BindView(R.id.name) TextView nameView;
 
+        private VideoItemDto video;
+
         public VideoItemViewHolder(final View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
         public void bind(final VideoItemDto dto) {
+            video = dto;
             nameView.setText(dto.getName());
+        }
+
+        @OnClick(R.id.container)
+        public void click() {
+            if (listener != null) {
+                listener.onClick(video);
+            }
         }
     }
 

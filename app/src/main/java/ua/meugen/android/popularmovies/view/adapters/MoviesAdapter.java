@@ -13,6 +13,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.presenter.images.FileSize;
@@ -62,15 +63,25 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         @BindView(R.id.poster) ImageView posterView;
 
+        private int movieId;
+
         public MovieViewHolder(final View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
         public void bind(final MovieItemDto movie) {
+            movieId = movie.getId();
             ImageLoader.from(itemView.getContext())
                     .load(FileSize.w(500), movie.getPosterPath())
                     .into(posterView);
+        }
+
+        @OnClick(R.id.poster)
+        public void click() {
+            if (listener != null) {
+                listener.onMovieClick(movieId);
+            }
         }
     }
 }

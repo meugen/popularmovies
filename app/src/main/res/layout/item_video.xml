@@ -5,7 +5,8 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:background="@drawable/button_background">
+    android:background="@drawable/button_background"
+    android:id="@+id/container">
 
     <ImageView
         android:layout_width="?android:attr/listPreferredItemHeight"

@@ -41,7 +41,7 @@ public class MovieReviewsFragment extends MvpFragment<MovieReviewsView, MovieRev
         return fragment;
     }
 
-    @BindView(R.id.recycler) RecyclerView recyclerView;
+    @BindView(R.id.reviews) RecyclerView reviewsView;
 
     private ReviewsAdapter adapter;
 
@@ -100,7 +100,7 @@ public class MovieReviewsFragment extends MvpFragment<MovieReviewsView, MovieRev
     public void onReviewsLoaded(final List<ReviewItemDto> reviews) {
         if (adapter == null) {
             adapter = new ReviewsAdapter(getContext(), this);
-            recyclerView.setAdapter(adapter);
+            reviewsView.setAdapter(adapter);
         }
         adapter.setReviews(reviews);
     }

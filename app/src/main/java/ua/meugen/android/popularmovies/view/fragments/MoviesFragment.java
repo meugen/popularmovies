@@ -38,6 +38,12 @@ public class MoviesFragment extends MvpFragment<MoviesView, MoviesPresenter>
     RecyclerView recycler;
     private MoviesAdapter adapter;
 
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(
@@ -78,6 +84,20 @@ public class MoviesFragment extends MvpFragment<MoviesView, MoviesPresenter>
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(final Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        @SortType
+        final int sortType = PopularMovies.from(getContext()).getSortType();
+        if (sortType == SortType.POPULAR) {
+            menu.findItem(R.id.popular).setChecked(true);
+        } else if (sortType == SortType.TOP_RATED) {
+            menu.findItem(R.id.top_rated).setChecked(true);
+        } else if (sortType == SortType.FAVORITES) {
+            menu.findItem(R.id.favorites).setChecked(true);
+        }
     }
 
     private void refresh() {

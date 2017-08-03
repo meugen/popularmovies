@@ -12,6 +12,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
 import ua.meugen.android.popularmovies.presenter.listeners.OnClickReviewListener;
@@ -62,14 +63,24 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewIt
         @BindView(R.id.content) TextView contentView;
         @BindView(R.id.author) TextView authorView;
 
+        private ReviewItemDto review;
+
         public ReviewItemViewHolder(final View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
         public void bind(final ReviewItemDto dto) {
+            review = dto;
             contentView.setText(dto.getContent());
             authorView.setText(dto.getAuthor());
+        }
+
+        @OnClick(R.id.container)
+        public void click() {
+            if (listener != null) {
+                listener.onClickReview(review);
+            }
         }
     }
 
