@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import io.realm.Realm;
+import timber.log.Timber;
+import ua.meugen.android.popularmovies.BuildConfig;
 import ua.meugen.android.popularmovies.app.di.AppComponent;
 import ua.meugen.android.popularmovies.app.di.AppModule;
 import ua.meugen.android.popularmovies.app.di.DaggerAppComponent;
@@ -30,6 +32,9 @@ public class PopularMovies extends Application {
     public void onCreate() {
         super.onCreate();
         Realm.init(this);
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();

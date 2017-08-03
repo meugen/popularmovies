@@ -1,7 +1,5 @@
 package ua.meugen.android.popularmovies.presenter;
 
-import android.util.Log;
-
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 
 import java.util.Date;
@@ -13,6 +11,7 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
@@ -27,8 +26,6 @@ import ua.meugen.android.popularmovies.ui.MovieDetailsView;
 
 public class MovieDetailsPresenter implements
         MvpPresenter<MovieDetailsView> {
-
-    private static final String TAG = MovieDetailsPresenter.class.getSimpleName();
 
     private final ModelApi modelApi;
     private final Realm realm;
@@ -132,7 +129,7 @@ public class MovieDetailsPresenter implements
     }
 
     private void rateMovieError(final Throwable th) {
-        Log.e(TAG, th.getMessage(), th);
+        Timber.e(th.getMessage(), th);
         view.onError();
     }
 
@@ -157,7 +154,7 @@ public class MovieDetailsPresenter implements
     }
 
     private void onGuestSessionError(final Throwable th) {
-        Log.e(TAG, th.getMessage(), th);
+        Timber.e(th.getMessage(), th);
         view.onError();
     }
 }

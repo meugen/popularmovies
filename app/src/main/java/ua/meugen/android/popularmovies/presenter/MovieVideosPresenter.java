@@ -1,7 +1,5 @@
 package ua.meugen.android.popularmovies.presenter;
 
-import android.util.Log;
-
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 
 import javax.inject.Inject;
@@ -10,13 +8,12 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.responses.VideosDto;
 import ua.meugen.android.popularmovies.presenter.api.ModelApi;
 import ua.meugen.android.popularmovies.ui.MovieVideosView;
 
 public class MovieVideosPresenter implements MvpPresenter<MovieVideosView> {
-
-    private static final String TAG = MovieVideosPresenter.class.getSimpleName();
 
     private final ModelApi modelApi;
 
@@ -64,6 +61,6 @@ public class MovieVideosPresenter implements MvpPresenter<MovieVideosView> {
     }
 
     private void onVideosError(final Throwable th) {
-        Log.e(TAG, th.getMessage(), th);
+        Timber.e(th.getMessage(), th);
     }
 }

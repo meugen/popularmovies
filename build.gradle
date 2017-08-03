@@ -84,6 +84,7 @@ ext {
     picasso = "$PicassoPackage:picasso:$PicassoVersion"
     supportConstraint = "$SupportConstraintPackage:constraint-layout:$SupportConstraintVersion"
     junit = "junit:junit:4.12"
+    timber = "com.jakewharton.timber:timber:4.5.1"
 
 }
 

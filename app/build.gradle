@@ -52,6 +52,7 @@ dependencies {
     compile butterknife.core
     compile butterknife.compiler
 
+    compile timber
     androidTestCompile(espresso.core, {
         exclude group: SupportPackage, module: 'support-annotations'
     })
