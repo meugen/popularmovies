@@ -16,73 +16,62 @@ buildscript {
 
 ext {
     //Packages
-    RetrofitPackage = 'com.squareup.retrofit2'
-    SupportPackage = 'com.android.support'
-    SupportConstraintPackage = 'com.android.support.constraint'
-    DaggerPackage = 'com.google.dagger'
-    OkHttpPackage = 'com.squareup.okhttp3'
-    PicassoPackage = 'com.squareup.picasso'
-    RxJavaPackage = 'io.reactivex'
-    EspressoPackage = 'com.android.support.test.espresso'
-    MosbyPackage = 'com.hannesdorfmann.mosby3'
-    ButterknifePackage = 'com.jakewharton'
+    retrofit_package = 'com.squareup.retrofit2'
+    support_package = 'com.android.support'
+    dagger_package = 'com.google.dagger'
+    okhttp_package = 'com.squareup.okhttp3'
+    rxjava_package = 'io.reactivex'
+    butterknife_package = 'com.jakewharton'
 
     // Versions
-    RetrofitVersion = '2.3.0'
-    SupportVersion = '25.3.1'
-    SupportConstraintVersion = '1.0.2'
-    DaggerVersion = '2.10'
-    OkHttpVersion = '3.8.0'
-    PicassoVersion = '2.5.2'
-    RxJavaVersion = '1.3.0'
-    RxAndroidVersion = '1.2.1'
-    EspressoVersion = '2.2.2'
-    MosbyVersion = '3.0.4'
-    ButterknifeVersion = '8.7.0'
+    retrofit_version = '2.3.0'
+    support_version = '25.3.1'
+    dagger_version = '2.10'
+    okhttp_version = '3.8.0'
+    butterknife_version = '8.7.0'
 
     support = [
-            appCompat: "$SupportPackage:appcompat-v7:$SupportVersion",
-            recyclerView: "$SupportPackage:recyclerview-v7:$SupportVersion",
-            design: "$SupportPackage:design:$SupportVersion"
+            appCompat: "$support_package:appcompat-v7:$support_version",
+            recyclerView: "$support_package:recyclerview-v7:$support_version",
+            design: "$support_package:design:$support_version",
+            constraint: "${support_package}.constraint:constraint-layout:1.0.2"
     ]
 
     dagger = [
-            core: "$DaggerPackage:dagger:$DaggerVersion",
-            compiler: "$DaggerPackage:dagger-compiler:$DaggerVersion"
+            core: "$dagger_package:dagger:$dagger_version",
+            compiler: "$dagger_package:dagger-compiler:$dagger_version"
     ]
 
     retrofit = [
-            core: "$RetrofitPackage:retrofit:$RetrofitVersion",
-            converterGson: "$RetrofitPackage:converter-gson:$RetrofitVersion",
-            adapterRxJava: "$RetrofitPackage:adapter-rxjava:$RetrofitVersion"
+            core: "$retrofit_package:retrofit:$retrofit_version",
+            converterGson: "$retrofit_package:converter-gson:$retrofit_version",
+            adapterRxJava: "$retrofit_package:adapter-rxjava:$retrofit_version"
     ]
 
     okHttp = [
-            core: "$OkHttpPackage:okhttp:$OkHttpVersion",
-            logging: "$OkHttpPackage:logging-interceptor:$OkHttpVersion"
+            core: "$okhttp_package:okhttp:$okhttp_version",
+            logging: "$okhttp_package:logging-interceptor:$okhttp_version"
     ]
 
     rx = [
-            java: "$RxJavaPackage:rxjava:$RxJavaVersion",
-            android: "$RxJavaPackage:rxandroid:$RxAndroidVersion"
+            java: "$rxjava_package:rxjava:1.3.0",
+            android: "$rxjava_package:rxandroid:1.2.1"
     ]
 
-    // com.android.support.test.espresso:espresso-core:2.2.2
     espresso = [
-            core: "$EspressoPackage:espresso-core:$EspressoVersion"
+            core: "com.android.support.test.espresso:espresso-core:2.2.2"
     ]
 
     mosby = [
-            mvp: "$MosbyPackage:mvp:$MosbyVersion"
+            mvp: "com.hannesdorfmann.mosby3:mvp:3.0.4"
     ]
 
     butterknife = [
-            core: "$ButterknifePackage:butterknife:$ButterknifeVersion",
-            compiler: "$ButterknifePackage:butterknife-compiler:$ButterknifeVersion"
+            core: "$butterknife_package:butterknife:$butterknife_version",
+            compiler: "$butterknife_package:butterknife-compiler:$butterknife_version"
     ]
 
-    picasso = "$PicassoPackage:picasso:$PicassoVersion"
-    supportConstraint = "$SupportConstraintPackage:constraint-layout:$SupportConstraintVersion"
+    picasso = "com.squareup.picasso:picasso:2.5.2"
     junit = "junit:junit:4.12"
     timber = "com.jakewharton.timber:timber:4.5.1"
 

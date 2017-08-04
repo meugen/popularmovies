@@ -30,9 +30,7 @@ dependencies {
     compile support.appCompat
     compile support.recyclerView
     compile support.design
-
-    compile supportConstraint
-    compile picasso
+    compile support.constraint
 
     compile dagger.core
     annotationProcessor dagger.compiler
@@ -52,9 +50,10 @@ dependencies {
     compile butterknife.core
     compile butterknife.compiler
 
+    compile picasso
     compile timber
     androidTestCompile(espresso.core, {
-        exclude group: SupportPackage, module: 'support-annotations'
+        exclude group: support_package, module: 'support-annotations'
     })
     testCompile junit
 }
