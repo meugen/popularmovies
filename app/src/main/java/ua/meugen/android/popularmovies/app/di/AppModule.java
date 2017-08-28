@@ -18,6 +18,7 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ua.meugen.android.popularmovies.BuildConfig;
 import ua.meugen.android.popularmovies.app.executors.MergeMoviesExecutor;
+import ua.meugen.android.popularmovies.app.executors.MoviesData;
 import ua.meugen.android.popularmovies.app.impls.ModelApiImpl;
 import ua.meugen.android.popularmovies.app.impls.SessionStorageImpl;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
@@ -84,7 +85,7 @@ public class AppModule {
     }
 
     @Provides @Named("merge-movies") @Singleton
-    public TransactionExecutor<List<MovieItemDto>> bindMergeMoviesExecutor(
+    public TransactionExecutor<MoviesData> bindMergeMoviesExecutor(
             final MergeMoviesExecutor executor) {
         return executor;
     }

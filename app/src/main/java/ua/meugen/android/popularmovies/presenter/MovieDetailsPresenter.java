@@ -105,7 +105,7 @@ public class MovieDetailsPresenter implements
     public void switchFavorites() {
         if (movie != null) {
             realm.beginTransaction();
-            movie.setFavorite(!movie.isFavorite());
+            movie.setFavorites(!movie.isFavorites());
             realm.commitTransaction();
         }
     }

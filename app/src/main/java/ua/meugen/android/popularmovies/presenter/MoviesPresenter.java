@@ -8,11 +8,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subjects.AsyncSubject;
 import rx.subscriptions.CompositeSubscription;
+import ua.meugen.android.popularmovies.app.executors.MoviesData;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
 import ua.meugen.android.popularmovies.presenter.annotations.SortType;
@@ -28,7 +33,7 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
 
     private final ModelApi modelApi;
     private final Realm realm;
-    private final TransactionExecutor<List<MovieItemDto>> mergeMoviesExecutor;
+    private final TransactionExecutor<MoviesData> mergeMoviesExecutor;
 
     private MoviesView view;
     private CompositeSubscription compositeSubscription;
@@ -41,7 +46,7 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
             final ModelApi modelApi,
             final Realm realm,
             @Named("merge-movies")
-            final TransactionExecutor<List<MovieItemDto>> mergeMoviesExecutor) {
+            final TransactionExecutor<MoviesData> mergeMoviesExecutor) {
         this.modelApi = modelApi;
         this.realm = realm;
         this.mergeMoviesExecutor = mergeMoviesExecutor;
@@ -62,33 +67,53 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
     private void refresh() {
         view.showRefreshing();
 
-        Observable<? extends List<MovieItemDto>> observable;
+        Observable<? extends MoviesData> observable;
         if (sortType == SortType.POPULAR) {
             observable = modelApi.getPopularMovies()
                     .map(PagedMoviesDto::getResults)
-                    .subscribeOn(Schedulers.io());
+                    .map(movies -> new MoviesData(movies, MovieItemDto.POPULAR, true))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .onExceptionResumeNext(getMoviesByStatus(MovieItemDto.POPULAR));
         } else if (sortType == SortType.TOP_RATED) {
             observable = modelApi.getTopRatedMovies()
                     .map(PagedMoviesDto::getResults)
-                    .subscribeOn(Schedulers.io());
+                    .map(movies -> new MoviesData(movies, MovieItemDto.TOP_RATED, true))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .onExceptionResumeNext(getMoviesByStatus(MovieItemDto.TOP_RATED));
         } else if (sortType == SortType.FAVORITES) {
-            observable = realm.where(MovieItemDto.class)
-                    .equalTo("favorite", true)
-                    .findAllAsync().asObservable();
+            observable = getMoviesByStatus(MovieItemDto.FAVORITES)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
         } else {
             throw new IllegalArgumentException("Unknown sort type");
         }
         final Subscription subscription = observable
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onMovies);
         compositeSubscription.add(subscription);
     }
 
-    private void onMovies(final List<MovieItemDto> movies) {
-        if (sortType != SortType.FAVORITES) {
-            mergeMoviesExecutor.executeTransactionAsync(realm, movies);
+    private Observable<MoviesData> getMoviesByStatus(final String status) {
+        final AsyncSubject<List<MovieItemDto>> subject = AsyncSubject.create();
+        final RealmResults<MovieItemDto> results = realm
+                .where(MovieItemDto.class)
+                .equalTo(status, true)
+                .findAllAsync();
+        results.addChangeListener(newResults -> {
+            subject.onNext(newResults);
+            subject.onCompleted();
+            results.removeAllChangeListeners();
+        });
+        return subject.asObservable()
+                .map(movies -> new MoviesData(movies, status, false));
+    }
+
+    private void onMovies(final MoviesData data) {
+        if (data.isNeedToSave()) {
+            mergeMoviesExecutor.executeTransactionAsync(realm, data);
         }
-        view.showMovies(movies);
+        view.showMovies(data.getMovies());
     }
 
     private void init() {

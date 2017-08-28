@@ -25,6 +25,10 @@ public class MovieItemDto extends RealmObject implements Parcelable {
     public static final Creator<MovieItemDto> CREATOR
             = new MovieItemDtoCreator();
 
+    public static final String POPULAR = "popular";
+    public static final String TOP_RATED = "topRated";
+    public static final String FAVORITES = "favorites";
+
     @SerializedName("poster_path")
     private String posterPath;
     @SerializedName("adult")
@@ -57,14 +61,34 @@ public class MovieItemDto extends RealmObject implements Parcelable {
     @SerializedName("vote_average")
     private double voteAverage;
     @Expose(serialize = false, deserialize = false)
-    private boolean favorite = false;
+    private boolean favorites = false;
+    @Expose(serialize = false, deserialize = false)
+    private boolean popular = false;
+    @Expose(serialize = false, deserialize = false)
+    private boolean topRated = false;
 
-    public boolean isFavorite() {
-        return favorite;
+    public boolean isFavorites() {
+        return favorites;
     }
 
-    public void setFavorite(final boolean favorite) {
-        this.favorite = favorite;
+    public void setFavorites(final boolean favorites) {
+        this.favorites = favorites;
+    }
+
+    public boolean isPopular() {
+        return popular;
+    }
+
+    public void setPopular(final boolean popular) {
+        this.popular = popular;
+    }
+
+    public boolean isTopRated() {
+        return topRated;
+    }
+
+    public void setTopRated(final boolean topRated) {
+        this.topRated = topRated;
     }
 
     public String getPosterPath() {
@@ -198,7 +222,7 @@ public class MovieItemDto extends RealmObject implements Parcelable {
         parcel.writeDouble(popularity);
         parcel.writeInt(voteCount);
         parcel.writeDouble(voteAverage);
-        parcel.writeBooleanArray(new boolean[] { adult, video, favorite });
+        parcel.writeBooleanArray(new boolean[] { adult, video, popular, topRated, favorites });
     }
 
     @Override
@@ -213,7 +237,9 @@ public class MovieItemDto extends RealmObject implements Parcelable {
         if (Double.compare(that.popularity, popularity) != 0) return false;
         if (voteCount != that.voteCount) return false;
         if (video != that.video) return false;
-        if (favorite != that.favorite) return false;
+        if (popular != that.popular) return false;
+        if (topRated != that.topRated) return false;
+        if (favorites != that.favorites) return false;
         if (Double.compare(that.voteAverage, voteAverage) != 0) return false;
         if (posterPath != null ? !posterPath.equals(that.posterPath) : that.posterPath != null)
             return false;
@@ -252,7 +278,9 @@ public class MovieItemDto extends RealmObject implements Parcelable {
         result = 31 * result + (video ? 1 : 0);
         temp = Double.doubleToLongBits(voteAverage);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (favorite ? 1 : 0);
+        result = 31 * result + (popular ? 1 : 0);
+        result = 31 * result + (topRated ? 1 : 0);
+        result = 31 * result + (favorites ? 1 : 0);
         return result;
     }
 }
@@ -274,11 +302,13 @@ class MovieItemDtoCreator implements Parcelable.Creator<MovieItemDto> {
         dto.setPopularity(parcel.readDouble());
         dto.setVoteCount(parcel.readInt());
         dto.setVoteAverage(parcel.readDouble());
-        final boolean[] bools = new boolean[3];
+        final boolean[] bools = new boolean[5];
         parcel.readBooleanArray(bools);
         dto.setAdult(bools[0]);
         dto.setVideo(bools[1]);
-        dto.setFavorite(bools[2]);
+        dto.setPopular(bools[2]);
+        dto.setTopRated(bools[3]);
+        dto.setFavorites(bools[4]);
         return dto;
     }
 
