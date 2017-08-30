@@ -1,6 +1,6 @@
 package ua.meugen.android.popularmovies.presenter.api;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
 import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;

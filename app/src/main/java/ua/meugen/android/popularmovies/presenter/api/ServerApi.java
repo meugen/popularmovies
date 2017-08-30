@@ -2,12 +2,12 @@ package ua.meugen.android.popularmovies.presenter.api;
 
 import java.util.Map;
 
+import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
-import rx.Observable;
 import ua.meugen.android.popularmovies.model.requests.RateMovieRequest;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
 import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;

@@ -2,21 +2,21 @@ package ua.meugen.android.popularmovies.presenter;
 
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 
+import org.reactivestreams.Subscription;
+
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.AsyncSubject;
 import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subjects.AsyncSubject;
-import rx.subscriptions.CompositeSubscription;
 import ua.meugen.android.popularmovies.app.executors.MoviesData;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
@@ -36,7 +36,7 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
     private final TransactionExecutor<MoviesData> mergeMoviesExecutor;
 
     private MoviesView view;
-    private CompositeSubscription compositeSubscription;
+    private CompositeDisposable compositeDisposable;
 
     @SortType
     private int sortType;
@@ -89,9 +89,9 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
         } else {
             throw new IllegalArgumentException("Unknown sort type");
         }
-        final Subscription subscription = observable
+        final Disposable disposable = observable
                 .subscribe(this::onMovies);
-        compositeSubscription.add(subscription);
+        compositeDisposable.add(disposable);
     }
 
     private Observable<MoviesData> getMoviesByStatus(final String status) {
@@ -102,10 +102,10 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
                 .findAllAsync();
         results.addChangeListener(newResults -> {
             subject.onNext(newResults);
-            subject.onCompleted();
+            subject.onComplete();
             results.removeAllChangeListeners();
         });
-        return subject.asObservable()
+        return subject.hide()
                 .map(movies -> new MoviesData(movies, status, false));
     }
 
@@ -117,13 +117,13 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
     }
 
     private void init() {
-        compositeSubscription = new CompositeSubscription();
+        compositeDisposable = new CompositeDisposable();
     }
 
     private void reset(final boolean isInit) {
-        if (compositeSubscription != null) {
-            compositeSubscription.unsubscribe();
-            compositeSubscription = null;
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+            compositeDisposable = null;
         }
         if (isInit) {
             init();

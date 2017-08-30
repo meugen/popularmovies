@@ -6,11 +6,16 @@ import java.util.Date;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.AsyncSubject;
+import io.realm.ObjectChangeSet;
 import io.realm.Realm;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.realm.RealmChangeListener;
+import io.realm.RealmModel;
+import io.realm.RealmObjectChangeListener;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
@@ -32,7 +37,7 @@ public class MovieDetailsPresenter implements
     private final SessionStorage sessionStorage;
 
     private MovieDetailsView view;
-    private CompositeSubscription compositeSubscription;
+    private CompositeDisposable compositeDisposable;
 
     private MovieItemDto movie;
     private int movieId;
@@ -46,21 +51,21 @@ public class MovieDetailsPresenter implements
         this.realm = realm;
         this.sessionStorage = sessionStorage;
 
-        compositeSubscription = new CompositeSubscription();
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
     public void attachView(final MovieDetailsView view) {
         this.view = view;
-        compositeSubscription = new CompositeSubscription();
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
     public void detachView(final boolean retainInstance) {
         this.view = null;
-        if (compositeSubscription != null) {
-            compositeSubscription.unsubscribe();
-            compositeSubscription = null;
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+            compositeDisposable = null;
         }
     }
 
@@ -73,14 +78,20 @@ public class MovieDetailsPresenter implements
     }
 
     public void load() {
-        Subscription subscription = realm
+        MovieItemDto result = realm
                 .where(MovieItemDto.class)
                 .equalTo("id", movieId)
-                .findFirstAsync()
-                .<MovieItemDto>asObservable()
+                .findFirstAsync();
+        AsyncSubject<MovieItemDto> subject = AsyncSubject.create();
+        result.addChangeListener(newResult -> {
+            subject.onNext((MovieItemDto) newResult);
+            subject.onComplete();
+            result.removeAllChangeListeners();
+        });
+        Disposable disposable = subject
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotMovie);
-        compositeSubscription.add(subscription);
+        compositeDisposable.add(disposable);
     }
 
     private void gotMovie(final MovieItemDto movie) {
@@ -112,12 +123,12 @@ public class MovieDetailsPresenter implements
 
     public void onMovieRated(final float value) {
         final Session session = sessionStorage.getSession();
-        final Subscription subscription = modelApi
+        final Disposable disposable = modelApi
                 .rateMovie(session, movieId, value)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::rateMovieSuccess, this::rateMovieError);
-        compositeSubscription.add(subscription);
+        compositeDisposable.add(disposable);
     }
 
     private void rateMovieSuccess(final BaseDto dto) {
@@ -134,12 +145,12 @@ public class MovieDetailsPresenter implements
     }
 
     public void createGuestSession() {
-        Subscription subscription = modelApi
+        Disposable disposable = modelApi
                 .createNewGuestSession()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGuestSessionSuccess, this::onGuestSessionError);
-        compositeSubscription.add(subscription);
+        compositeDisposable.add(disposable);
     }
 
     private void onGuestSessionSuccess(final NewGuestSessionDto dto) {

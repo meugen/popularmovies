@@ -4,10 +4,10 @@ import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
 import ua.meugen.android.popularmovies.presenter.api.ModelApi;
@@ -21,7 +21,7 @@ public class MovieReviewsPresenter implements MvpPresenter<MovieReviewsView> {
 
     private final ModelApi modelApi;
 
-    private CompositeSubscription compositeSubscription;
+    private CompositeDisposable compositeDisposable;
 
     private MovieReviewsView view;
     private int movieId;
@@ -34,15 +34,15 @@ public class MovieReviewsPresenter implements MvpPresenter<MovieReviewsView> {
     @Override
     public void attachView(final MovieReviewsView view) {
         this.view = view;
-        compositeSubscription = new CompositeSubscription();
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
     public void detachView(final boolean retainInstance) {
         this.view = null;
-        if (compositeSubscription != null) {
-            compositeSubscription.unsubscribe();
-            compositeSubscription = null;
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+            compositeDisposable = null;
         }
     }
 
@@ -55,13 +55,13 @@ public class MovieReviewsPresenter implements MvpPresenter<MovieReviewsView> {
     }
 
     public void load() {
-        Subscription subscription = modelApi
+        Disposable disposable = modelApi
                 .getMovieReviews(movieId)
                 .map(PagedReviewsDto::getResults)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::onReviewsLoaded, this::onReviewsError);
-        compositeSubscription.add(subscription);
+        compositeDisposable.add(disposable);
     }
 
     private void onReviewsError(final Throwable th) {

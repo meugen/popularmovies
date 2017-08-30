@@ -20,7 +20,7 @@ ext {
     support_package = 'com.android.support'
     dagger_package = 'com.google.dagger'
     okhttp_package = 'com.squareup.okhttp3'
-    rxjava_package = 'io.reactivex'
+    rxjava_package = 'io.reactivex.rxjava2'
     butterknife_package = 'com.jakewharton'
 
     // Versions
@@ -45,7 +45,7 @@ ext {
     retrofit = [
             core: "$retrofit_package:retrofit:$retrofit_version",
             converterGson: "$retrofit_package:converter-gson:$retrofit_version",
-            adapterRxJava: "$retrofit_package:adapter-rxjava:$retrofit_version"
+            adapterRxJava: "$retrofit_package:adapter-rxjava2:$retrofit_version"
     ]
 
     okHttp = [
@@ -54,8 +54,8 @@ ext {
     ]
 
     rx = [
-            java: "$rxjava_package:rxjava:1.3.0",
-            android: "$rxjava_package:rxandroid:1.2.1"
+            java: "$rxjava_package:rxjava:2.1.3",
+            android: "$rxjava_package:rxandroid:2.0.1"
     ]
 
     espresso = [

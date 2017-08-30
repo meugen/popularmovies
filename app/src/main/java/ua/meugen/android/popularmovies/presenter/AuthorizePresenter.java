@@ -4,10 +4,10 @@ import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
 import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
@@ -18,7 +18,7 @@ public class AuthorizePresenter implements MvpPresenter<AuthorizeView> {
 
     private final ModelApi modelApi;
 
-    private CompositeSubscription compositeSubscription;
+    private CompositeDisposable compositeDisposable;
     private AuthorizeView view;
 
     private String token;
@@ -32,15 +32,15 @@ public class AuthorizePresenter implements MvpPresenter<AuthorizeView> {
     @Override
     public void attachView(final AuthorizeView view) {
         this.view = view;
-        compositeSubscription = new CompositeSubscription();
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
     public void detachView(final boolean retainInstance) {
         this.view = null;
-        if (compositeSubscription != null) {
-            compositeSubscription.unsubscribe();
-            compositeSubscription = null;
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
+            compositeDisposable = null;
         }
     }
 
@@ -69,11 +69,11 @@ public class AuthorizePresenter implements MvpPresenter<AuthorizeView> {
     }
 
     private void loadToken() {
-        Subscription subscription = modelApi.createNewToken()
+        Disposable disposable = modelApi.createNewToken()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotToken, this::onError);
-        compositeSubscription.add(subscription);
+        compositeDisposable.add(disposable);
     }
 
     private void gotToken(final NewTokenDto dto) {
@@ -96,11 +96,11 @@ public class AuthorizePresenter implements MvpPresenter<AuthorizeView> {
     }
 
     private void createSession() {
-        Subscription subscription = modelApi.createNewSession(token)
+        Disposable disposable = modelApi.createNewSession(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotSession, this::onError);
-        compositeSubscription.add(subscription);
+        compositeDisposable.add(disposable);
     }
 
     private void gotSession(final NewSessionDto dto) {
@@ -112,8 +112,8 @@ public class AuthorizePresenter implements MvpPresenter<AuthorizeView> {
     }
 
     public void reset() {
-        if (!compositeSubscription.isUnsubscribed()) {
-            compositeSubscription.unsubscribe();
+        if (!compositeDisposable.isDisposed()) {
+            compositeDisposable.dispose();
         }
     }
 }

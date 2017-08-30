@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.requests.RateMovieRequest;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
