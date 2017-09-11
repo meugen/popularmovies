@@ -7,5 +7,5 @@ public @interface SortType {
 
     int POPULAR = 1;
     int TOP_RATED = 2;
-    int FAVORITES = 3;
+    int FAVORITES = 4;
 }

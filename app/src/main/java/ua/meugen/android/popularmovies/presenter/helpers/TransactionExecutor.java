@@ -1,9 +1,10 @@
 package ua.meugen.android.popularmovies.presenter.helpers;
 
-import io.realm.Realm;
-import io.realm.RealmAsyncTask;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+
+import io.reactivex.Completable;
 
 public interface TransactionExecutor<D> {
 
-    RealmAsyncTask executeTransactionAsync(Realm realm, D data);
+    Completable executeTransactionAsync(StorIOSQLite storIOSQLite, D data);
 }

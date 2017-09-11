@@ -1,8 +1,12 @@
-package ua.meugen.android.popularmovies.presenter;
+package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.presenter;
 
-import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
+import com.pushtorefresh.storio.operations.PreparedOperation;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
+import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -10,85 +14,82 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.AsyncSubject;
-import io.realm.ObjectChangeSet;
-import io.realm.Realm;
-import io.realm.RealmChangeListener;
-import io.realm.RealmModel;
-import io.realm.RealmObjectChangeListener;
 import timber.log.Timber;
+import ua.meugen.android.popularmovies.app.di.db.movie.MovieContract;
+import ua.meugen.android.popularmovies.app.utils.RxUtils;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.presenter.annotations.SortType;
 import ua.meugen.android.popularmovies.presenter.api.ModelApi;
 import ua.meugen.android.popularmovies.presenter.helpers.SessionStorage;
-import ua.meugen.android.popularmovies.ui.MovieDetailsView;
+import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.state.MovieDetailsState;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.view.MovieDetailsView;
 
 /**
  * @author meugen
  */
 
-public class MovieDetailsPresenter implements
-        MvpPresenter<MovieDetailsView> {
+public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView, MovieDetailsState>
+        implements MovieDetailsPresenter {
 
     private final ModelApi modelApi;
-    private final Realm realm;
+    private final StorIOSQLite storIOSQLite;
     private final SessionStorage sessionStorage;
 
-    private MovieDetailsView view;
     private CompositeDisposable compositeDisposable;
 
     private MovieItemDto movie;
     private int movieId;
+    private UUID listenerUUID;
 
     @Inject
-    public MovieDetailsPresenter(
+    public MovieDetailsPresenterImpl(
             final ModelApi modelApi,
-            final Realm realm,
+            final StorIOSQLite storIOSQLite,
             final SessionStorage sessionStorage) {
         this.modelApi = modelApi;
-        this.realm = realm;
+        this.storIOSQLite = storIOSQLite;
         this.sessionStorage = sessionStorage;
 
         compositeDisposable = new CompositeDisposable();
     }
 
     @Override
-    public void attachView(final MovieDetailsView view) {
-        this.view = view;
-        compositeDisposable = new CompositeDisposable();
+    public void onCreate(final MovieDetailsState state) {
+        super.onCreate(state);
+        movieId = state.getMovieId();
+        listenerUUID = state.getListenerUUID();
     }
 
     @Override
-    public void detachView(final boolean retainInstance) {
-        this.view = null;
-        if (compositeDisposable != null) {
-            compositeDisposable.dispose();
-            compositeDisposable = null;
-        }
+    public void onSaveInstanceState(final MovieDetailsState state) {
+        super.onSaveInstanceState(state);
+        state.setMovieId(movieId);
+        state.setListenerUUID(listenerUUID);
     }
 
-    public int getMovieId() {
-        return movieId;
+    @Override
+    public void onStart() {
+        super.onStart();
+        load();
     }
 
-    public void setMovieId(final int movieId) {
-        this.movieId = movieId;
-    }
-
-    public void load() {
-        MovieItemDto result = realm
-                .where(MovieItemDto.class)
-                .equalTo("id", movieId)
-                .findFirstAsync();
-        AsyncSubject<MovieItemDto> subject = AsyncSubject.create();
-        result.addChangeListener(newResult -> {
-            subject.onNext((MovieItemDto) newResult);
-            subject.onComplete();
-            result.removeAllChangeListeners();
-        });
-        Disposable disposable = subject
+    private void load() {
+        Query query = Query.builder()
+                .table(MovieContract.TABLE)
+                .where(MovieContract.Fields.ID + "=?")
+                .whereArgs(movieId)
+                .limit(1)
+                .build();
+        PreparedOperation<MovieItemDto> operation = storIOSQLite
+                .get().object(MovieItemDto.class)
+                .withQuery(query)
+                .prepare();
+        Disposable disposable = RxUtils.asSingle(operation)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotMovie);
         compositeDisposable.add(disposable);
@@ -115,9 +116,18 @@ public class MovieDetailsPresenter implements
 
     public void switchFavorites() {
         if (movie != null) {
-            realm.beginTransaction();
-            movie.setFavorites(!movie.isFavorites());
-            realm.commitTransaction();
+            if ((movie.getStatus() & SortType.FAVORITES) == SortType.FAVORITES) {
+                movie.setStatus(movie.getStatus() & ~SortType.FAVORITES);
+            } else {
+                movie.setStatus(movie.getStatus() | SortType.FAVORITES);
+            }
+            final PreparedOperation<PutResult> operation = storIOSQLite
+                    .put().object(movie).prepare();
+            Disposable disposable = RxUtils.asCompletable(operation)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe();
+            compositeDisposable.add(disposable);
         }
     }
 
@@ -167,5 +177,15 @@ public class MovieDetailsPresenter implements
     private void onGuestSessionError(final Throwable th) {
         Timber.e(th.getMessage(), th);
         view.onError();
+    }
+
+    @Override
+    public UUID getListenerUUID() {
+        return listenerUUID;
+    }
+
+    @Override
+    public void setListenerUUID(final UUID uuid) {
+        listenerUUID = uuid;
     }
 }

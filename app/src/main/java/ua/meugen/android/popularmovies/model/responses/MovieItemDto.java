@@ -6,43 +6,39 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 import java.util.Date;
 import java.util.List;
 
-import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
-import io.realm.annotations.PrimaryKey;
 import ua.meugen.android.popularmovies.model.typeadapters.DateTypeAdapter;
 import ua.meugen.android.popularmovies.ui.utils.ParcelUtils;
 
 /**
  * Created by meugen on 28.03.17.
  */
-
-public class MovieItemDto extends RealmObject implements Parcelable {
+@StorIOSQLiteType(table = "movies")
+public class MovieItemDto implements Parcelable {
 
     public static final Creator<MovieItemDto> CREATOR
             = new MovieItemDtoCreator();
 
-    public static final String POPULAR = "popular";
-    public static final String TOP_RATED = "topRated";
-    public static final String FAVORITES = "favorites";
-
     @SerializedName("poster_path")
+    @StorIOSQLiteColumn(name = "poster_path")
     private String posterPath;
     @SerializedName("adult")
+    @StorIOSQLiteColumn(name = "adult")
     private boolean adult;
     @SerializedName("overview")
+    @StorIOSQLiteColumn(name = "overview")
     private String overview;
     @SerializedName("release_date")
     @JsonAdapter(DateTypeAdapter.class)
     private Date releaseDate;
     @SerializedName("genre_ids")
-    @Ignore
     private List<Integer> genreIds;
     @SerializedName("id")
-    @PrimaryKey
     private int id;
     @SerializedName("original_title")
     private String originalTitle;
@@ -61,34 +57,14 @@ public class MovieItemDto extends RealmObject implements Parcelable {
     @SerializedName("vote_average")
     private double voteAverage;
     @Expose(serialize = false, deserialize = false)
-    private boolean favorites = false;
-    @Expose(serialize = false, deserialize = false)
-    private boolean popular = false;
-    @Expose(serialize = false, deserialize = false)
-    private boolean topRated = false;
+    private int status = 0;
 
-    public boolean isFavorites() {
-        return favorites;
+    public int getStatus() {
+        return status;
     }
 
-    public void setFavorites(final boolean favorites) {
-        this.favorites = favorites;
-    }
-
-    public boolean isPopular() {
-        return popular;
-    }
-
-    public void setPopular(final boolean popular) {
-        this.popular = popular;
-    }
-
-    public boolean isTopRated() {
-        return topRated;
-    }
-
-    public void setTopRated(final boolean topRated) {
-        this.topRated = topRated;
+    public void setStatus(final int status) {
+        this.status = status;
     }
 
     public String getPosterPath() {
@@ -222,7 +198,8 @@ public class MovieItemDto extends RealmObject implements Parcelable {
         parcel.writeDouble(popularity);
         parcel.writeInt(voteCount);
         parcel.writeDouble(voteAverage);
-        parcel.writeBooleanArray(new boolean[] { adult, video, popular, topRated, favorites });
+        parcel.writeBooleanArray(new boolean[] { adult, video });
+        parcel.writeInt(status);
     }
 
     @Override
@@ -237,9 +214,7 @@ public class MovieItemDto extends RealmObject implements Parcelable {
         if (Double.compare(that.popularity, popularity) != 0) return false;
         if (voteCount != that.voteCount) return false;
         if (video != that.video) return false;
-        if (popular != that.popular) return false;
-        if (topRated != that.topRated) return false;
-        if (favorites != that.favorites) return false;
+        if (status != that.status) return false;
         if (Double.compare(that.voteAverage, voteAverage) != 0) return false;
         if (posterPath != null ? !posterPath.equals(that.posterPath) : that.posterPath != null)
             return false;
@@ -278,9 +253,7 @@ public class MovieItemDto extends RealmObject implements Parcelable {
         result = 31 * result + (video ? 1 : 0);
         temp = Double.doubleToLongBits(voteAverage);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
-        result = 31 * result + (popular ? 1 : 0);
-        result = 31 * result + (topRated ? 1 : 0);
-        result = 31 * result + (favorites ? 1 : 0);
+        result = 31 * result + status;
         return result;
     }
 }
@@ -302,13 +275,11 @@ class MovieItemDtoCreator implements Parcelable.Creator<MovieItemDto> {
         dto.setPopularity(parcel.readDouble());
         dto.setVoteCount(parcel.readInt());
         dto.setVoteAverage(parcel.readDouble());
-        final boolean[] bools = new boolean[5];
+        final boolean[] bools = new boolean[2];
         parcel.readBooleanArray(bools);
         dto.setAdult(bools[0]);
         dto.setVideo(bools[1]);
-        dto.setPopular(bools[2]);
-        dto.setTopRated(bools[3]);
-        dto.setFavorites(bools[4]);
+        dto.setStatus(parcel.readInt());
         return dto;
     }
 

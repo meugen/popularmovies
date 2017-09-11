@@ -1,11 +1,11 @@
-package ua.meugen.android.popularmovies.ui.activities;
+package ua.meugen.android.popularmovies.ui.activities.movies;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import ua.meugen.android.popularmovies.R;
+import ua.meugen.android.popularmovies.ui.activities.base.BaseActivity;
 
-public class MoviesActivity extends AppCompatActivity {
+public class MoviesActivity extends BaseActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {

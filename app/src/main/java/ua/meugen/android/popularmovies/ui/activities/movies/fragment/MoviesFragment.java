@@ -1,10 +1,8 @@
-package ua.meugen.android.popularmovies.ui.fragments;
+package ua.meugen.android.popularmovies.ui.activities.movies.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,30 +10,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby3.mvp.MvpFragment;
-
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import javax.inject.Inject;
+
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.app.PopularMovies;
+import ua.meugen.android.popularmovies.databinding.FragmentMoviesBinding;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.presenter.MoviesPresenter;
 import ua.meugen.android.popularmovies.presenter.annotations.SortType;
 import ua.meugen.android.popularmovies.presenter.listeners.OnMovieClickListener;
-import ua.meugen.android.popularmovies.ui.MoviesView;
-import ua.meugen.android.popularmovies.ui.activities.MovieDetailsActivity;
+import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.MovieDetailsActivity;
+import ua.meugen.android.popularmovies.ui.activities.movies.fragment.presenter.MoviesPresenter;
+import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.MoviesState;
+import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.MoviesView;
 import ua.meugen.android.popularmovies.ui.adapters.MoviesAdapter;
 
 
-public class MoviesFragment extends MvpFragment<MoviesView, MoviesPresenter>
+public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
         implements MoviesView, OnMovieClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefresh;
-    @BindView(R.id.recycler)
-    RecyclerView recycler;
+    @Inject MoviesPresenter presenter;
+
+    private FragmentMoviesBinding binding;
     private MoviesAdapter adapter;
 
     @Override
@@ -50,15 +48,14 @@ public class MoviesFragment extends MvpFragment<MoviesView, MoviesPresenter>
             final LayoutInflater inflater,
             @Nullable final ViewGroup container,
             @Nullable final Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_movies, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+        binding = FragmentMoviesBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        swipeRefresh.setOnRefreshListener(this);
+        binding.swipeRefresh.setOnRefreshListener(this);
         refresh();
     }
 
@@ -112,22 +109,16 @@ public class MoviesFragment extends MvpFragment<MoviesView, MoviesPresenter>
     }
 
     @Override
-    @NonNull
-    public MoviesPresenter createPresenter() {
-        return PopularMovies.appComponent(getContext()).createMoviesPresenter();
-    }
-
-    @Override
     public void showRefreshing() {
-        swipeRefresh.setRefreshing(true);
+        binding.swipeRefresh.setRefreshing(true);
     }
 
     @Override
     public void showMovies(final List<MovieItemDto> movies) {
-        swipeRefresh.setRefreshing(false);
+        binding.swipeRefresh.setRefreshing(false);
         if (adapter == null) {
             adapter = new MoviesAdapter(getContext(), this);
-            recycler.setAdapter(adapter);
+            binding.recycler.setAdapter(adapter);
         }
         adapter.setMovies(movies);
     }

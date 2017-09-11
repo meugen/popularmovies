@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.presenter;
+package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.presenter;
 
 import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
 
@@ -11,9 +11,9 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.responses.VideosDto;
 import ua.meugen.android.popularmovies.presenter.api.ModelApi;
-import ua.meugen.android.popularmovies.ui.MovieVideosView;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.view.MovieVideosView;
 
-public class MovieVideosPresenter implements MvpPresenter<MovieVideosView> {
+public class MovieVideosPresenterImpl implements MvpPresenter<MovieVideosView> {
 
     private final ModelApi modelApi;
 
@@ -23,7 +23,7 @@ public class MovieVideosPresenter implements MvpPresenter<MovieVideosView> {
     private int movieId;
 
     @Inject
-    public MovieVideosPresenter(
+    public MovieVideosPresenterImpl(
             final ModelApi modelApi) {
         this.modelApi = modelApi;
     }

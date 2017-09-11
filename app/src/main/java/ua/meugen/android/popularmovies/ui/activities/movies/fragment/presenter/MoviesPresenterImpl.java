@@ -1,67 +1,76 @@
-package ua.meugen.android.popularmovies.presenter;
+package ua.meugen.android.popularmovies.ui.activities.movies.fragment.presenter;
 
-import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
-
-import org.reactivestreams.Subscription;
+import com.pushtorefresh.storio.operations.PreparedOperation;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import io.reactivex.subjects.AsyncSubject;
-import io.realm.Realm;
-import io.realm.RealmResults;
 import ua.meugen.android.popularmovies.app.executors.MoviesData;
+import ua.meugen.android.popularmovies.app.utils.RxUtils;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
 import ua.meugen.android.popularmovies.presenter.annotations.SortType;
 import ua.meugen.android.popularmovies.presenter.api.ModelApi;
 import ua.meugen.android.popularmovies.presenter.helpers.TransactionExecutor;
-import ua.meugen.android.popularmovies.ui.MoviesView;
+import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
+import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.MoviesState;
+import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.MoviesView;
 
 /**
  * @author meugen
  */
 
-public class MoviesPresenter implements MvpPresenter<MoviesView> {
+public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesState>
+        implements MoviesPresenter {
 
     private final ModelApi modelApi;
-    private final Realm realm;
+    private final StorIOSQLite storIOSQLite;
     private final TransactionExecutor<MoviesData> mergeMoviesExecutor;
-
-    private MoviesView view;
-    private CompositeDisposable compositeDisposable;
 
     @SortType
     private int sortType;
+    private CompositeDisposable compositeDisposable;
 
     @Inject
-    public MoviesPresenter(
+    public MoviesPresenterImpl(
             final ModelApi modelApi,
-            final Realm realm,
-            @Named("merge-movies")
+            final StorIOSQLite storIOSQLite,
             final TransactionExecutor<MoviesData> mergeMoviesExecutor) {
         this.modelApi = modelApi;
-        this.realm = realm;
+        this.storIOSQLite = storIOSQLite;
         this.mergeMoviesExecutor = mergeMoviesExecutor;
     }
 
     @Override
-    public void attachView(final MoviesView view) {
-        this.view = view;
-        init();
+    public void onCreate(final MoviesState state) {
+        super.onCreate(state);
+        refresh(state.getSortType());
     }
 
     @Override
-    public void detachView(final boolean retainInstance) {
-        this.view = null;
-        reset(false);
+    public void onSaveInstanceState(final MoviesState state) {
+        super.onSaveInstanceState(state);
+        state.setSortType(sortType);
+    }
+
+    @Override
+    public void refresh(@SortType final int sortType) {
+        reset(true);
+        this.sortType = sortType;
+        refresh();
+    }
+
+    @Override
+    public int getSortType() {
+        return this.sortType;
     }
 
     private void refresh() {
@@ -71,19 +80,19 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
         if (sortType == SortType.POPULAR) {
             observable = modelApi.getPopularMovies()
                     .map(PagedMoviesDto::getResults)
-                    .map(movies -> new MoviesData(movies, MovieItemDto.POPULAR, true))
+                    .map(movies -> new MoviesData(movies, SortType.POPULAR, true))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .onExceptionResumeNext(getMoviesByStatus(MovieItemDto.POPULAR));
+                    .onExceptionResumeNext(getMoviesByStatus(SortType.POPULAR));
         } else if (sortType == SortType.TOP_RATED) {
             observable = modelApi.getTopRatedMovies()
                     .map(PagedMoviesDto::getResults)
-                    .map(movies -> new MoviesData(movies, MovieItemDto.TOP_RATED, true))
+                    .map(movies -> new MoviesData(movies, SortType.TOP_RATED, true))
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .onExceptionResumeNext(getMoviesByStatus(MovieItemDto.TOP_RATED));
+                    .onExceptionResumeNext(getMoviesByStatus(SortType.TOP_RATED));
         } else if (sortType == SortType.FAVORITES) {
-            observable = getMoviesByStatus(MovieItemDto.FAVORITES)
+            observable = getMoviesByStatus(SortType.FAVORITES)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
         } else {
@@ -94,24 +103,24 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
         compositeDisposable.add(disposable);
     }
 
-    private Observable<MoviesData> getMoviesByStatus(final String status) {
-        final AsyncSubject<List<MovieItemDto>> subject = AsyncSubject.create();
-        final RealmResults<MovieItemDto> results = realm
-                .where(MovieItemDto.class)
-                .equalTo(status, true)
-                .findAllAsync();
-        results.addChangeListener(newResults -> {
-            subject.onNext(newResults);
-            subject.onComplete();
-            results.removeAllChangeListeners();
-        });
-        return subject.hide()
+    private Observable<MoviesData> getMoviesByStatus(final int status) {
+        final Query query = Query.builder()
+                .table("movies")
+                .where("(status & ?0) == ?0")
+                .whereArgs(status)
+                .build();
+        final PreparedOperation<List<MovieItemDto>> operation =
+                storIOSQLite.get()
+                .listOfObjects(MovieItemDto.class)
+                .withQuery(query)
+                .prepare();
+        return RxUtils.asObservable(operation)
                 .map(movies -> new MoviesData(movies, status, false));
     }
 
     private void onMovies(final MoviesData data) {
         if (data.isNeedToSave()) {
-            mergeMoviesExecutor.executeTransactionAsync(realm, data);
+            mergeMoviesExecutor.executeTransactionAsync(storIOSQLite, data);
         }
         view.showMovies(data.getMovies());
     }
@@ -128,16 +137,5 @@ public class MoviesPresenter implements MvpPresenter<MoviesView> {
         if (isInit) {
             init();
         }
-    }
-
-    public void refresh(
-            @SortType final int sortType) {
-        reset(true);
-        this.sortType = sortType;
-        refresh();
-    }
-
-    public int getSortType() {
-        return sortType;
     }
 }

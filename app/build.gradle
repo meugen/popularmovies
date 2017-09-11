@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 25
@@ -12,6 +11,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        buildConfigField 'String', 'SERVER_URL', '"https://api.themoviedb.org/3/"'
     }
     buildTypes {
         release {
@@ -22,6 +23,9 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    dataBinding {
+        enabled true
     }
 }
 
@@ -34,6 +38,8 @@ dependencies {
 
     compile dagger.core
     annotationProcessor dagger.compiler
+    compile dagger.android.core
+    annotationProcessor dagger.android.processor
 
     compile retrofit.core
     compile retrofit.converterGson
@@ -45,15 +51,15 @@ dependencies {
     compile rx.java
     compile rx.android
 
-    compile mosby.mvp
-
-    compile butterknife.core
-    compile butterknife.compiler
+    compile storio.sqlite.core
+    compile storio.sqlite.annotations.core
+    annotationProcessor storio.sqlite.annotations.processor
 
     compile picasso
     compile timber
     androidTestCompile(espresso.core, {
         exclude group: support_package, module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs', module: 'jsr305'
     })
     testCompile junit
 }

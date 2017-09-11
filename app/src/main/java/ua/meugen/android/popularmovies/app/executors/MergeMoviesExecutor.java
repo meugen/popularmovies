@@ -1,10 +1,11 @@
 package ua.meugen.android.popularmovies.app.executors;
 
-import java.util.List;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.get.GetResolver;
+import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import javax.inject.Inject;
 
-import io.realm.Realm;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 
 /**
@@ -13,49 +14,33 @@ import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 
 public class MergeMoviesExecutor extends AbstractExecutor<MoviesData> {
 
+    private final GetResolver<Integer> statusGetResolver;
+
     @Inject
-    public MergeMoviesExecutor() {}
+    public MergeMoviesExecutor(final GetResolver<Integer> statusGetResolver) {
+        this.statusGetResolver = statusGetResolver;
+    }
 
     @Override
-    protected void execute(final Realm realm, final MoviesData data) {
+    protected void execute(final StorIOSQLite storIOSQLite, final MoviesData data) {
         if (!data.isNeedToSave()) {
             throw new IllegalArgumentException("This data no need to save.");
         }
+        final Query.CompleteBuilder builder = Query.builder()
+                .table("movies")
+                .columns("status")
+                .where("id=?")
+                .limit(1);
         for (MovieItemDto movie : data.getMovies()) {
-            MovieItemDto persistMovie = realm
-                    .where(MovieItemDto.class)
-                    .equalTo("id", movie.getId())
-                    .findFirst();
-            if (persistMovie == null) {
-                updateMovie(movie, data.getStatus());
-                realm.copyToRealm(movie);
-            } else {
-                persistMovie.setPosterPath(movie.getPosterPath());
-                persistMovie.setAdult(movie.isAdult());
-                persistMovie.setOverview(movie.getOverview());
-                persistMovie.setReleaseDate(movie.getReleaseDate());
-                persistMovie.setOriginalTitle(movie.getOriginalTitle());
-                persistMovie.setOriginalLanguage(movie.getOriginalLanguage());
-                persistMovie.setTitle(movie.getTitle());
-                persistMovie.setBackdropPath(movie.getBackdropPath());
-                persistMovie.setPopularity(movie.getPopularity());
-                persistMovie.setVoteCount(movie.getVoteCount());
-                persistMovie.setVideo(movie.isVideo());
-                persistMovie.setVoteAverage(movie.getVoteAverage());
-                updateMovie(persistMovie, data.getStatus());
+            Integer status = storIOSQLite
+                    .get().object(Integer.class)
+                    .withQuery(builder.whereArgs(movie.getId()).build())
+                    .withGetResolver(statusGetResolver)
+                    .prepare().executeAsBlocking();
+            if (status != null) {
+                movie.setStatus(data.getStatus() | status);
             }
-        }
-    }
-
-    private void updateMovie(final MovieItemDto movie, final String status) {
-        if (MovieItemDto.POPULAR.equals(status)) {
-            movie.setPopular(true);
-        } else if (MovieItemDto.TOP_RATED.equals(status)) {
-            movie.setTopRated(true);
-        } else if (MovieItemDto.FAVORITES.equals(status)) {
-            movie.setFavorites(true);
-        } else {
-            throw new IllegalArgumentException("Unknown status: " + status);
+            storIOSQLite.put().object(movie).prepare().executeAsBlocking();
         }
     }
 }

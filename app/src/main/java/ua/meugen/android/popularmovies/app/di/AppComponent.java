@@ -3,11 +3,8 @@ package ua.meugen.android.popularmovies.app.di;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import ua.meugen.android.popularmovies.presenter.AuthorizePresenter;
-import ua.meugen.android.popularmovies.presenter.MovieDetailsPresenter;
-import ua.meugen.android.popularmovies.presenter.MovieReviewsPresenter;
-import ua.meugen.android.popularmovies.presenter.MovieVideosPresenter;
-import ua.meugen.android.popularmovies.presenter.MoviesPresenter;
+import dagger.android.AndroidInjector;
+import ua.meugen.android.popularmovies.app.PopularMovies;
 
 /**
  * @author meugen
@@ -15,15 +12,9 @@ import ua.meugen.android.popularmovies.presenter.MoviesPresenter;
 
 @Singleton
 @Component(modules = { AppModule.class })
-public interface AppComponent {
+public interface AppComponent extends AndroidInjector<PopularMovies> {
 
-    MoviesPresenter createMoviesPresenter();
+    public abstract class Builder extends AndroidInjector.Builder<PopularMovies> {
 
-    AuthorizePresenter createAuthorizePresenter();
-
-    MovieDetailsPresenter createMovieDetailsPresenter();
-
-    MovieReviewsPresenter createMovieReviewsPresenter();
-
-    MovieVideosPresenter createMovieVideosPresenter();
+    }
 }

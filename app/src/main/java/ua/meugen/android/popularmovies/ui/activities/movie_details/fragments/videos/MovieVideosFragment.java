@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.ui.fragments;
+package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,25 +9,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby3.mvp.MvpFragment;
-
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.app.PopularMovies;
 import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
-import ua.meugen.android.popularmovies.presenter.MovieVideosPresenter;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.presenter.MovieVideosPresenterImpl;
 import ua.meugen.android.popularmovies.presenter.listeners.OnClickVideoListener;
-import ua.meugen.android.popularmovies.ui.MovieVideosView;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.state.MovieVideosState;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.view.MovieVideosView;
+import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
 import ua.meugen.android.popularmovies.ui.adapters.VideosAdapter;
 
 /**
  * @author meugen
  */
 
-public class MovieVideosFragment extends MvpFragment<MovieVideosView, MovieVideosPresenter>
+public class MovieVideosFragment extends BaseFragment<MovieVideosState, MovieVideosPresenterImpl>
         implements OnClickVideoListener, MovieVideosView {
 
     private static final String PARAM_MOVIE_ID = "movieId";
@@ -84,7 +82,7 @@ public class MovieVideosFragment extends MvpFragment<MovieVideosView, MovieVideo
     }
 
     @Override
-    public MovieVideosPresenter createPresenter() {
+    public MovieVideosPresenterImpl createPresenter() {
         return PopularMovies.appComponent(getContext())
                 .createMovieVideosPresenter();
     }

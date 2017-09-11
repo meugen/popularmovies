@@ -1,15 +1,31 @@
 package ua.meugen.android.popularmovies.app.executors;
 
-import io.realm.Realm;
-import io.realm.RealmAsyncTask;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+
+import io.reactivex.Completable;
 import ua.meugen.android.popularmovies.presenter.helpers.TransactionExecutor;
 
-abstract class AbstractExecutor<D> implements TransactionExecutor<D> {
+/**
+ * @author meugen
+ */
+
+public abstract class AbstractExecutor<D> implements TransactionExecutor<D> {
 
     @Override
-    public RealmAsyncTask executeTransactionAsync(final Realm realm, final D data) {
-        return realm.executeTransactionAsync(r -> execute(r, data));
+    public final Completable executeTransactionAsync(
+            final StorIOSQLite storIOSQLite, final D data) {
+        return Completable.create(source -> {
+            final StorIOSQLite.LowLevel lowLevel = storIOSQLite.lowLevel();
+            lowLevel.beginTransaction();
+            try {
+                execute(storIOSQLite, data);
+                source.onComplete();
+                lowLevel.setTransactionSuccessful();
+            } finally {
+                lowLevel.endTransaction();
+            }
+        });
     }
 
-    protected abstract void execute(final Realm realm, final D data);
+    protected abstract void execute(final StorIOSQLite storIOSQLite, final D data);
 }

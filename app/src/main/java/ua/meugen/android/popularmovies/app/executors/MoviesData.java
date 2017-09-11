@@ -11,12 +11,12 @@ import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 public class MoviesData {
 
     private final List<MovieItemDto> movies;
-    private final String status;
+    private final int status;
     private final boolean needToSave;
 
     public MoviesData(
             final List<MovieItemDto> movies,
-            final String status,
+            final int status,
             final boolean needToSave) {
         this.movies = movies;
         this.status = status;
@@ -27,7 +27,7 @@ public class MoviesData {
         return movies;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 

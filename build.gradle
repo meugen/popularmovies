@@ -7,7 +7,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
         classpath 'me.tatarka:gradle-retrolambda:3.6.1'
-        classpath 'io.realm:realm-gradle-plugin:3.5.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -21,14 +20,14 @@ ext {
     dagger_package = 'com.google.dagger'
     okhttp_package = 'com.squareup.okhttp3'
     rxjava_package = 'io.reactivex.rxjava2'
-    butterknife_package = 'com.jakewharton'
+    storio_package = 'com.pushtorefresh.storio'
 
     // Versions
     retrofit_version = '2.3.0'
     support_version = '25.3.1'
-    dagger_version = '2.10'
+    dagger_version = '2.11'
     okhttp_version = '3.8.0'
-    butterknife_version = '8.7.0'
+    storio_version = '1.13.0'
 
     support = [
             appCompat: "$support_package:appcompat-v7:$support_version",
@@ -39,7 +38,12 @@ ext {
 
     dagger = [
             core: "$dagger_package:dagger:$dagger_version",
-            compiler: "$dagger_package:dagger-compiler:$dagger_version"
+            compiler: "$dagger_package:dagger-compiler:$dagger_version",
+            android: [
+                    core: "$dagger_package:dagger-android-support:$dagger_version",
+                    processor: "$dagger_package:dagger-android-processor:$dagger_version"
+            ]
+
     ]
 
     retrofit = [
@@ -62,13 +66,14 @@ ext {
             core: "com.android.support.test.espresso:espresso-core:2.2.2"
     ]
 
-    mosby = [
-            mvp: "com.hannesdorfmann.mosby3:mvp:3.0.4"
-    ]
-
-    butterknife = [
-            core: "$butterknife_package:butterknife:$butterknife_version",
-            compiler: "$butterknife_package:butterknife-compiler:$butterknife_version"
+    storio = [
+            sqlite: [
+                    core: "$storio_package:sqlite:$storio_version",
+                    annotations: [
+                            core: "$storio_package:sqlite-annotations:$storio_version",
+                            processor: "$storio_package:sqlite-annotations-processor:$storio_version"
+                    ]
+            ]
     ]
 
     picasso = "com.squareup.picasso:picasso:2.5.2"

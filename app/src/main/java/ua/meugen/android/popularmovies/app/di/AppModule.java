@@ -1,49 +1,48 @@
 package ua.meugen.android.popularmovies.app.di;
 
+import android.app.Application;
 import android.content.Context;
 
-import java.util.List;
-
-import javax.inject.Named;
 import javax.inject.Singleton;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
+import dagger.android.ContributesAndroidInjector;
+import dagger.android.support.AndroidSupportInjectionModule;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ua.meugen.android.popularmovies.BuildConfig;
-import ua.meugen.android.popularmovies.app.executors.MergeMoviesExecutor;
-import ua.meugen.android.popularmovies.app.executors.MoviesData;
+import ua.meugen.android.popularmovies.app.PopularMovies;
+import ua.meugen.android.popularmovies.app.di.db.DbModule;
 import ua.meugen.android.popularmovies.app.impls.ModelApiImpl;
 import ua.meugen.android.popularmovies.app.impls.SessionStorageImpl;
-import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.presenter.api.ModelApi;
 import ua.meugen.android.popularmovies.presenter.api.ServerApi;
 import ua.meugen.android.popularmovies.presenter.helpers.SessionStorage;
-import ua.meugen.android.popularmovies.presenter.helpers.TransactionExecutor;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.MovieDetailsActivity;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.MovieDetailsActivityModule;
+import ua.meugen.android.popularmovies.ui.activities.movies.MoviesActivity;
+import ua.meugen.android.popularmovies.ui.activities.movies.MoviesActivityModule;
 
 /**
  * @author meugen
  */
 
-@Module
-public class AppModule {
+@Module(includes = { AndroidSupportInjectionModule.class, DbModule.class })
+public abstract class AppModule {
 
-    private static final String BASE_URL = "https://api.themoviedb.org/3/";
+    @Binds @Singleton
+    public abstract Application bindApplication(final PopularMovies popularMovies);
 
-    private final Context context;
-
-    public AppModule(final Context context) {
-        this.context = context;
-    }
+    @Binds @Singleton
+    public abstract Context bindApplicationContext(final Application application);
 
     @Provides @Singleton
-    public OkHttpClient provideHttpClient() {
+    public static OkHttpClient provideHttpClient() {
         final OkHttpClient.Builder builder = new OkHttpClient.Builder();
         if (BuildConfig.DEBUG) {
             final HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -54,39 +53,25 @@ public class AppModule {
     }
 
     @Provides @Singleton
-    public Context provideContext() {
-        return context;
-    }
-
-    @Provides @Singleton
-    public ServerApi provideApi(final OkHttpClient client) {
+    public static ServerApi provideApi(final OkHttpClient client) {
         return new Retrofit.Builder()
-                .client(client).baseUrl(BASE_URL)
+                .client(client).baseUrl(BuildConfig.SERVER_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build().create(ServerApi.class);
     }
 
-    @Provides @Singleton
-    public ModelApi provideModelApi(final ModelApiImpl impl) {
-        return impl;
-    }
+    @Binds @Singleton
+    public abstract ModelApi bindModelApi(final ModelApiImpl impl);
 
-    @Provides @Singleton
-    public SessionStorage provideSessionStorage(final SessionStorageImpl impl) {
-        return impl;
-    }
+    @Binds @Singleton
+    public abstract SessionStorage bindSessionStorage(final SessionStorageImpl impl);
 
-    @Provides @Singleton
-    public Realm provideRealm() {
-        final RealmConfiguration configuration = new RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded().build();
-        return Realm.getInstance(configuration);
-    }
+    @PerActivity
+    @ContributesAndroidInjector(modules = MoviesActivityModule.class)
+    public abstract MoviesActivity contributeMoviesActivity();
 
-    @Provides @Named("merge-movies") @Singleton
-    public TransactionExecutor<MoviesData> bindMergeMoviesExecutor(
-            final MergeMoviesExecutor executor) {
-        return executor;
-    }
+    @PerActivity
+    @ContributesAndroidInjector(modules = MovieDetailsActivityModule.class)
+    public abstract MovieDetailsActivity contributeMovieDetailsActivity();
 }
