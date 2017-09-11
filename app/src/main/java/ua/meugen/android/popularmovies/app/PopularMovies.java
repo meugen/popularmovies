@@ -16,8 +16,6 @@ import ua.meugen.android.popularmovies.app.di.DaggerAppComponent;
 
 public class PopularMovies extends Application implements HasActivityInjector {
 
-    private static final String PREF_SORT_TYPE_INT = "sortTypeInt";
-
     public static PopularMovies from(final Context context) {
         return (PopularMovies) context.getApplicationContext();
     }

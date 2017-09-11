@@ -13,7 +13,7 @@ public abstract class BaseMvpState implements MvpViewState {
     @Override
     public void attachBundle(final Bundle bundle) {
         this.bundle = bundle == null
-                ? new Bundle() : bundle;
+                ? Bundle.EMPTY : bundle;
     }
 
     @Override

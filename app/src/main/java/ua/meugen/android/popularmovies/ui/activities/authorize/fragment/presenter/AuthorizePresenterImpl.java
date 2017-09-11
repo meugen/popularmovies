@@ -1,66 +1,52 @@
-package ua.meugen.android.popularmovies.presenter;
-
-import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
+package ua.meugen.android.popularmovies.ui.activities.authorize.fragment.presenter;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
 import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
 import ua.meugen.android.popularmovies.presenter.api.ModelApi;
-import ua.meugen.android.popularmovies.ui.AuthorizeView;
+import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.state.AuthorizeState;
+import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.view.AuthorizeView;
+import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
 
-public class AuthorizePresenter implements MvpPresenter<AuthorizeView> {
+public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, AuthorizeState>
+        implements AuthorizePresenter {
 
     private final ModelApi modelApi;
-
-    private CompositeDisposable compositeDisposable;
-    private AuthorizeView view;
 
     private String token;
     private boolean allowed = false;
 
     @Inject
-    public AuthorizePresenter(final ModelApi modelApi) {
+    public AuthorizePresenterImpl(final ModelApi modelApi) {
         this.modelApi = modelApi;
     }
 
     @Override
-    public void attachView(final AuthorizeView view) {
-        this.view = view;
-        compositeDisposable = new CompositeDisposable();
+    public void onCreate(final AuthorizeState state) {
+        super.onCreate(state);
+        token = state.getToken();
+        allowed = state.isAllowed();
     }
 
     @Override
-    public void detachView(final boolean retainInstance) {
-        this.view = null;
-        if (compositeDisposable != null) {
-            compositeDisposable.dispose();
-            compositeDisposable = null;
-        }
+    public void onSaveInstanceState(final AuthorizeState state) {
+        super.onSaveInstanceState(state);
+        state.setToken(token);
+        state.setAllowed(allowed);
     }
 
-    public String getToken() {
-        return token;
+    @Override
+    public void onStart() {
+        super.onStart();
+        load();
     }
 
-    public void setToken(final String token) {
-        this.token = token;
-    }
-
-    public boolean isAllowed() {
-        return allowed;
-    }
-
-    public void setAllowed(final boolean allowed) {
-        this.allowed = allowed;
-    }
-
-    public void load() {
+    private void load() {
         if (token == null) {
             loadToken();
         } else if (allowed) {
@@ -73,7 +59,7 @@ public class AuthorizePresenter implements MvpPresenter<AuthorizeView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotToken, this::onError);
-        compositeDisposable.add(disposable);
+        getCompositeDisposable().add(disposable);
     }
 
     private void gotToken(final NewTokenDto dto) {
@@ -100,7 +86,7 @@ public class AuthorizePresenter implements MvpPresenter<AuthorizeView> {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotSession, this::onError);
-        compositeDisposable.add(disposable);
+        getCompositeDisposable().add(disposable);
     }
 
     private void gotSession(final NewSessionDto dto) {
@@ -108,12 +94,6 @@ public class AuthorizePresenter implements MvpPresenter<AuthorizeView> {
             view.gotSession(dto.getSessionId());
         } else {
             view.gotServerError(dto);
-        }
-    }
-
-    public void reset() {
-        if (!compositeDisposable.isDisposed()) {
-            compositeDisposable.dispose();
         }
     }
 }

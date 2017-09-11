@@ -1,11 +1,9 @@
-package ua.meugen.android.popularmovies.ui.fragments;
+package ua.meugen.android.popularmovies.ui.activities.authorize.fragment;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,17 +12,16 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.hannesdorfmann.mosby3.mvp.MvpFragment;
+import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.app.PopularMovies;
+import ua.meugen.android.popularmovies.databinding.FragmentAuthorizeBinding;
 import ua.meugen.android.popularmovies.model.responses.BaseResponse;
-import ua.meugen.android.popularmovies.presenter.AuthorizePresenter;
-import ua.meugen.android.popularmovies.ui.AuthorizeView;
+import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.presenter.AuthorizePresenter;
+import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.state.AuthorizeState;
+import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.view.AuthorizeView;
+import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
 
-public class AuthorizeFragment extends MvpFragment<AuthorizeView, AuthorizePresenter>
+public class AuthorizeFragment extends BaseFragment<AuthorizeState, AuthorizePresenter>
         implements AuthorizeView {
 
     private static final String PARAM_TOKEN = "token";
@@ -32,21 +29,9 @@ public class AuthorizeFragment extends MvpFragment<AuthorizeView, AuthorizePrese
 
     private static final String BASE_AUTH_URL = "https://www.themoviedb.org/authenticate/";
 
-    @BindView(R.id.webview) WebView webView;
+    private FragmentAuthorizeBinding binding;
 
-    private OnAuthorizeResultListener resultListener;
-
-    @Override
-    public void onAttach(final Activity activity) {
-        super.onAttach(activity);
-        resultListener = (OnAuthorizeResultListener) activity;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        resultListener = null;
-    }
+    @Inject OnAuthorizeResultListener resultListener;
 
     @Nullable
     @Override
@@ -54,44 +39,20 @@ public class AuthorizeFragment extends MvpFragment<AuthorizeView, AuthorizePrese
             final LayoutInflater inflater,
             @Nullable final ViewGroup container,
             @Nullable final Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_authorize, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+        binding = FragmentAuthorizeBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        webView.setWebViewClient(new AuthorizeWebViewClient());
-        webView.getSettings().setJavaScriptEnabled(true);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            presenter.setToken(savedInstanceState.getString(PARAM_TOKEN));
-            presenter.setAllowed(savedInstanceState.getBoolean(PARAM_ALLOWED));
-        }
-        presenter.load();
-    }
-
-    @Override
-    public void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(PARAM_TOKEN, presenter.getToken());
-        outState.putBoolean(PARAM_ALLOWED, presenter.isAllowed());
-    }
-
-    @Override
-    @NonNull
-    public AuthorizePresenter createPresenter() {
-        return PopularMovies.appComponent(getContext()).createAuthorizePresenter();
+        binding.webview.setWebViewClient(new AuthorizeWebViewClient());
+        binding.webview.getSettings().setJavaScriptEnabled(true);
     }
 
     @Override
     public void gotToken(final String token) {
-        webView.loadUrl(BASE_AUTH_URL + token);
+        binding.webview.loadUrl(BASE_AUTH_URL + token);
     }
 
     @Override

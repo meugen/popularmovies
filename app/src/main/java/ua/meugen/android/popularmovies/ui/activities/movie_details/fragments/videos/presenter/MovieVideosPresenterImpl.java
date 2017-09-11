@@ -1,7 +1,5 @@
 package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.presenter;
 
-import com.hannesdorfmann.mosby3.mvp.MvpPresenter;
-
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -11,9 +9,12 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.responses.VideosDto;
 import ua.meugen.android.popularmovies.presenter.api.ModelApi;
+import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.state.MovieVideosState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.view.MovieVideosView;
 
-public class MovieVideosPresenterImpl implements MvpPresenter<MovieVideosView> {
+public class MovieVideosPresenterImpl extends BaseMvpPresenter<MovieVideosView, MovieVideosState>
+        implements MovieVideosPresenter {
 
     private final ModelApi modelApi;
 
@@ -28,30 +29,25 @@ public class MovieVideosPresenterImpl implements MvpPresenter<MovieVideosView> {
         this.modelApi = modelApi;
     }
 
-    public int getMovieId() {
-        return movieId;
-    }
-
-    public void setMovieId(final int movieId) {
-        this.movieId = movieId;
+    @Override
+    public void onCreate(final MovieVideosState state) {
+        super.onCreate(state);
+        movieId = state.getMovieId();
     }
 
     @Override
-    public void attachView(final MovieVideosView view) {
-        this.view = view;
-        compositeDisposable = new CompositeDisposable();
+    public void onSaveInstanceState(final MovieVideosState state) {
+        super.onSaveInstanceState(state);
+        state.setMovieId(movieId);
     }
 
     @Override
-    public void detachView(final boolean retainInstance) {
-        this.view = null;
-        if (compositeDisposable != null) {
-            compositeDisposable.dispose();
-            compositeDisposable = null;
-        }
+    public void onStart() {
+        super.onStart();
+        load();
     }
 
-    public void load() {
+    private void load() {
         Disposable disposable = modelApi.getMovieVideos(movieId)
                 .map(VideosDto::getResults)
                 .subscribeOn(Schedulers.io())

@@ -11,7 +11,6 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -39,8 +38,6 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
     private final StorIOSQLite storIOSQLite;
     private final SessionStorage sessionStorage;
 
-    private CompositeDisposable compositeDisposable;
-
     private MovieItemDto movie;
     private int movieId;
     private UUID listenerUUID;
@@ -53,8 +50,6 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
         this.modelApi = modelApi;
         this.storIOSQLite = storIOSQLite;
         this.sessionStorage = sessionStorage;
-
-        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -92,7 +87,7 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotMovie);
-        compositeDisposable.add(disposable);
+        getCompositeDisposable().add(disposable);
     }
 
     private void gotMovie(final MovieItemDto movie) {
@@ -127,7 +122,7 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe();
-            compositeDisposable.add(disposable);
+            getCompositeDisposable().add(disposable);
         }
     }
 
@@ -138,7 +133,7 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::rateMovieSuccess, this::rateMovieError);
-        compositeDisposable.add(disposable);
+        getCompositeDisposable().add(disposable);
     }
 
     private void rateMovieSuccess(final BaseDto dto) {
@@ -160,7 +155,7 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGuestSessionSuccess, this::onGuestSessionError);
-        compositeDisposable.add(disposable);
+        getCompositeDisposable().add(disposable);
     }
 
     private void onGuestSessionSuccess(final NewGuestSessionDto dto) {

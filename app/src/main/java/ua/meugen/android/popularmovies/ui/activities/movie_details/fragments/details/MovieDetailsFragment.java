@@ -10,14 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.text.DateFormat;
-import java.util.UUID;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.presenter.images.FileSize;
 import ua.meugen.android.popularmovies.presenter.images.ImageLoader;
-import ua.meugen.android.popularmovies.ui.activities.AuthorizeActivity;
+import ua.meugen.android.popularmovies.ui.activities.authorize.AuthorizeActivity;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.presenter.MovieDetailsPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.state.MovieDetailsState;
@@ -32,8 +31,6 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
         SelectSessionTypeDialog.OnSessionTypeSelectedListener {
 
     private static final String PARAM_MOVIE_ID = "movieId";
-    private static final String PARAM_LISTENER_UUID
-            = "listenerUUID";
 
     public static MovieDetailsFragment newInstance(final int movieId) {
         final Bundle arguments = new Bundle();
@@ -46,14 +43,12 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
 
     private FragmentMovieDetailsBinding binding;
 
-    private UUID listenerUUID;
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         final ListenersCollector listenersCollector
                 = ListenersCollector.from(getActivity());
-        listenersCollector.unregisterListener(listenerUUID);
+        listenersCollector.unregisterListener(presenter.getListenerUUID());
     }
 
     @Nullable
@@ -62,7 +57,8 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
             final LayoutInflater inflater,
             @Nullable final ViewGroup container,
             @Nullable final Bundle savedInstanceState) {
-        binding = FragmentMovieDetailsBinding.inflate(inflater, container, false);
+        binding = FragmentMovieDetailsBinding.inflate(
+                inflater, container, false);
         binding.setPresenter(presenter);
         return binding.getRoot();
     }
@@ -120,14 +116,14 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
     @Override
     public void selectSession() {
         final SelectSessionTypeDialog dialog = SelectSessionTypeDialog
-                .newInstance(listenerUUID);
+                .newInstance(presenter.getListenerUUID());
         dialog.show(getFragmentManager(), "select_session_type");
     }
 
     @Override
     public void rateMovieWithSession() {
         final RateMovieDialog dialog = RateMovieDialog
-                .newInstance(listenerUUID);
+                .newInstance(presenter.getListenerUUID());
         dialog.show(getFragmentManager(), "rate_movie");
     }
 

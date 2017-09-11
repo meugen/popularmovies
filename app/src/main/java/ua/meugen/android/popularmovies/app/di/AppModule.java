@@ -23,6 +23,8 @@ import ua.meugen.android.popularmovies.app.impls.SessionStorageImpl;
 import ua.meugen.android.popularmovies.presenter.api.ModelApi;
 import ua.meugen.android.popularmovies.presenter.api.ServerApi;
 import ua.meugen.android.popularmovies.presenter.helpers.SessionStorage;
+import ua.meugen.android.popularmovies.ui.activities.authorize.AuthorizeActivity;
+import ua.meugen.android.popularmovies.ui.activities.authorize.AuthorizeActivityModule;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.MovieDetailsActivity;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.MovieDetailsActivityModule;
 import ua.meugen.android.popularmovies.ui.activities.movies.MoviesActivity;
@@ -74,4 +76,8 @@ public abstract class AppModule {
     @PerActivity
     @ContributesAndroidInjector(modules = MovieDetailsActivityModule.class)
     public abstract MovieDetailsActivity contributeMovieDetailsActivity();
+
+    @PerActivity
+    @ContributesAndroidInjector(modules = AuthorizeActivityModule.class)
+    public abstract AuthorizeActivity contributeAuthorizeActivity();
 }

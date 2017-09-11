@@ -31,7 +31,7 @@
                 android:value=".ui.activities.movies.MoviesActivity"/>
         </activity>
         <activity
-            android:name=".ui.activities.AuthorizeActivity"
+            android:name=".ui.activities.authorize.AuthorizeActivity"
             android:label="@string/activity_authorize_title"/>
 
     </application>

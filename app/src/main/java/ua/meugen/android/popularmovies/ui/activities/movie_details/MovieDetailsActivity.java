@@ -13,7 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.ActivityMovieDetailsBinding;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.MovieDetailsFragment;
-import ua.meugen.android.popularmovies.ui.fragments.MovieReviewsFragment;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.MovieReviewsFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.MovieVideosFragment;
 import ua.meugen.android.popularmovies.ui.helpers.ListenersCollector;
 

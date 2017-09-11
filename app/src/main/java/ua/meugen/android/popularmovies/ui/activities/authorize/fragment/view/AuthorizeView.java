@@ -1,8 +1,7 @@
-package ua.meugen.android.popularmovies.ui;
-
-import com.hannesdorfmann.mosby3.mvp.MvpView;
+package ua.meugen.android.popularmovies.ui.activities.authorize.fragment.view;
 
 import ua.meugen.android.popularmovies.model.responses.BaseResponse;
+import ua.meugen.android.popularmovies.ui.activities.base.fragment.view.MvpView;
 
 public interface AuthorizeView extends MvpView {
 
