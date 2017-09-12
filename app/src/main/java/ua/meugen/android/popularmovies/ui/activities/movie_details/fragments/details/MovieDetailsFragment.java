@@ -14,16 +14,16 @@ import java.text.DateFormat;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.presenter.images.FileSize;
-import ua.meugen.android.popularmovies.presenter.images.ImageLoader;
+import ua.meugen.android.popularmovies.ui.utils.images.FileSize;
+import ua.meugen.android.popularmovies.ui.utils.images.ImageLoader;
 import ua.meugen.android.popularmovies.ui.activities.authorize.AuthorizeActivity;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.presenter.MovieDetailsPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.state.MovieDetailsState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.view.MovieDetailsView;
-import ua.meugen.android.popularmovies.ui.dialogs.RateMovieDialog;
-import ua.meugen.android.popularmovies.ui.dialogs.SelectSessionTypeDialog;
-import ua.meugen.android.popularmovies.ui.helpers.ListenersCollector;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.RateMovieDialog;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.SelectSessionTypeDialog;
+import ua.meugen.android.popularmovies.ui.activities.ListenersCollector;
 
 
 public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieDetailsPresenter>

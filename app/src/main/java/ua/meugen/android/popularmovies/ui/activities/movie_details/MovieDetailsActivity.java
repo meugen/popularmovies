@@ -15,7 +15,7 @@ import ua.meugen.android.popularmovies.databinding.ActivityMovieDetailsBinding;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.MovieDetailsFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.MovieReviewsFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.MovieVideosFragment;
-import ua.meugen.android.popularmovies.ui.helpers.ListenersCollector;
+import ua.meugen.android.popularmovies.ui.activities.ListenersCollector;
 
 public class MovieDetailsActivity extends AppCompatActivity
         implements TabLayout.OnTabSelectedListener, ListenersCollector.Container {

@@ -28,7 +28,7 @@ public class PopularMovies extends Application implements HasActivityInjector {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
-        appComponent = DaggerAppComponent.create(this).inject(this);
+        DaggerAppComponent.create(this).inject(this);
     }
 
     @Override

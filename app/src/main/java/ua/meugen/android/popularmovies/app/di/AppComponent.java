@@ -14,7 +14,5 @@ import ua.meugen.android.popularmovies.app.PopularMovies;
 @Component(modules = { AppModule.class })
 public interface AppComponent extends AndroidInjector<PopularMovies> {
 
-    public abstract class Builder extends AndroidInjector.Builder<PopularMovies> {
-
-    }
+    abstract class Builder extends AndroidInjector.Builder<PopularMovies> {}
 }

@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.ui.helpers;
+package ua.meugen.android.popularmovies.ui.activities;
 
 import android.support.annotation.NonNull;
 

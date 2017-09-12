@@ -1,6 +1,6 @@
 package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews;
 
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 
 import dagger.Binds;
 import dagger.Module;

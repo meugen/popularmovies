@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.presenter.helpers;
+package ua.meugen.android.popularmovies.app.di.ints;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 

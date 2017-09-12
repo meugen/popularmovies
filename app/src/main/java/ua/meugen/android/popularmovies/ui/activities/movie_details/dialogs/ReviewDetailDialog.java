@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.ui.dialogs;
+package ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;

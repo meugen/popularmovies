@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="5dp"
-    android:background="@drawable/button_background"
-    android:id="@+id/container">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <data>
+        <import type="ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.adapters.ReviewsAdapter.ReviewItemViewHolder"/>
+        <import type="ua.meugen.android.popularmovies.model.responses.ReviewItemDto"/>
+        <variable name="holder" type="ReviewItemViewHolder"/>
+        <variable name="review" type="ReviewItemDto"/>
+    </data>
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:maxLines="1"
-        android:ellipsize="end"
-        android:gravity="center_vertical"
-        android:layout_weight="1"
-        tools:text="Very good movie 9.5/10"
-        android:id="@+id/content"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:padding="5dp"
+        android:background="@drawable/button_background"
+        android:id="@+id/container"
+        app:onClick="@{holder::click}">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="elshaarawy"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:gravity="end"
-        android:id="@+id/author"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:layout_weight="1"
+            tools:text="Very good movie 9.5/10"
+            android:id="@+id/content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@{review.content}"/>
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="elshaarawy"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="end"
+            android:id="@+id/author"
+            android:text="@{review.author}"/>
+
+    </LinearLayout>
+</layout>

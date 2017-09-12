@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.ui.dialogs;
+package ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -9,15 +9,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.RatingBar;
 
 import java.util.UUID;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.ui.helpers.ListenersCollector;
+import ua.meugen.android.popularmovies.databinding.DialogRateMovieBinding;
+import ua.meugen.android.popularmovies.ui.activities.ListenersCollector;
 import ua.meugen.android.popularmovies.ui.utils.BundleUtils;
 
 /**
@@ -38,8 +36,6 @@ public class RateMovieDialog extends DialogFragment
         dialog.setArguments(arguments);
         return dialog;
     }
-
-    @BindView(R.id.movie_rate) RatingBar ratingBar;
 
     private UUID listenerUUID;
     private float movieRate;
@@ -70,14 +66,13 @@ public class RateMovieDialog extends DialogFragment
     @Override
     public Dialog onCreateDialog(final Bundle savedInstanceState) {
         final LayoutInflater inflater = LayoutInflater.from(getContext());
-        final View view = inflater.inflate(R.layout.dialog_rate_movie, null, false);
-        ButterKnife.bind(this, view);
-        ratingBar.setRating(movieRate);
-        ratingBar.setOnRatingBarChangeListener(this);
+        DialogRateMovieBinding binding = DialogRateMovieBinding.inflate(inflater);
+        binding.movieRate.setRating(movieRate);
+        binding.movieRate.setOnRatingBarChangeListener(this);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(R.string.rate_movie_text);
-        builder.setView(view);
+        builder.setView(binding.getRoot());
         builder.setNegativeButton(R.string.button_cancel, this);
         builder.setPositiveButton(R.string.button_ok, this);
         return builder.create();

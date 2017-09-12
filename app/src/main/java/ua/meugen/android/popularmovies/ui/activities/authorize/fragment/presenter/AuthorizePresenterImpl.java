@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
 import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
-import ua.meugen.android.popularmovies.presenter.api.ModelApi;
+import ua.meugen.android.popularmovies.app.api.ModelApi;
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.state.AuthorizeState;
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.view.AuthorizeView;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;

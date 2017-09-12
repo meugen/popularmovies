@@ -1,21 +1,16 @@
-package ua.meugen.android.popularmovies.ui.adapters;
+package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import ua.meugen.android.popularmovies.R;
+import ua.meugen.android.popularmovies.databinding.ItemReviewBinding;
 import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
-import ua.meugen.android.popularmovies.presenter.listeners.OnClickReviewListener;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.listeners.OnClickReviewListener;
 
 /**
  * @author meugen
@@ -44,8 +39,8 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewIt
     @Override
     public ReviewItemViewHolder onCreateViewHolder(
             final ViewGroup parent, final int viewType) {
-        return new ReviewItemViewHolder(inflater.inflate(
-                R.layout.item_review, parent, false));
+        return new ReviewItemViewHolder(ItemReviewBinding
+                .inflate(inflater, parent, false));
     }
 
     @Override
@@ -60,26 +55,21 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewIt
 
     public class ReviewItemViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.content) TextView contentView;
-        @BindView(R.id.author) TextView authorView;
+        private final ItemReviewBinding binding;
 
-        private ReviewItemDto review;
-
-        public ReviewItemViewHolder(final View view) {
-            super(view);
-            ButterKnife.bind(this, view);
+        public ReviewItemViewHolder(final ItemReviewBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.setHolder(this);
         }
 
         public void bind(final ReviewItemDto dto) {
-            review = dto;
-            contentView.setText(dto.getContent());
-            authorView.setText(dto.getAuthor());
+            binding.setReview(dto);
         }
 
-        @OnClick(R.id.container)
         public void click() {
             if (listener != null) {
-                listener.onClickReview(review);
+                listener.onClickReview(binding.getReview());
             }
         }
     }

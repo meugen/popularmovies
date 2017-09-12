@@ -18,20 +18,16 @@ import ua.meugen.android.popularmovies.ui.utils.ParcelUtils;
 /**
  * Created by meugen on 28.03.17.
  */
-@StorIOSQLiteType(table = "movies")
 public class MovieItemDto implements Parcelable {
 
     public static final Creator<MovieItemDto> CREATOR
             = new MovieItemDtoCreator();
 
     @SerializedName("poster_path")
-    @StorIOSQLiteColumn(name = "poster_path")
     private String posterPath;
     @SerializedName("adult")
-    @StorIOSQLiteColumn(name = "adult")
     private boolean adult;
     @SerializedName("overview")
-    @StorIOSQLiteColumn(name = "overview")
     private String overview;
     @SerializedName("release_date")
     @JsonAdapter(DateTypeAdapter.class)

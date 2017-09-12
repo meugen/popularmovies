@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.presenter.api;
+package ua.meugen.android.popularmovies.app.api;
 
 import java.util.Map;
 

@@ -34,7 +34,7 @@ public class MoviePutResolver extends DefaultPutResolver<MovieItemDto> implement
     protected UpdateQuery mapToUpdateQuery(@NonNull final MovieItemDto object) {
         return UpdateQuery.builder()
                 .table(TABLE)
-                .where(Fields.ID + "=?")
+                .where(FIELD_ID + "=?")
                 .whereArgs(object.getId())
                 .build();
     }
@@ -43,20 +43,20 @@ public class MoviePutResolver extends DefaultPutResolver<MovieItemDto> implement
     @Override
     protected ContentValues mapToContentValues(@NonNull final MovieItemDto object) {
         final ContentValues result = new ContentValues();
-        result.put(Fields.ID, object.getId());
-        result.put(Fields.POSTER_PATH, object.getPosterPath());
-        result.put(Fields.ADULT, object.isAdult());
-        result.put(Fields.OVERVIEW, object.getOverview());
-        result.put(Fields.RELEASE_DATE, object.getReleaseDate().getTime());
-        result.put(Fields.ORIGINAL_TITLE, object.getOriginalTitle());
-        result.put(Fields.ORIGINAL_LANGUAGE, object.getOriginalLanguage());
-        result.put(Fields.TITLE, object.getTitle());
-        result.put(Fields.BACKDROP_PATH, object.getBackdropPath());
-        result.put(Fields.POPULARITY, object.getPopularity());
-        result.put(Fields.VOTE_COUNT, object.getVoteCount());
-        result.put(Fields.VIDEO, object.isVideo());
-        result.put(Fields.VOTE_AVERAGE, object.getVoteAverage());
-        result.put(Fields.STATUS, object.getStatus());
+        result.put(FIELD_ID, object.getId());
+        result.put(FIELD_POSTER_PATH, object.getPosterPath());
+        result.put(FIELD_ADULT, object.isAdult());
+        result.put(FIELD_OVERVIEW, object.getOverview());
+        result.put(FIELD_RELEASE_DATE, object.getReleaseDate().getTime());
+        result.put(FIELD_ORIGINAL_TITLE, object.getOriginalTitle());
+        result.put(FIELD_ORIGINAL_LANGUAGE, object.getOriginalLanguage());
+        result.put(FIELD_TITLE, object.getTitle());
+        result.put(FIELD_BACKDROP_PATH, object.getBackdropPath());
+        result.put(FIELD_POPULARITY, object.getPopularity());
+        result.put(FIELD_VOTE_COUNT, object.getVoteCount());
+        result.put(FIELD_VIDEO, object.isVideo());
+        result.put(FIELD_VOTE_AVERAGE, object.getVoteAverage());
+        result.put(FIELD_STATUS, object.getStatus());
         return result;
     }
 }

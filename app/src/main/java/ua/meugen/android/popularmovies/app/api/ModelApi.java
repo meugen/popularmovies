@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.presenter.api;
+package ua.meugen.android.popularmovies.app.api;
 
 import io.reactivex.Observable;
 import ua.meugen.android.popularmovies.model.Session;

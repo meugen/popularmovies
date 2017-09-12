@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.presenter.images;
+package ua.meugen.android.popularmovies.ui.utils.images;
 
 public class FileSize {
 

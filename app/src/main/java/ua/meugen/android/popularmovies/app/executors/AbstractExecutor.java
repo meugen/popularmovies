@@ -3,7 +3,7 @@ package ua.meugen.android.popularmovies.app.executors;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import io.reactivex.Completable;
-import ua.meugen.android.popularmovies.presenter.helpers.TransactionExecutor;
+import ua.meugen.android.popularmovies.app.di.ints.TransactionExecutor;
 
 /**
  * @author meugen

@@ -14,7 +14,7 @@ import ua.meugen.android.popularmovies.app.di.db.scalars.ScalarsModule;
 import ua.meugen.android.popularmovies.app.executors.MergeMoviesExecutor;
 import ua.meugen.android.popularmovies.app.executors.MoviesData;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.presenter.helpers.TransactionExecutor;
+import ua.meugen.android.popularmovies.app.di.ints.TransactionExecutor;
 
 /**
  * @author meugen

@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
-    android:background="@drawable/button_background"
-    android:id="@+id/container">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:layout_width="?android:attr/listPreferredItemHeight"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_play_arrow_black_24dp"
-        android:scaleType="centerInside"/>
-
-    <TextView
+    <data>
+        <import type="ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.adapters.VideosAdapter.VideoItemViewHolder"/>
+        <import type="ua.meugen.android.popularmovies.model.responses.VideoItemDto"/>
+        <variable name="holder" type="VideoItemViewHolder"/>
+        <variable name="video" type="VideoItemDto"/>
+    </data>
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/name"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        tools:text="Trailer"
-        android:padding="8dp"
-        android:gravity="center_vertical"/>
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:background="@drawable/button_background"
+        android:id="@+id/container"
+        app:onClick="@{holder::click}">
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="?android:attr/listPreferredItemHeight"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_play_arrow_black_24dp"
+            android:scaleType="centerInside"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/name"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            tools:text="Trailer"
+            android:padding="8dp"
+            android:gravity="center_vertical"
+            android:text="@{video.name}"/>
+
+    </LinearLayout>
+</layout>

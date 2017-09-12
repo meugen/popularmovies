@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.app.impls;
+package ua.meugen.android.popularmovies.app.di.impls;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import ua.meugen.android.popularmovies.model.Session;
-import ua.meugen.android.popularmovies.presenter.helpers.SessionStorage;
+import ua.meugen.android.popularmovies.app.di.ints.SessionStorage;
 
 @Singleton
 public class SessionStorageImpl implements SessionStorage {

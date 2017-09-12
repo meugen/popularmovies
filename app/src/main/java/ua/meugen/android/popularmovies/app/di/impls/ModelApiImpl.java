@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.app.impls;
+package ua.meugen.android.popularmovies.app.di.impls;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +15,8 @@ import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
 import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
 import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
 import ua.meugen.android.popularmovies.model.responses.VideosDto;
-import ua.meugen.android.popularmovies.presenter.api.ModelApi;
-import ua.meugen.android.popularmovies.presenter.api.ServerApi;
+import ua.meugen.android.popularmovies.app.api.ModelApi;
+import ua.meugen.android.popularmovies.app.api.ServerApi;
 
 /**
  * @author meugen

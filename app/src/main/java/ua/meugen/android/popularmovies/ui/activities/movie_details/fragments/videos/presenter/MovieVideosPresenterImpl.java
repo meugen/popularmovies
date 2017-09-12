@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.responses.VideosDto;
-import ua.meugen.android.popularmovies.presenter.api.ModelApi;
+import ua.meugen.android.popularmovies.app.api.ModelApi;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.state.MovieVideosState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.view.MovieVideosView;

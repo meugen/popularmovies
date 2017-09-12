@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.presenter.annotations;
+package ua.meugen.android.popularmovies.app.annotations;
 
 import android.support.annotation.IntDef;
 

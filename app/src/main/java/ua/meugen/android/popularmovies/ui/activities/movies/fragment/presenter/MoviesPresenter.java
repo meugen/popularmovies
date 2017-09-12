@@ -1,6 +1,6 @@
 package ua.meugen.android.popularmovies.ui.activities.movies.fragment.presenter;
 
-import ua.meugen.android.popularmovies.presenter.annotations.SortType;
+import ua.meugen.android.popularmovies.app.annotations.SortType;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.MvpPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.MoviesState;
 

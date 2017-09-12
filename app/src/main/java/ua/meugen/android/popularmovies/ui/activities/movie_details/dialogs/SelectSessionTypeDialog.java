@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.ui.dialogs;
+package ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -11,7 +11,7 @@ import android.support.v7.app.AlertDialog;
 import java.util.UUID;
 
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.ui.helpers.ListenersCollector;
+import ua.meugen.android.popularmovies.ui.activities.ListenersCollector;
 import ua.meugen.android.popularmovies.ui.utils.BundleUtils;
 
 
