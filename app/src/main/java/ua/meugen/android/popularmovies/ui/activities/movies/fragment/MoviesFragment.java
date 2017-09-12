@@ -87,7 +87,7 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
     public void onPrepareOptionsMenu(final Menu menu) {
         super.onPrepareOptionsMenu(menu);
         @SortType
-        final int sortType = PopularMovies.from(getContext()).getSortType();
+        final int sortType = presenter.getSortType();
         if (sortType == SortType.POPULAR) {
             menu.findItem(R.id.popular).setChecked(true);
         } else if (sortType == SortType.TOP_RATED) {
@@ -99,12 +99,11 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
 
     private void refresh() {
         @SortType
-        final int sortType = PopularMovies.from(getContext()).getSortType();
+        final int sortType = presenter.getSortType();
         presenter.refresh(sortType);
     }
 
     private void refresh(@SortType final int sortType) {
-        PopularMovies.from(getContext()).setSortType(sortType);
         presenter.refresh(sortType);
     }
 
