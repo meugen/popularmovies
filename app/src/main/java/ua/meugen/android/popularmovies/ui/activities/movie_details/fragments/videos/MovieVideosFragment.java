@@ -12,12 +12,12 @@ import java.util.List;
 
 import ua.meugen.android.popularmovies.databinding.FragmentMovieVideosBinding;
 import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.listeners.OnClickVideoListener;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.adapters.VideosAdapter;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.listeners.OnClickVideoListener;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.presenter.MovieVideosPresenterImpl;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.state.MovieVideosState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.view.MovieVideosView;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.adapters.VideosAdapter;
 
 /**
  * @author meugen

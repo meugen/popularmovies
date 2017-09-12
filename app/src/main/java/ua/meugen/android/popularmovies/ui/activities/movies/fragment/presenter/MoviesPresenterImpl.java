@@ -13,13 +13,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import ua.meugen.android.popularmovies.app.annotations.SortType;
+import ua.meugen.android.popularmovies.app.api.ModelApi;
+import ua.meugen.android.popularmovies.app.di.ints.TransactionExecutor;
 import ua.meugen.android.popularmovies.app.executors.MoviesData;
 import ua.meugen.android.popularmovies.app.utils.RxUtils;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
-import ua.meugen.android.popularmovies.app.annotations.SortType;
-import ua.meugen.android.popularmovies.app.api.ModelApi;
-import ua.meugen.android.popularmovies.app.di.ints.TransactionExecutor;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.MoviesState;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.MoviesView;
@@ -37,7 +37,6 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
 
     @SortType
     private int sortType;
-    private CompositeDisposable compositeDisposable;
 
     @Inject
     public MoviesPresenterImpl(
@@ -63,7 +62,6 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
 
     @Override
     public void refresh(@SortType final int sortType) {
-        reset(true);
         this.sortType = sortType;
         refresh();
     }
@@ -100,14 +98,14 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
         }
         final Disposable disposable = observable
                 .subscribe(this::onMovies);
-        compositeDisposable.add(disposable);
+        getCompositeDisposable().add(disposable);
     }
 
     private Observable<MoviesData> getMoviesByStatus(final int status) {
         final Query query = Query.builder()
                 .table("movies")
-                .where("(status & ?0) == ?0")
-                .whereArgs(status)
+                .where("(status & ?) == ?")
+                .whereArgs(status, status)
                 .build();
         final PreparedOperation<List<MovieItemDto>> operation =
                 storIOSQLite.get()
@@ -120,22 +118,13 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
 
     private void onMovies(final MoviesData data) {
         if (data.isNeedToSave()) {
-            mergeMoviesExecutor.executeTransactionAsync(storIOSQLite, data);
+            final Disposable disposable = mergeMoviesExecutor
+                    .executeTransactionAsync(storIOSQLite, data)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe();
+            getCompositeDisposable().add(disposable);
         }
         view.showMovies(data.getMovies());
-    }
-
-    private void init() {
-        compositeDisposable = new CompositeDisposable();
-    }
-
-    private void reset(final boolean isInit) {
-        if (compositeDisposable != null) {
-            compositeDisposable.dispose();
-            compositeDisposable = null;
-        }
-        if (isInit) {
-            init();
-        }
     }
 }

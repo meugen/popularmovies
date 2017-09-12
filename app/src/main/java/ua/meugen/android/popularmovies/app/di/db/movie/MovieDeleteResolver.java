@@ -23,7 +23,7 @@ public class MovieDeleteResolver extends DefaultDeleteResolver<MovieItemDto> imp
     protected DeleteQuery mapToDeleteQuery(@NonNull final MovieItemDto object) {
         return DeleteQuery.builder()
                 .table(TABLE)
-                .where(Fields.ID + "=?")
+                .where(FIELD_ID + "=?")
                 .whereArgs(object.getId())
                 .build();
     }

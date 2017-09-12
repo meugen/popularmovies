@@ -10,13 +10,13 @@ import java.util.List;
 
 import ua.meugen.android.popularmovies.databinding.FragmentMovieReviewsBinding;
 import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.listeners.OnClickReviewListener;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.ReviewDetailDialog;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.adapters.ReviewsAdapter;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.listeners.OnClickReviewListener;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.presenter.MovieReviewsPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.state.MovieReviewsState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.view.MovieReviewsView;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.adapters.ReviewsAdapter;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.ReviewDetailDialog;
 
 /**
  * @author meugen

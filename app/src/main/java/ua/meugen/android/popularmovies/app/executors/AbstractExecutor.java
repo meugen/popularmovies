@@ -14,12 +14,12 @@ public abstract class AbstractExecutor<D> implements TransactionExecutor<D> {
     @Override
     public final Completable executeTransactionAsync(
             final StorIOSQLite storIOSQLite, final D data) {
-        return Completable.create(source -> {
+        return Completable.create(emitter -> {
             final StorIOSQLite.LowLevel lowLevel = storIOSQLite.lowLevel();
             lowLevel.beginTransaction();
             try {
                 execute(storIOSQLite, data);
-                source.onComplete();
+                emitter.onComplete();
                 lowLevel.setTransactionSuccessful();
             } finally {
                 lowLevel.endTransaction();

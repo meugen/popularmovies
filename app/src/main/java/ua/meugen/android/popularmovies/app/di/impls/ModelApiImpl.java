@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import ua.meugen.android.popularmovies.app.api.ModelApi;
+import ua.meugen.android.popularmovies.app.api.ServerApi;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.requests.RateMovieRequest;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
@@ -15,8 +17,6 @@ import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
 import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
 import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
 import ua.meugen.android.popularmovies.model.responses.VideosDto;
-import ua.meugen.android.popularmovies.app.api.ModelApi;
-import ua.meugen.android.popularmovies.app.api.ServerApi;
 
 /**
  * @author meugen

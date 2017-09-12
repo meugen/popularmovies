@@ -8,6 +8,7 @@ import dagger.android.ContributesAndroidInjector;
 import ua.meugen.android.popularmovies.app.di.PerActivity;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.AuthorizeFragment;
+import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.AuthorizeFragmentModule;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
 
 /**
@@ -23,6 +24,6 @@ public abstract class AuthorizeActivityModule {
     abstract AppCompatActivity bindActivity(final AuthorizeActivity activity);
 
     @PerFragment
-    @ContributesAndroidInjector(modules = AuthorizeActivityModule.class)
+    @ContributesAndroidInjector(modules = AuthorizeFragmentModule.class)
     abstract AuthorizeFragment contributeAuthorizeFragment();
 }

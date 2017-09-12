@@ -26,20 +26,20 @@ public class DbOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(final SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + MovieContract.TABLE + " ( " +
-                MovieContract.Fields.ID + " INTEGER NOT NULL PRIMARY KEY, " +
-                MovieContract.Fields.POSTER_PATH + " VARCHAR(200) NOT NULL, " +
-                MovieContract.Fields.ADULT + " TINYINT NOT NULL, " +
-                MovieContract.Fields.OVERVIEW + " TEXT NOT NULL, " +
-                MovieContract.Fields.RELEASE_DATE + " BIGINT NOT NULL, " +
-                MovieContract.Fields.ORIGINAL_TITLE + " VARCHAR(100) NOT NULL, " +
-                MovieContract.Fields.ORIGINAL_LANGUAGE + " VARCHAR(20) NOT NULL, " +
-                MovieContract.Fields.TITLE + " VARCHAR(100) NOT NULL, " +
-                MovieContract.Fields.BACKDROP_PATH + " VARCHAR(200) NOT NULL, " +
-                MovieContract.Fields.POPULARITY + " DOUBLE NOT NULL, " +
-                MovieContract.Fields.VOTE_COUNT + " INTEGER NOT NULL, " +
-                MovieContract.Fields.VIDEO + " TINYINT NOT NULL, " +
-                MovieContract.Fields.VOTE_AVERAGE + " DOUBLE NOT NULL, " +
-                MovieContract.Fields.STATUS + " TINYINT NOT NULL);");
+                MovieContract.FIELD_ID + " INTEGER NOT NULL PRIMARY KEY, " +
+                MovieContract.FIELD_POSTER_PATH + " VARCHAR(200) NOT NULL, " +
+                MovieContract.FIELD_ADULT + " TINYINT NOT NULL, " +
+                MovieContract.FIELD_OVERVIEW + " TEXT NOT NULL, " +
+                MovieContract.FIELD_RELEASE_DATE + " BIGINT NOT NULL, " +
+                MovieContract.FIELD_ORIGINAL_TITLE + " VARCHAR(100) NOT NULL, " +
+                MovieContract.FIELD_ORIGINAL_LANGUAGE + " VARCHAR(20) NOT NULL, " +
+                MovieContract.FIELD_TITLE + " VARCHAR(100) NOT NULL, " +
+                MovieContract.FIELD_BACKDROP_PATH + " VARCHAR(200) NOT NULL, " +
+                MovieContract.FIELD_POPULARITY + " DOUBLE NOT NULL, " +
+                MovieContract.FIELD_VOTE_COUNT + " INTEGER NOT NULL, " +
+                MovieContract.FIELD_VIDEO + " TINYINT NOT NULL, " +
+                MovieContract.FIELD_VOTE_AVERAGE + " DOUBLE NOT NULL, " +
+                MovieContract.FIELD_STATUS + " TINYINT NOT NULL);");
     }
 
     @Override

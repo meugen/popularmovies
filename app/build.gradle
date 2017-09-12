@@ -52,8 +52,8 @@ dependencies {
     compile rx.android
 
     compile storio.sqlite.core
-    compile storio.sqlite.annotations.core
-    annotationProcessor storio.sqlite.annotations.processor
+//    compile storio.sqlite.annotations.core
+//    annotationProcessor storio.sqlite.annotations.processor
 
     compile picasso
     compile timber

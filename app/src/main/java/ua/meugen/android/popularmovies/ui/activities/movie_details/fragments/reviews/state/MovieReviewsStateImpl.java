@@ -1,5 +1,7 @@
 package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.state;
 
+import javax.inject.Inject;
+
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.BaseMvpState;
 
 /**
@@ -9,6 +11,9 @@ import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.BaseMvp
 public class MovieReviewsStateImpl extends BaseMvpState implements MovieReviewsState {
 
     private static final String MOVIE_ID = "movieId";
+
+    @Inject
+    public MovieReviewsStateImpl() {}
 
     @Override
     public int getMovieId() {

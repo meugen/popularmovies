@@ -7,8 +7,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-import ua.meugen.android.popularmovies.model.responses.VideosDto;
 import ua.meugen.android.popularmovies.app.api.ModelApi;
+import ua.meugen.android.popularmovies.model.responses.VideosDto;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.state.MovieVideosState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.view.MovieVideosView;
@@ -17,9 +17,6 @@ public class MovieVideosPresenterImpl extends BaseMvpPresenter<MovieVideosView, 
         implements MovieVideosPresenter {
 
     private final ModelApi modelApi;
-
-    private MovieVideosView view;
-    private CompositeDisposable compositeDisposable;
 
     private int movieId;
 
@@ -53,7 +50,7 @@ public class MovieVideosPresenterImpl extends BaseMvpPresenter<MovieVideosView, 
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::onVideosLoaded, this::onVideosError);
-        compositeDisposable.add(disposable);
+        getCompositeDisposable().add(disposable);
     }
 
     private void onVideosError(final Throwable th) {

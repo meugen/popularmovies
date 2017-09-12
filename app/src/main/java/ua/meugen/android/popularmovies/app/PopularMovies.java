@@ -2,7 +2,6 @@ package ua.meugen.android.popularmovies.app;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 
 import javax.inject.Inject;
 
@@ -24,7 +23,7 @@ public class PopularMovies extends Application implements HasActivityInjector {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
-        DaggerAppComponent.create(this).inject(this);
+        DaggerAppComponent.builder().create(this).inject(this);
     }
 
     @Override

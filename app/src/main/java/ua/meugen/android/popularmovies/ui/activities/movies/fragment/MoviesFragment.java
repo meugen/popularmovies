@@ -15,17 +15,16 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.app.PopularMovies;
+import ua.meugen.android.popularmovies.app.annotations.SortType;
 import ua.meugen.android.popularmovies.databinding.FragmentMoviesBinding;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.app.annotations.SortType;
-import ua.meugen.android.popularmovies.ui.activities.movies.fragment.listeners.OnMovieClickListener;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.MovieDetailsActivity;
+import ua.meugen.android.popularmovies.ui.activities.movies.fragment.adapters.MoviesAdapter;
+import ua.meugen.android.popularmovies.ui.activities.movies.fragment.listeners.OnMovieClickListener;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.presenter.MoviesPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.MoviesState;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.MoviesView;
-import ua.meugen.android.popularmovies.ui.activities.movies.fragment.adapters.MoviesAdapter;
 
 
 public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>

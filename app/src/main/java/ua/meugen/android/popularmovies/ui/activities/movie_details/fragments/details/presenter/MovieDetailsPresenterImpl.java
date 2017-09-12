@@ -14,15 +14,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
+import ua.meugen.android.popularmovies.app.annotations.SortType;
+import ua.meugen.android.popularmovies.app.api.ModelApi;
 import ua.meugen.android.popularmovies.app.di.db.movie.MovieContract;
+import ua.meugen.android.popularmovies.app.di.ints.SessionStorage;
 import ua.meugen.android.popularmovies.app.utils.RxUtils;
 import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.model.responses.BaseDto;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
 import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
-import ua.meugen.android.popularmovies.app.annotations.SortType;
-import ua.meugen.android.popularmovies.app.api.ModelApi;
-import ua.meugen.android.popularmovies.app.di.ints.SessionStorage;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.state.MovieDetailsState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.view.MovieDetailsView;
@@ -75,7 +75,7 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
     private void load() {
         Query query = Query.builder()
                 .table(MovieContract.TABLE)
-                .where(MovieContract.Fields.ID + "=?")
+                .where(MovieContract.FIELD_ID + "=?")
                 .whereArgs(movieId)
                 .limit(1)
                 .build();

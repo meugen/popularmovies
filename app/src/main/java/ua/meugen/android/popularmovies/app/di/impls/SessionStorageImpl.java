@@ -9,8 +9,8 @@ import java.util.Date;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import ua.meugen.android.popularmovies.model.Session;
 import ua.meugen.android.popularmovies.app.di.ints.SessionStorage;
+import ua.meugen.android.popularmovies.model.Session;
 
 @Singleton
 public class SessionStorageImpl implements SessionStorage {

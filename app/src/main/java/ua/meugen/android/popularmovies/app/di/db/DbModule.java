@@ -11,10 +11,10 @@ import dagger.Module;
 import dagger.Provides;
 import ua.meugen.android.popularmovies.app.di.db.movie.MovieModule;
 import ua.meugen.android.popularmovies.app.di.db.scalars.ScalarsModule;
+import ua.meugen.android.popularmovies.app.di.ints.TransactionExecutor;
 import ua.meugen.android.popularmovies.app.executors.MergeMoviesExecutor;
 import ua.meugen.android.popularmovies.app.executors.MoviesData;
 import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.app.di.ints.TransactionExecutor;
 
 /**
  * @author meugen
