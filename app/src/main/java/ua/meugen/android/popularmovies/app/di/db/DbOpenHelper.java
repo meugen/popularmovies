@@ -3,6 +3,7 @@ package ua.meugen.android.popularmovies.app.di.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,6 +16,8 @@ import ua.meugen.android.popularmovies.app.di.db.movie.MovieContract;
 @Singleton
 public class DbOpenHelper extends SQLiteOpenHelper {
 
+    private static final String TAG = DbOpenHelper.class.getSimpleName();
+
     private static final String NAME = "popularmovies.db";
     private static final int VERSION = 1;
 
@@ -25,6 +28,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(final SQLiteDatabase db) {
+        Log.i(TAG, db.getPath());
         db.execSQL("CREATE TABLE " + MovieContract.TABLE + " ( " +
                 MovieContract.FIELD_ID + " INTEGER NOT NULL PRIMARY KEY, " +
                 MovieContract.FIELD_POSTER_PATH + " VARCHAR(200) NOT NULL, " +

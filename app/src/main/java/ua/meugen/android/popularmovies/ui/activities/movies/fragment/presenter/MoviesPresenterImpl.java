@@ -15,6 +15,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ua.meugen.android.popularmovies.app.annotations.SortType;
 import ua.meugen.android.popularmovies.app.api.ModelApi;
+import ua.meugen.android.popularmovies.app.di.db.movie.MovieContract;
 import ua.meugen.android.popularmovies.app.di.ints.TransactionExecutor;
 import ua.meugen.android.popularmovies.app.executors.MoviesData;
 import ua.meugen.android.popularmovies.app.utils.RxUtils;
@@ -29,7 +30,7 @@ import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.Movies
  */
 
 public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesState>
-        implements MoviesPresenter {
+        implements MoviesPresenter, MovieContract {
 
     private final ModelApi modelApi;
     private final StorIOSQLite storIOSQLite;
@@ -103,9 +104,8 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
 
     private Observable<MoviesData> getMoviesByStatus(final int status) {
         final Query query = Query.builder()
-                .table("movies")
-                .where("(status & ?) == ?")
-                .whereArgs(status, status)
+                .table(TABLE)
+                .where("(" + FIELD_STATUS + "&" + status + ")=" + status)
                 .build();
         final PreparedOperation<List<MovieItemDto>> operation =
                 storIOSQLite.get()
