@@ -8,4 +8,6 @@ import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.vid
  */
 
 public interface MovieVideosPresenter extends MvpPresenter<MovieVideosState> {
+
+    void load();
 }

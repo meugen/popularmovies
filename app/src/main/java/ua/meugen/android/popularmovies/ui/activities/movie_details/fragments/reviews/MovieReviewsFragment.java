@@ -8,12 +8,14 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ua.meugen.android.popularmovies.databinding.FragmentMovieReviewsBinding;
-import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
+import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.ReviewDetailDialog;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.review.ReviewDetailDialog;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.adapters.ReviewsAdapter;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.listeners.OnClickReviewListener;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.adapters.OnClickReviewListener;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.presenter.MovieReviewsPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.state.MovieReviewsState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.view.MovieReviewsView;
@@ -36,9 +38,9 @@ public class MovieReviewsFragment extends BaseFragment<MovieReviewsState, MovieR
         return fragment;
     }
 
-    private FragmentMovieReviewsBinding binding;
+    @Inject ReviewsAdapter adapter;
 
-    private ReviewsAdapter adapter;
+    private FragmentMovieReviewsBinding binding;
 
     @Nullable
     @Override
@@ -52,17 +54,27 @@ public class MovieReviewsFragment extends BaseFragment<MovieReviewsState, MovieR
     }
 
     @Override
-    public void onClickReview(final ReviewItemDto review) {
-        final ReviewDetailDialog dialog = ReviewDetailDialog.newInstance(review);
+    public void onViewCreated(
+            final View view,
+            @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding.reviews.setAdapter(adapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.load();
+    }
+
+    @Override
+    public void onClickReview(final ReviewItem review) {
+        final ReviewDetailDialog dialog = ReviewDetailDialog.newInstance(review.id);
         dialog.show(getFragmentManager(), "review_detail");
     }
 
     @Override
-    public void onReviewsLoaded(final List<ReviewItemDto> reviews) {
-        if (adapter == null) {
-            adapter = new ReviewsAdapter(getContext(), this);
-            binding.reviews.setAdapter(adapter);
-        }
-        adapter.setReviews(reviews);
+    public void onReviewsLoaded(final List<ReviewItem> reviews) {
+        adapter.swapReviews(reviews);
     }
 }

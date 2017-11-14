@@ -6,9 +6,9 @@
 
     <data>
         <import type="ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.adapters.VideosAdapter.VideoItemViewHolder"/>
-        <import type="ua.meugen.android.popularmovies.model.responses.VideoItemDto"/>
+        <import type="ua.meugen.android.popularmovies.model.db.entity.VideoItem"/>
         <variable name="holder" type="VideoItemViewHolder"/>
-        <variable name="video" type="VideoItemDto"/>
+        <variable name="video" type="ua.meugen.android.popularmovies.model.db.entity.VideoItem"/>
     </data>
     <LinearLayout
         android:orientation="horizontal"

@@ -2,7 +2,7 @@ package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.re
 
 import java.util.List;
 
-import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
+import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.view.MvpView;
 
 /**
@@ -11,5 +11,5 @@ import ua.meugen.android.popularmovies.ui.activities.base.fragment.view.MvpView;
 
 public interface MovieReviewsView extends MvpView {
 
-    void onReviewsLoaded(List<ReviewItemDto> reviews);
+    void onReviewsLoaded(List<ReviewItem> reviews);
 }

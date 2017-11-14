@@ -8,4 +8,6 @@ import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.rev
  */
 
 public interface MovieReviewsPresenter extends MvpPresenter<MovieReviewsState> {
+
+    void load();
 }

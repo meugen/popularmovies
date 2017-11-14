@@ -12,6 +12,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         buildConfigField 'String', 'SERVER_URL', '"https://api.themoviedb.org/3/"'
+        buildConfigField 'String', 'API_KEY', '"4d0aefea62c601c18d2e9902f2570a61"'
     }
     buildTypes {
         release {
@@ -30,29 +31,28 @@ android {
 
 dependencies {
 
-    compile support.appCompat
-    compile support.recyclerView
-    compile support.design
-    compile support.constraint
+    implementation support.appCompat
+    implementation support.recyclerView
+    implementation support.design
+    implementation support.constraint
 
-    compile dagger.core
+    implementation dagger.core
     annotationProcessor dagger.compiler
-    compile dagger.android.core
+    implementation dagger.android.core
     annotationProcessor dagger.android.processor
 
-    compile retrofit.core
-    compile retrofit.converterGson
-    compile retrofit.adapterRxJava
+    implementation retrofit.core
+    implementation retrofit.converterGson
+    implementation retrofit.adapterRxJava
 
-    compile okHttp.core
-    compile okHttp.logging
+    implementation okHttp.core
+    implementation okHttp.logging
 
-    compile rx.java
-    compile rx.android
+    implementation rx.java
+    implementation rx.android
 
-    compile storio.sqlite.core
-//    compile storio.sqlite.annotations.core
-//    annotationProcessor storio.sqlite.annotations.processor
+    implementation room.runtime
+    annotationProcessor room.compiler
 
     compile picasso
     compile timber

@@ -9,28 +9,34 @@ import android.view.ViewGroup;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.databinding.ItemMovieBinding;
-import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.ui.activities.movies.fragment.listeners.OnMovieClickListener;
+import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
+import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
 import ua.meugen.android.popularmovies.ui.utils.images.FileSize;
 import ua.meugen.android.popularmovies.ui.utils.images.ImageLoader;
 
+@PerFragment
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 
     private final LayoutInflater inflater;
     private final OnMovieClickListener listener;
 
-    private List<MovieItemDto> movies;
+    private List<MovieItem> movies;
 
+    @Inject
     public MoviesAdapter(
-            @NonNull final Context context,
-            @NonNull final OnMovieClickListener listener) {
+            @Named(BaseActivityModule.ACTIVITY_CONTEXT) final Context context,
+            final OnMovieClickListener listener) {
         this.inflater = LayoutInflater.from(context);
         this.listener = listener;
         this.movies = Collections.emptyList();
     }
 
-    public void setMovies(final List<MovieItemDto> movies) {
+    public void swapMovies(final List<MovieItem> movies) {
         this.movies = movies;
         notifyDataSetChanged();
     }
@@ -65,10 +71,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             binding.setHolder(this);
         }
 
-        public void bind(final MovieItemDto movie) {
-            movieId = movie.getId();
+        public void bind(final MovieItem movie) {
+            movieId = movie.id;
             ImageLoader.from(itemView.getContext())
-                    .load(FileSize.w(500), movie.getPosterPath())
+                    .load(FileSize.w(500), movie.posterPath)
                     .into(binding.poster);
         }
 

@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import ua.meugen.android.popularmovies.databinding.FragmentMovieVideosBinding;
-import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
+import ua.meugen.android.popularmovies.model.db.entity.VideoItem;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.adapters.VideosAdapter;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.listeners.OnClickVideoListener;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.adapters.OnClickVideoListener;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.presenter.MovieVideosPresenterImpl;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.state.MovieVideosState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.view.MovieVideosView;
@@ -37,7 +39,8 @@ public class MovieVideosFragment extends BaseFragment<MovieVideosState, MovieVid
         return fragment;
     }
 
-    private VideosAdapter adapter;
+    @Inject VideosAdapter adapter;
+
     private FragmentMovieVideosBinding binding;
 
     @Nullable
@@ -51,18 +54,28 @@ public class MovieVideosFragment extends BaseFragment<MovieVideosState, MovieVid
     }
 
     @Override
-    public void onClickVideo(final VideoItemDto dto) {
+    public void onViewCreated(
+            final View view,
+            @Nullable final Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding.videos.setAdapter(adapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        presenter.load();
+    }
+
+    @Override
+    public void onClickVideo(final VideoItem dto) {
         final Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("https://www.youtube.com/watch?v=" + dto.getKey()));
+        intent.setData(Uri.parse("https://www.youtube.com/watch?v=" + dto.key));
         startActivity(intent);
     }
 
     @Override
-    public void onVideosLoaded(final List<VideoItemDto> videos) {
-        if (adapter == null) {
-            adapter = new VideosAdapter(getContext(), this);
-            binding.videos.setAdapter(adapter);
-        }
-        adapter.setVideos(videos);
+    public void onVideosLoaded(final List<VideoItem> videos) {
+        adapter.swapVideos(videos);
     }
 }

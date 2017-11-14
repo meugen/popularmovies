@@ -6,6 +6,7 @@ import dagger.Binds;
 import dagger.Module;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragmentModule;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.adapters.OnClickReviewListener;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.presenter.MovieReviewsPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.presenter.MovieReviewsPresenterImpl;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.state.MovieReviewsState;
@@ -29,4 +30,7 @@ public abstract class MovieReviewsFragmentModule {
 
     @Binds @PerFragment
     abstract Fragment bindFragment(final MovieReviewsFragment fragment);
+
+    @Binds @PerFragment
+    abstract OnClickReviewListener bindClickReviewListener(final MovieReviewsFragment fragment);
 }

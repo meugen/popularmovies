@@ -8,9 +8,12 @@ import android.view.ViewGroup;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import ua.meugen.android.popularmovies.databinding.ItemVideoBinding;
-import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.listeners.OnClickVideoListener;
+import ua.meugen.android.popularmovies.model.db.entity.VideoItem;
+import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
 
 
 public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemViewHolder> {
@@ -18,16 +21,19 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
     private final LayoutInflater inflater;
     private final OnClickVideoListener listener;
 
-    private List<VideoItemDto> videos;
+    private List<VideoItem> videos;
 
-    public VideosAdapter(final Context context, final OnClickVideoListener listener) {
+    @Inject
+    public VideosAdapter(
+            @Named(BaseActivityModule.ACTIVITY_CONTEXT) final Context context,
+            final OnClickVideoListener listener) {
         this.inflater = LayoutInflater
                 .from(context);
         this.listener = listener;
         this.videos = Collections.emptyList();
     }
 
-    public void setVideos(final List<VideoItemDto> videos) {
+    public void swapVideos(final List<VideoItem> videos) {
         this.videos = videos;
         notifyDataSetChanged();
     }
@@ -57,7 +63,7 @@ public class VideosAdapter extends RecyclerView.Adapter<VideosAdapter.VideoItemV
             binding.setHolder(this);
         }
 
-        public void bind(final VideoItemDto dto) {
+        public void bind(final VideoItem dto) {
             binding.setVideo(dto);
         }
 

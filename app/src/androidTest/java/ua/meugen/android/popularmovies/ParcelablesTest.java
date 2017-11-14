@@ -15,22 +15,21 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
-import ua.meugen.android.popularmovies.model.responses.BaseDto;
-import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
-import ua.meugen.android.popularmovies.model.responses.NewSessionDto;
-import ua.meugen.android.popularmovies.model.responses.NewTokenDto;
-import ua.meugen.android.popularmovies.model.responses.PagedMoviesDto;
-import ua.meugen.android.popularmovies.model.responses.PagedReviewsDto;
-import ua.meugen.android.popularmovies.model.responses.ReviewItemDto;
-import ua.meugen.android.popularmovies.model.responses.VideoItemDto;
-import ua.meugen.android.popularmovies.model.responses.VideosDto;
+import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
+import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
+import ua.meugen.android.popularmovies.model.network.resp.NewGuestSessionResponse;
+import ua.meugen.android.popularmovies.model.network.resp.NewSessionResponse;
+import ua.meugen.android.popularmovies.model.network.resp.NewTokenResponse;
+import ua.meugen.android.popularmovies.model.network.resp.PagedMoviesResponse;
+import ua.meugen.android.popularmovies.model.network.resp.PagedReviewsResponse;
+import ua.meugen.android.popularmovies.model.db.entity.VideoItem;
+import ua.meugen.android.popularmovies.model.network.resp.VideosResponse;
 
 @RunWith(AndroidJUnit4.class)
 public class ParcelablesTest {
 
-    private MovieItemDto createMovieItemDto() {
-        final MovieItemDto dto = new MovieItemDto();
+    private MovieItem createMovieItemDto() {
+        final MovieItem dto = new MovieItem();
         dto.setId(1);
         dto.setAdult(true);
         dto.setBackdropPath("backdropPath");
@@ -55,7 +54,7 @@ public class ParcelablesTest {
 
     @Test
     public void testPagedMoviesDtoParcelable() throws Exception {
-        final PagedMoviesDto dto = new PagedMoviesDto();
+        final PagedMoviesResponse dto = new PagedMoviesResponse();
         dto.setPage(1);
         dto.setResults(new ArrayList<>(Collections.singleton(createMovieItemDto())));
         dto.setTotalResults(1);
@@ -63,8 +62,8 @@ public class ParcelablesTest {
         testOneParcelable(dto);
     }
 
-    private ReviewItemDto createReviewItemDto() {
-        final ReviewItemDto dto = new ReviewItemDto();
+    private ReviewItem createReviewItemDto() {
+        final ReviewItem dto = new ReviewItem();
         dto.setAuthor("author");
         dto.setUrl("url");
         dto.setContent("content");
@@ -79,7 +78,7 @@ public class ParcelablesTest {
 
     @Test
     public void testPagedReviewsDtoParcelable() throws Exception {
-        final PagedReviewsDto dto = new PagedReviewsDto();
+        final PagedReviewsResponse dto = new PagedReviewsResponse();
         dto.setResults(new ArrayList<>(Collections.singleton(createReviewItemDto())));
         dto.setTotalPages(1);
         dto.setTotalResults(1);
@@ -88,8 +87,8 @@ public class ParcelablesTest {
         testOneParcelable(dto);
     }
 
-    private VideoItemDto createVideoItemDto() {
-        final VideoItemDto dto = new VideoItemDto();
+    private VideoItem createVideoItemDto() {
+        final VideoItem dto = new VideoItem();
         dto.setIso31661("iso31661");
         dto.setType("type");
         dto.setId("id");
@@ -108,7 +107,7 @@ public class ParcelablesTest {
 
     @Test
     public void testVideosDtoParcelable() throws Exception {
-        final VideosDto dto = new VideosDto();
+        final VideosResponse dto = new VideosResponse();
         dto.setId(1);
         dto.setResults(new ArrayList<>(Collections.singleton(createVideoItemDto())));
         testOneParcelable(dto);
@@ -116,7 +115,7 @@ public class ParcelablesTest {
 
     @Test
     public void testNewTokenDtoParcelable() throws Exception {
-        final NewTokenDto dto = new NewTokenDto();
+        final NewTokenResponse dto = new NewTokenResponse();
         dto.setExpiresAt(new Date(System.currentTimeMillis()));
         dto.setToken("token");
         dto.setSuccess(true);
@@ -125,7 +124,7 @@ public class ParcelablesTest {
 
     @Test
     public void testNewSessionDtoParcelable() throws Exception {
-        final NewSessionDto dto = new NewSessionDto();
+        final NewSessionResponse dto = new NewSessionResponse();
         dto.setSessionId("session_id");
         dto.setSuccess(true);
         testOneParcelable(dto);
@@ -133,7 +132,7 @@ public class ParcelablesTest {
 
     @Test
     public void testNewGuestSessionDtoParcelable() throws Exception {
-        final NewGuestSessionDto dto = new NewGuestSessionDto();
+        final NewGuestSessionResponse dto = new NewGuestSessionResponse();
         dto.setExpiresAt(new Date(System.currentTimeMillis()));
         dto.setGuestSessionId("guest_session_id");
         dto.setSuccess(true);

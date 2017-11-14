@@ -9,5 +9,7 @@ import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.Mvp
 
 public interface AuthorizePresenter extends MvpPresenter<AuthorizeState> {
 
+    void load();
+
     void gotAllowed();
 }

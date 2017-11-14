@@ -20,14 +20,14 @@ ext {
     dagger_package = 'com.google.dagger'
     okhttp_package = 'com.squareup.okhttp3'
     rxjava_package = 'io.reactivex.rxjava2'
-    storio_package = 'com.pushtorefresh.storio'
+    room_package = 'android.arch.persistence.room'
 
     // Versions
     retrofit_version = '2.3.0'
     support_version = '26.1.0'
     dagger_version = '2.11'
     okhttp_version = '3.8.0'
-    storio_version = '1.13.0'
+    room_version = '1.0.0'
 
     support = [
             appCompat: "$support_package:appcompat-v7:$support_version",
@@ -66,14 +66,9 @@ ext {
             core: "com.android.support.test.espresso:espresso-core:2.2.2"
     ]
 
-    storio = [
-            sqlite: [
-                    core: "$storio_package:sqlite:$storio_version",
-                    annotations: [
-                            core: "$storio_package:sqlite-annotations:$storio_version",
-                            processor: "$storio_package:sqlite-annotations-processor:$storio_version"
-                    ]
-            ]
+    room = [
+            runtime: "$room_package:runtime:$room_version",
+            compiler: "$room_package:compiler:$room_version"
     ]
 
     picasso = "com.squareup.picasso:picasso:2.5.2"

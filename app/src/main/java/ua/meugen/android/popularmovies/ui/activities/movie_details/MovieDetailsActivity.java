@@ -8,18 +8,19 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.ActivityMovieDetailsBinding;
-import ua.meugen.android.popularmovies.ui.activities.ListenersCollector;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivity;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.rate.OnMovieRatedListener;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.session.OnSessionTypeSelectedListener;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.MovieDetailsFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.MovieReviewsFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.MovieVideosFragment;
 
-public class MovieDetailsActivity extends BaseActivity
-        implements TabLayout.OnTabSelectedListener, ListenersCollector.Container {
+public class MovieDetailsActivity extends BaseActivity implements
+        TabLayout.OnTabSelectedListener, OnSessionTypeSelectedListener,
+        OnMovieRatedListener {
 
     private static final String EXTRA_MOVIE_ID = "movieId";
 
@@ -35,9 +36,6 @@ public class MovieDetailsActivity extends BaseActivity
         intent.putExtra(EXTRA_MOVIE_ID, movieId);
         context.startActivity(intent);
     }
-
-    private final ListenersCollector listenersCollector
-            = new ListenersCollector();
 
     private ActivityMovieDetailsBinding binding;
 
@@ -114,9 +112,18 @@ public class MovieDetailsActivity extends BaseActivity
         outState.putInt(PARAM_ACTIVE_TAB, binding.tabLayout.getSelectedTabPosition());
     }
 
-    @NonNull
     @Override
-    public ListenersCollector getListenersCollector() {
-        return listenersCollector;
+    public void onUserSessionSelected() {
+        detailsFragment.onUserSessionSelected();
+    }
+
+    @Override
+    public void onGuestSessionSelected() {
+        detailsFragment.onGuestSessionSelected();
+    }
+
+    @Override
+    public void onMovieRated(final float value) {
+        detailsFragment.onMovieRated(value);
     }
 }

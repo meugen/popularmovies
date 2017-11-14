@@ -6,6 +6,7 @@ import dagger.Binds;
 import dagger.Module;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragmentModule;
+import ua.meugen.android.popularmovies.ui.activities.movies.fragment.adapters.OnMovieClickListener;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.presenter.MoviesPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.presenter.MoviesPresenterImpl;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.MoviesState;
@@ -19,14 +20,17 @@ import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.Movies
 public abstract class MoviesFragmentModule {
 
     @Binds @PerFragment
-    public abstract MoviesPresenter bindMoviesPresenter(final MoviesPresenterImpl impl);
+    abstract MoviesPresenter bindMoviesPresenter(final MoviesPresenterImpl impl);
 
     @Binds @PerFragment
-    public abstract MoviesState bindMoviesState(final MoviesStateImpl impl);
+    abstract MoviesState bindMoviesState(final MoviesStateImpl impl);
 
     @Binds @PerFragment
-    public abstract MoviesView bindMoviesView(final MoviesFragment fragment);
+    abstract MoviesView bindMoviesView(final MoviesFragment fragment);
 
     @Binds @PerFragment
-    public abstract Fragment bindFragment(final MoviesFragment fragment);
+    abstract Fragment bindFragment(final MoviesFragment fragment);
+
+    @Binds @PerFragment
+    abstract OnMovieClickListener bindMovieClickListener(final MoviesFragment fragment);
 }

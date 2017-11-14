@@ -1,28 +1,26 @@
 package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.presenter;
 
-import com.pushtorefresh.storio.operations.PreparedOperation;
-import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
-import com.pushtorefresh.storio.sqlite.queries.Query;
-
+import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-import ua.meugen.android.popularmovies.app.annotations.SortType;
-import ua.meugen.android.popularmovies.app.api.ModelApi;
-import ua.meugen.android.popularmovies.app.di.db.movie.MovieContract;
-import ua.meugen.android.popularmovies.app.di.ints.SessionStorage;
-import ua.meugen.android.popularmovies.app.utils.RxUtils;
-import ua.meugen.android.popularmovies.model.Session;
-import ua.meugen.android.popularmovies.model.responses.BaseDto;
-import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.model.responses.NewGuestSessionDto;
+import ua.meugen.android.popularmovies.model.SortType;
+import ua.meugen.android.popularmovies.model.api.ModelApi;
+import ua.meugen.android.popularmovies.model.db.dao.MoviesDao;
+import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
+import ua.meugen.android.popularmovies.model.network.resp.BaseResponse;
+import ua.meugen.android.popularmovies.model.network.resp.NewGuestSessionResponse;
+import ua.meugen.android.popularmovies.model.session.Session;
+import ua.meugen.android.popularmovies.model.session.SessionStorage;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.state.MovieDetailsState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.view.MovieDetailsView;
@@ -34,63 +32,38 @@ import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.det
 public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView, MovieDetailsState>
         implements MovieDetailsPresenter {
 
-    private final ModelApi modelApi;
-    private final StorIOSQLite storIOSQLite;
-    private final SessionStorage sessionStorage;
+    @Inject ModelApi modelApi;
+    @Inject MoviesDao moviesDao;
+    @Inject SessionStorage sessionStorage;
 
-    private MovieItemDto movie;
+    private MovieItem movie;
     private int movieId;
-    private UUID listenerUUID;
 
     @Inject
-    public MovieDetailsPresenterImpl(
-            final ModelApi modelApi,
-            final StorIOSQLite storIOSQLite,
-            final SessionStorage sessionStorage) {
-        this.modelApi = modelApi;
-        this.storIOSQLite = storIOSQLite;
-        this.sessionStorage = sessionStorage;
-    }
+    public MovieDetailsPresenterImpl() {}
 
     @Override
-    public void onCreate(final MovieDetailsState state) {
-        super.onCreate(state);
+    public void restoreState(final MovieDetailsState state) {
+        super.restoreState(state);
         movieId = state.getMovieId();
-        listenerUUID = state.getListenerUUID();
     }
 
     @Override
-    public void onSaveInstanceState(final MovieDetailsState state) {
-        super.onSaveInstanceState(state);
+    public void saveState(final MovieDetailsState state) {
+        super.saveState(state);
         state.setMovieId(movieId);
-        state.setListenerUUID(listenerUUID);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        load();
-    }
-
-    private void load() {
-        Query query = Query.builder()
-                .table(MovieContract.TABLE)
-                .where(MovieContract.FIELD_ID + "=?")
-                .whereArgs(movieId)
-                .limit(1)
-                .build();
-        PreparedOperation<MovieItemDto> operation = storIOSQLite
-                .get().object(MovieItemDto.class)
-                .withQuery(query)
-                .prepare();
-        Disposable disposable = RxUtils.asSingle(operation)
+    public void load() {
+        Disposable disposable = Single
+                .fromCallable(() -> moviesDao.byId(movieId))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotMovie);
         getCompositeDisposable().add(disposable);
     }
 
-    private void gotMovie(final MovieItemDto movie) {
+    private void gotMovie(final MovieItem movie) {
         this.movie = movie;
         view.gotMovie(movie);
     }
@@ -111,18 +84,24 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
 
     public void switchFavorites() {
         if (movie != null) {
-            if ((movie.getStatus() & SortType.FAVORITES) == SortType.FAVORITES) {
-                movie.setStatus(movie.getStatus() & ~SortType.FAVORITES);
+            if ((movie.status & SortType.FAVORITES) == SortType.FAVORITES) {
+                movie.status = movie.status & ~SortType.FAVORITES;
             } else {
-                movie.setStatus(movie.getStatus() | SortType.FAVORITES);
+                movie.status = movie.status | SortType.FAVORITES;
             }
-            final PreparedOperation<PutResult> operation = storIOSQLite
-                    .put().object(movie).prepare();
-            Disposable disposable = RxUtils.asCompletable(operation)
+            Disposable disposable = Completable
+                    .create(this::mergeMovie)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe();
             getCompositeDisposable().add(disposable);
+        }
+    }
+
+    private void mergeMovie(final CompletableEmitter emitter) {
+        moviesDao.merge(Collections.singleton(movie));
+        if (!emitter.isDisposed()) {
+            emitter.onComplete();
         }
     }
 
@@ -136,11 +115,11 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
         getCompositeDisposable().add(disposable);
     }
 
-    private void rateMovieSuccess(final BaseDto dto) {
-        if (dto.isSuccess()) {
+    private void rateMovieSuccess(final BaseResponse response) {
+        if (response.success) {
             view.onMovieRatedSuccess();
         } else {
-            view.onServerError(dto.getStatusMessage());
+            view.onServerError(response.statusMessage);
         }
     }
 
@@ -158,29 +137,19 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
         getCompositeDisposable().add(disposable);
     }
 
-    private void onGuestSessionSuccess(final NewGuestSessionDto dto) {
-        if (dto.isSuccess()) {
+    private void onGuestSessionSuccess(final NewGuestSessionResponse dto) {
+        if (dto.success) {
             sessionStorage.storeSession(
-                    dto.getGuestSessionId(), true,
-                    dto.getExpiresAt());
+                    dto.guestSessionId, true,
+                    dto.expiresAt);
             view.rateMovieWithSession();
         } else {
-            view.onServerError(dto.getStatusMessage());
+            view.onServerError(dto.statusMessage);
         }
     }
 
     private void onGuestSessionError(final Throwable th) {
         Timber.e(th.getMessage(), th);
         view.onError();
-    }
-
-    @Override
-    public UUID getListenerUUID() {
-        return listenerUUID;
-    }
-
-    @Override
-    public void setListenerUUID(final UUID uuid) {
-        listenerUUID = uuid;
     }
 }

@@ -8,17 +8,9 @@ import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.MvpStat
 
 public interface MvpPresenter<S extends MvpState> {
 
-    void onCreate(S state);
+    void restoreState(S state);
 
-    void onSaveInstanceState(S state);
+    void saveState(S state);
 
-    void onStart();
-
-    void onResume();
-
-    void onPause();
-
-    void onStop();
-
-    void onDestroy();
+    void clean();
 }

@@ -11,6 +11,8 @@ import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.det
 
 public interface MovieDetailsPresenter extends MvpPresenter<MovieDetailsState> {
 
+    void load();
+
     void rateMovie();
 
     void storeUserSession(final String session);
@@ -20,8 +22,4 @@ public interface MovieDetailsPresenter extends MvpPresenter<MovieDetailsState> {
     void onMovieRated(final float value);
 
     void createGuestSession();
-
-    UUID getListenerUUID();
-
-    void setListenerUUID(UUID uuid);
 }

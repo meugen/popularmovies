@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import dagger.android.AndroidInjector;
 import ua.meugen.android.popularmovies.app.PopularMovies;
+import ua.meugen.android.popularmovies.app.di.modules.AppModule;
 
 /**
  * @author meugen

@@ -12,14 +12,15 @@ import android.widget.Toast;
 import java.text.DateFormat;
 
 import ua.meugen.android.popularmovies.R;
-import ua.meugen.android.popularmovies.app.annotations.SortType;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
-import ua.meugen.android.popularmovies.model.responses.MovieItemDto;
-import ua.meugen.android.popularmovies.ui.activities.ListenersCollector;
+import ua.meugen.android.popularmovies.model.SortType;
+import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.ui.activities.authorize.AuthorizeActivity;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.RateMovieDialog;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.SelectSessionTypeDialog;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.rate.OnMovieRatedListener;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.rate.RateMovieDialog;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.session.OnSessionTypeSelectedListener;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.session.SelectSessionTypeDialog;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.presenter.MovieDetailsPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.state.MovieDetailsState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.view.MovieDetailsView;
@@ -28,14 +29,12 @@ import ua.meugen.android.popularmovies.ui.utils.images.ImageLoader;
 
 
 public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieDetailsPresenter>
-        implements MovieDetailsView, RateMovieDialog.OnMovieRatedListener,
-        SelectSessionTypeDialog.OnSessionTypeSelectedListener {
-
-    private static final String PARAM_MOVIE_ID = "movieId";
+        implements MovieDetailsView, OnMovieRatedListener,
+        OnSessionTypeSelectedListener {
 
     public static MovieDetailsFragment newInstance(final int movieId) {
         final Bundle arguments = new Bundle();
-        arguments.putInt(PARAM_MOVIE_ID, movieId);
+        arguments.putInt(MovieDetailsState.PARAM_MOVIE_ID, movieId);
 
         final MovieDetailsFragment fragment = new MovieDetailsFragment();
         fragment.setArguments(arguments);
@@ -43,14 +42,6 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
     }
 
     private FragmentMovieDetailsBinding binding;
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        final ListenersCollector listenersCollector
-                = ListenersCollector.from(getActivity());
-        listenersCollector.unregisterListener(presenter.getListenerUUID());
-    }
 
     @Nullable
     @Override
@@ -65,10 +56,9 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
     }
 
     @Override
-    public void onActivityCreated(@Nullable final Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ListenersCollector collector = ListenersCollector.from(this.getActivity());
-        presenter.setListenerUUID(collector.registerListener(presenter.getListenerUUID(), this));
+    public void onStart() {
+        super.onStart();
+        presenter.load();
     }
 
     @Override
@@ -86,17 +76,17 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
     }
 
     @Override
-    public void gotMovie(final MovieItemDto movie) {
+    public void gotMovie(final MovieItem movie) {
         ImageLoader.from(getContext())
-                .load(FileSize.w(500), movie.getPosterPath())
+                .load(FileSize.w(500), movie.posterPath)
                 .into(binding.poster);
         binding.releaseDate.setText(DateFormat.getDateInstance()
-                .format(movie.getReleaseDate()));
+                .format(movie.releaseDate));
         binding.voteAverage.setText(getString(R.string.activity_movie_details_vote_average,
-                movie.getVoteAverage()));
-        binding.overview.setText(movie.getOverview());
+                movie.voteAverage));
+        binding.overview.setText(movie.overview);
         binding.switchFavorites.setChecked(
-                (movie.getStatus() & SortType.FAVORITES) == SortType.FAVORITES);
+                (movie.status & SortType.FAVORITES) == SortType.FAVORITES);
     }
 
     @Override
@@ -118,16 +108,14 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
 
     @Override
     public void selectSession() {
-        final SelectSessionTypeDialog dialog = SelectSessionTypeDialog
-                .newInstance(presenter.getListenerUUID());
-        dialog.show(getFragmentManager(), "select_session_type");
+        new SelectSessionTypeDialog().show(
+                getFragmentManager(), "select_session_type");
     }
 
     @Override
     public void rateMovieWithSession() {
-        final RateMovieDialog dialog = RateMovieDialog
-                .newInstance(presenter.getListenerUUID());
-        dialog.show(getFragmentManager(), "rate_movie");
+        new RateMovieDialog().show(
+                getFragmentManager(), "rate_movie");
     }
 
     @Override

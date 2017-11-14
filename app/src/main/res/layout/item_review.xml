@@ -6,9 +6,9 @@
 
     <data>
         <import type="ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.adapters.ReviewsAdapter.ReviewItemViewHolder"/>
-        <import type="ua.meugen.android.popularmovies.model.responses.ReviewItemDto"/>
+        <import type="ua.meugen.android.popularmovies.model.db.entity.ReviewItem"/>
         <variable name="holder" type="ReviewItemViewHolder"/>
-        <variable name="review" type="ReviewItemDto"/>
+        <variable name="review" type="ua.meugen.android.popularmovies.model.db.entity.ReviewItem"/>
     </data>
     <LinearLayout
         android:orientation="vertical"

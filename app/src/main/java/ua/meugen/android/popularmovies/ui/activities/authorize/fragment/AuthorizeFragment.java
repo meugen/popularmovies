@@ -15,7 +15,7 @@ import android.webkit.WebViewClient;
 import javax.inject.Inject;
 
 import ua.meugen.android.popularmovies.databinding.FragmentAuthorizeBinding;
-import ua.meugen.android.popularmovies.model.responses.BaseResponse;
+import ua.meugen.android.popularmovies.model.network.resp.BaseResponse;
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.presenter.AuthorizePresenter;
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.state.AuthorizeState;
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.view.AuthorizeView;
@@ -51,13 +51,19 @@ public class AuthorizeFragment extends BaseFragment<AuthorizeState, AuthorizePre
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        presenter.load();
+    }
+
+    @Override
     public void gotToken(final String token) {
         binding.webview.loadUrl(BASE_AUTH_URL + token);
     }
 
     @Override
     public void gotServerError(final BaseResponse response) {
-        resultListener.onServerError(response.getStatusMessage(), response.getStatusCode());
+        resultListener.onServerError(response.statusMessage, response.statusCode);
     }
 
     @Override

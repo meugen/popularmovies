@@ -28,25 +28,13 @@ public abstract class BaseMvpPresenter<V extends MvpView, S extends MvpState>
     }
 
     @Override
-    public void onCreate(final S state) {}
+    public void restoreState(final S state) {}
 
     @Override
-    public void onSaveInstanceState(final S state) {}
+    public void saveState(final S state) {}
 
     @Override
-    public void onResume() {}
-
-    @Override
-    public void onPause() {}
-
-    @Override
-    public void onStart() {}
-
-    @Override
-    public void onStop() {}
-
-    @Override
-    public void onDestroy() {
+    public void clean() {
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
             compositeDisposable = null;

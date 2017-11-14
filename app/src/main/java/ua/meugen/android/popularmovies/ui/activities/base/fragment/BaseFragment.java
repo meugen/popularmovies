@@ -31,14 +31,14 @@ public class BaseFragment<S extends MvpState, P extends MvpPresenter<S>> extends
     }
 
     @Override
-    public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void onCreate(@Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
             ((MvpViewState) state).attachBundle(getArguments());
         } else {
             ((MvpViewState) state).attachBundle(savedInstanceState);
         }
-        presenter.onCreate(state);
+        presenter.restoreState(state);
         ((MvpViewState) state).detachBundle();
     }
 
@@ -46,37 +46,13 @@ public class BaseFragment<S extends MvpState, P extends MvpPresenter<S>> extends
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         ((MvpViewState) state).attachBundle(outState);
-        presenter.onSaveInstanceState(state);
+        presenter.saveState(state);
         ((MvpViewState) state).detachBundle();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        presenter.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        presenter.onStop();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        presenter.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        presenter.onPause();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        presenter.onDestroy();
+        presenter.clean();
     }
 }
