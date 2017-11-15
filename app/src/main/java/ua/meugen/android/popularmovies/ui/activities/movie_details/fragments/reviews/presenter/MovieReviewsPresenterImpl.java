@@ -9,7 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-import ua.meugen.android.popularmovies.model.api.ModelApi;
+import ua.meugen.android.popularmovies.model.api.AppActionApi;
 import ua.meugen.android.popularmovies.model.db.dao.ReviewsDao;
 import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
@@ -23,8 +23,7 @@ import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.rev
 public class MovieReviewsPresenterImpl extends BaseMvpPresenter<MovieReviewsView, MovieReviewsState>
         implements MovieReviewsPresenter {
 
-    @Inject ModelApi modelApi;
-    @Inject ReviewsDao reviewsDao;
+    @Inject AppActionApi<Integer, List<ReviewItem>> reviewsActionApi;
 
     private int movieId;
 
@@ -44,11 +43,8 @@ public class MovieReviewsPresenterImpl extends BaseMvpPresenter<MovieReviewsView
     }
 
     public void load() {
-        Disposable disposable = modelApi
-                .getMovieReviews(movieId)
-                .map(response -> response.results)
-                .flatMap(this::storeToDb)
-                .onErrorResumeNext(loadFromDb())
+        Disposable disposable = reviewsActionApi
+                .action(movieId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::onReviewsLoaded, this::onReviewsError);
@@ -57,14 +53,5 @@ public class MovieReviewsPresenterImpl extends BaseMvpPresenter<MovieReviewsView
 
     private void onReviewsError(final Throwable th) {
         Timber.e(th.getMessage(), th);
-    }
-
-    private Observable<List<ReviewItem>> storeToDb(final List<ReviewItem> reviews) {
-        reviewsDao.merge(reviews);
-        return Observable.just(reviews);
-    }
-
-    private Observable<List<ReviewItem>> loadFromDb() {
-        return Observable.fromCallable(() -> reviewsDao.byMovieId(movieId));
     }
 }

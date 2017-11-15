@@ -54,8 +54,9 @@ dependencies {
     implementation room.runtime
     annotationProcessor room.compiler
 
-    compile picasso
-    compile timber
+    implementation javatuples
+    implementation picasso
+    implementation timber
     androidTestCompile(espresso.core, {
         exclude group: support_package, module: 'support-annotations'
         exclude group: 'com.google.code.findbugs', module: 'jsr305'

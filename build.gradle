@@ -71,6 +71,7 @@ ext {
             compiler: "$room_package:compiler:$room_version"
     ]
 
+    javatuples = "org.javatuples:javatuples:1.2"
     picasso = "com.squareup.picasso:picasso:2.5.2"
     junit = "junit:junit:4.12"
     timber = "com.jakewharton.timber:timber:4.5.1"

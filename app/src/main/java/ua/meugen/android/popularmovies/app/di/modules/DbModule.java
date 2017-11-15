@@ -15,17 +15,13 @@ import ua.meugen.android.popularmovies.model.db.dao.ReviewsDao;
 import ua.meugen.android.popularmovies.model.db.dao.VideosDao;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
 import ua.meugen.android.popularmovies.model.db.execs.MergeMoviesExecutor;
-import ua.meugen.android.popularmovies.model.db.execs.MoviesData;
+import ua.meugen.android.popularmovies.model.db.execs.data.MoviesData;
 
 /**
  * @author meugen
  */
 @Module
 public abstract class DbModule {
-
-    @Binds @Singleton
-    abstract Executor<MoviesData> bindMoviesTransactionExecutor(
-            final MergeMoviesExecutor executor);
 
     @Provides @Singleton
     static AppDatabase provideAppDatabase(

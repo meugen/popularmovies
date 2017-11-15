@@ -6,5 +6,5 @@ package ua.meugen.android.popularmovies.model.network.req;
 
 public class RateMovieRequest {
 
-    public double value;
+    public float value;
 }

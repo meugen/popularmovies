@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import ua.meugen.android.popularmovies.model.db.dao.MoviesDao;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.db.entity.MovieStatus;
+import ua.meugen.android.popularmovies.model.db.execs.data.MoviesData;
 
 /**
  * @author meugen
@@ -19,15 +20,12 @@ public class MergeMoviesExecutor extends AbstractExecutor<MoviesData> {
 
     @Override
     protected void execute(final MoviesData data) {
-        if (!data.isNeedToSave()) {
-            throw new IllegalArgumentException("This data no need to save.");
-        }
-        for (MovieItem movie : data.getMovies()) {
+        for (MovieItem movie : data.movies) {
             MovieStatus movieStatus = moviesDao.statusById(movie.id);
             if (movieStatus != null) {
-                movie.status = data.getStatus() | movieStatus.status;
+                movie.status = data.status | movieStatus.status;
             }
         }
-        moviesDao.merge(data.getMovies());
+        moviesDao.merge(data.movies);
     }
 }

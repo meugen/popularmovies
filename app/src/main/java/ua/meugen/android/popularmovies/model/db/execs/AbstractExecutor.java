@@ -15,7 +15,7 @@ abstract class AbstractExecutor<D> implements Executor<D> {
     @Inject AppDatabase database;
 
     @Override
-    public final Completable executeTransactionAsync(
+    public final Completable executeTransaction(
             final D data) {
         return Completable.create(emitter -> {
             database.runInTransaction(() -> execute(data));

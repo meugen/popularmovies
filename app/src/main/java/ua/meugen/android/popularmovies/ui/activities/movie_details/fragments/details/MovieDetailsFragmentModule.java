@@ -2,9 +2,18 @@ package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.de
 
 import android.support.v4.app.Fragment;
 
+import org.javatuples.Pair;
+
 import dagger.Binds;
 import dagger.Module;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
+import ua.meugen.android.popularmovies.model.api.AppActionApi;
+import ua.meugen.android.popularmovies.model.api.actions.MovieByIdActionApi;
+import ua.meugen.android.popularmovies.model.api.actions.NewGuestSessionActionApi;
+import ua.meugen.android.popularmovies.model.api.actions.RateMovieActionApi;
+import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
+import ua.meugen.android.popularmovies.model.network.resp.BaseResponse;
+import ua.meugen.android.popularmovies.model.network.resp.NewGuestSessionResponse;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragmentModule;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.presenter.MovieDetailsPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.presenter.MovieDetailsPresenterImpl;
@@ -19,14 +28,25 @@ import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.det
 public abstract class MovieDetailsFragmentModule {
 
     @Binds @PerFragment
-    public abstract MovieDetailsPresenter bindPresenter(final MovieDetailsPresenterImpl impl);
+    abstract MovieDetailsPresenter bindPresenter(final MovieDetailsPresenterImpl impl);
 
     @Binds @PerFragment
-    public abstract MovieDetailsState bindState(final MovieDetailsStateImpl impl);
+    abstract MovieDetailsState bindState(final MovieDetailsStateImpl impl);
 
     @Binds @PerFragment
-    public abstract MovieDetailsView bindView(final MovieDetailsFragment fragment);
+    abstract MovieDetailsView bindView(final MovieDetailsFragment fragment);
 
     @Binds @PerFragment
-    public abstract Fragment bindFragment(final MovieDetailsFragment fragment);
+    abstract Fragment bindFragment(final MovieDetailsFragment fragment);
+
+    @Binds @PerFragment
+    abstract AppActionApi<Integer, MovieItem> bindMovieByIdActionApi(final MovieByIdActionApi api);
+
+    @Binds @PerFragment
+    abstract AppActionApi<Pair<Integer, Float>, BaseResponse> bindRateMovieActionApi(
+            final RateMovieActionApi api);
+
+    @Binds @PerFragment
+    abstract AppActionApi<Void, NewGuestSessionResponse> bindNewGuestSessionActionApi(
+            final NewGuestSessionActionApi api);
 }

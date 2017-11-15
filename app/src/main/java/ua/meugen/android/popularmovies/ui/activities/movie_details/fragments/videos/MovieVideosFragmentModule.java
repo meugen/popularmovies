@@ -2,9 +2,17 @@ package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.vi
 
 import android.support.v4.app.Fragment;
 
+import java.util.List;
+
 import dagger.Binds;
 import dagger.Module;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
+import ua.meugen.android.popularmovies.model.api.AppActionApi;
+import ua.meugen.android.popularmovies.model.api.actions.MovieVideosActionApi;
+import ua.meugen.android.popularmovies.model.db.entity.VideoItem;
+import ua.meugen.android.popularmovies.model.db.execs.Executor;
+import ua.meugen.android.popularmovies.model.db.execs.MergeVideosExecutor;
+import ua.meugen.android.popularmovies.model.db.execs.data.VideosData;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragmentModule;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.adapters.OnClickVideoListener;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.presenter.MovieVideosPresenter;
@@ -33,4 +41,10 @@ public abstract class MovieVideosFragmentModule {
 
     @Binds @PerFragment
     abstract OnClickVideoListener bindClickVideoListener(final MovieVideosFragment fragment);
+
+    @Binds @PerFragment
+    abstract AppActionApi<Integer, List<VideoItem>> bindVideosActionApi(final MovieVideosActionApi api);
+
+    @Binds @PerFragment
+    abstract Executor<VideosData> bindMergeVideosExecutor(final MergeVideosExecutor executor);
 }

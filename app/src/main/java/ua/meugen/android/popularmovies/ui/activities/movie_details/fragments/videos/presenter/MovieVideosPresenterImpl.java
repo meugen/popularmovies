@@ -9,7 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-import ua.meugen.android.popularmovies.model.api.ModelApi;
+import ua.meugen.android.popularmovies.model.api.AppActionApi;
 import ua.meugen.android.popularmovies.model.db.dao.VideosDao;
 import ua.meugen.android.popularmovies.model.db.entity.VideoItem;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
@@ -19,8 +19,7 @@ import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.vid
 public class MovieVideosPresenterImpl extends BaseMvpPresenter<MovieVideosView, MovieVideosState>
         implements MovieVideosPresenter {
 
-    @Inject ModelApi modelApi;
-    @Inject VideosDao videosDao;
+    @Inject AppActionApi<Integer, List<VideoItem>> videosActionApi;
 
     private int movieId;
 
@@ -40,11 +39,8 @@ public class MovieVideosPresenterImpl extends BaseMvpPresenter<MovieVideosView, 
     }
 
     public void load() {
-        Disposable disposable = modelApi
-                .getMovieVideos(movieId)
-                .map(dto -> dto.results)
-                .flatMap(this::storeToDb)
-                .onErrorResumeNext(loadFromDb())
+        Disposable disposable = videosActionApi
+                .action(movieId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(view::onVideosLoaded, this::onVideosError);
@@ -53,14 +49,5 @@ public class MovieVideosPresenterImpl extends BaseMvpPresenter<MovieVideosView, 
 
     private void onVideosError(final Throwable th) {
         Timber.e(th.getMessage(), th);
-    }
-
-    private Observable<List<VideoItem>> storeToDb(final List<VideoItem> videos) {
-        videosDao.merge(videos);
-        return Observable.just(videos);
-    }
-
-    private Observable<List<VideoItem>> loadFromDb() {
-        return Observable.fromCallable(() -> videosDao.byMovieId(movieId));
     }
 }

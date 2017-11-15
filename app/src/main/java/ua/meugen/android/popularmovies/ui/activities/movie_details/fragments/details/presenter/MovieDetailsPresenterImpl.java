@@ -1,8 +1,9 @@
 package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.presenter;
 
+import org.javatuples.Pair;
+
 import java.util.Collections;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -14,7 +15,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.SortType;
-import ua.meugen.android.popularmovies.model.api.ModelApi;
+import ua.meugen.android.popularmovies.model.api.AppActionApi;
 import ua.meugen.android.popularmovies.model.db.dao.MoviesDao;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.network.resp.BaseResponse;
@@ -32,9 +33,11 @@ import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.det
 public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView, MovieDetailsState>
         implements MovieDetailsPresenter {
 
-    @Inject ModelApi modelApi;
-    @Inject MoviesDao moviesDao;
+    @Inject AppActionApi<Integer, MovieItem> movieByIdActionApi;
     @Inject SessionStorage sessionStorage;
+    @Inject MoviesDao moviesDao;
+    @Inject AppActionApi<Pair<Integer, Float>, BaseResponse> rateMovieActionApi;
+    @Inject AppActionApi<Void, NewGuestSessionResponse> newGuestSessionActionApi;
 
     private MovieItem movie;
     private int movieId;
@@ -55,8 +58,8 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
     }
 
     public void load() {
-        Disposable disposable = Single
-                .fromCallable(() -> moviesDao.byId(movieId))
+        Disposable disposable = movieByIdActionApi
+                .action(movieId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotMovie);
@@ -106,9 +109,8 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
     }
 
     public void onMovieRated(final float value) {
-        final Session session = sessionStorage.getSession();
-        final Disposable disposable = modelApi
-                .rateMovie(session, movieId, value)
+        final Disposable disposable = rateMovieActionApi
+                .action(Pair.with(movieId, value))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::rateMovieSuccess, this::rateMovieError);
@@ -129,8 +131,8 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
     }
 
     public void createGuestSession() {
-        Disposable disposable = modelApi
-                .createNewGuestSession()
+        Disposable disposable = newGuestSessionActionApi
+                .action(null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGuestSessionSuccess, this::onGuestSessionError);

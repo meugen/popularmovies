@@ -3,6 +3,7 @@ package ua.meugen.android.popularmovies.model.session;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import java.util.Date;
 
@@ -42,6 +43,7 @@ public class SessionStorageImpl implements SessionStorage {
                 .apply();
     }
 
+    @Nullable
     @Override
     public Session getSession() {
         final SharedPreferences prefs = getPrefs();

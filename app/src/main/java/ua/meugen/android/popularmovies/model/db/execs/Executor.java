@@ -4,5 +4,5 @@ import io.reactivex.Completable;
 
 public interface Executor<D> {
 
-    Completable executeTransactionAsync(D data);
+    Completable executeTransaction(D data);
 }

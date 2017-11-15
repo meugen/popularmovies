@@ -6,7 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-import ua.meugen.android.popularmovies.model.api.ModelApi;
+import ua.meugen.android.popularmovies.model.api.AppActionApi;
 import ua.meugen.android.popularmovies.model.network.resp.NewSessionResponse;
 import ua.meugen.android.popularmovies.model.network.resp.NewTokenResponse;
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.state.AuthorizeState;
@@ -16,15 +16,14 @@ import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.Bas
 public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, AuthorizeState>
         implements AuthorizePresenter {
 
-    private final ModelApi modelApi;
+    @Inject AppActionApi<Void, NewTokenResponse> newTokenActionApi;
+    @Inject AppActionApi<String, NewSessionResponse> newSessionActionApi;
 
     private String token;
     private boolean allowed = false;
 
     @Inject
-    public AuthorizePresenterImpl(final ModelApi modelApi) {
-        this.modelApi = modelApi;
-    }
+    AuthorizePresenterImpl() {}
 
     @Override
     public void restoreState(final AuthorizeState state) {
@@ -49,7 +48,8 @@ public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, Auth
     }
 
     private void loadToken() {
-        Disposable disposable = modelApi.createNewToken()
+        Disposable disposable = newTokenActionApi
+                .action(null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotToken, this::onError);
@@ -76,7 +76,8 @@ public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, Auth
     }
 
     private void createSession() {
-        Disposable disposable = modelApi.createNewSession(token)
+        Disposable disposable = newSessionActionApi
+                .action(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::gotSession, this::onError);
