@@ -1,5 +1,6 @@
 package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +12,15 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
 import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.ui.activities.authorize.AuthorizeActivity;
+import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.rate.OnMovieRatedListener;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.rate.RateMovieDialog;
@@ -40,6 +45,9 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
         fragment.setArguments(arguments);
         return fragment;
     }
+
+    @Inject @Named(BaseActivityModule.ACTIVITY_CONTEXT)
+    Context context;
 
     private FragmentMovieDetailsBinding binding;
 
@@ -91,9 +99,8 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
 
     @Override
     public void onUserSessionSelected() {
-        final Context context = getContext();
         final Intent intent = new Intent(context, AuthorizeActivity.class);
-        context.startActivity(intent);
+        startActivityForResult(intent, 0);
     }
 
     @Override

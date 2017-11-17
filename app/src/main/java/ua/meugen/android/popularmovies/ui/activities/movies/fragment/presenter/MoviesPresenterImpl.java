@@ -19,6 +19,8 @@ import ua.meugen.android.popularmovies.model.db.execs.data.MoviesData;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.MoviesState;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.MoviesView;
+import ua.meugen.android.popularmovies.ui.rxloader.LifecycleHandler;
+import ua.meugen.android.popularmovies.ui.utils.RxUtils;
 
 /**
  * @author meugen
@@ -27,7 +29,10 @@ import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.Movies
 public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesState>
         implements MoviesPresenter {
 
+    private static final int LOADER_ID = 1;
+
     @Inject AppActionApi<Integer, List<MovieItem>> moviesActionApi;
+    @Inject LifecycleHandler lifecycleHandler;
 
     @SortType
     private int sortType;
@@ -63,8 +68,8 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
 
         final Disposable disposable = moviesActionApi
                 .action(sortType)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtils.async())
+                .compose(lifecycleHandler.load(LOADER_ID))
                 .subscribe(view::showMovies, this::onError);
         getCompositeDisposable().add(disposable);
     }

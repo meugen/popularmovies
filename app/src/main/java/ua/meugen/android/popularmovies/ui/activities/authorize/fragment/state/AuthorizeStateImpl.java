@@ -1,5 +1,7 @@
 package ua.meugen.android.popularmovies.ui.activities.authorize.fragment.state;
 
+import javax.inject.Inject;
+
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.BaseMvpState;
 
 /**
@@ -10,6 +12,9 @@ public class AuthorizeStateImpl extends BaseMvpState implements AuthorizeState {
 
     private static final String TOKEN = "token";
     private static final String ALLOWED = "allowed";
+
+    @Inject
+    AuthorizeStateImpl() {}
 
     @Override
     public String getToken() {

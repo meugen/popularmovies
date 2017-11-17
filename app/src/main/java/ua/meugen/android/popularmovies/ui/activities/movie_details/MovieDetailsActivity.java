@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.ActivityMovieDetailsBinding;
+import ua.meugen.android.popularmovies.ui.activities.authorize.AuthorizeActivity;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivity;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.rate.OnMovieRatedListener;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.session.OnSessionTypeSelectedListener;

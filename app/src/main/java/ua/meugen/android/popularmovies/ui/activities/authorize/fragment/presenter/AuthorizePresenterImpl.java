@@ -2,9 +2,7 @@ package ua.meugen.android.popularmovies.ui.activities.authorize.fragment.present
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.api.AppActionApi;
 import ua.meugen.android.popularmovies.model.network.resp.NewSessionResponse;
@@ -12,12 +10,18 @@ import ua.meugen.android.popularmovies.model.network.resp.NewTokenResponse;
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.state.AuthorizeState;
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.view.AuthorizeView;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
+import ua.meugen.android.popularmovies.ui.rxloader.LifecycleHandler;
+import ua.meugen.android.popularmovies.ui.utils.RxUtils;
 
 public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, AuthorizeState>
         implements AuthorizePresenter {
 
+    private static final int TOKEN_LOADER_ID = 1;
+    private static final int SESSION_LOADER_ID = 2;
+
     @Inject AppActionApi<Void, NewTokenResponse> newTokenActionApi;
     @Inject AppActionApi<String, NewSessionResponse> newSessionActionApi;
+    @Inject LifecycleHandler lifecycleHandler;
 
     private String token;
     private boolean allowed = false;
@@ -50,13 +54,14 @@ public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, Auth
     private void loadToken() {
         Disposable disposable = newTokenActionApi
                 .action(null)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::gotToken, this::onError);
+                .compose(RxUtils.async())
+                .compose(lifecycleHandler.load(TOKEN_LOADER_ID))
+                .subscribe(this::onTokenSuccess, this::onTokenError);
         getCompositeDisposable().add(disposable);
     }
 
-    private void gotToken(final NewTokenResponse dto) {
+    private void onTokenSuccess(final NewTokenResponse dto) {
+        lifecycleHandler.clear(TOKEN_LOADER_ID);
         if (dto.success) {
             this.token = dto.token;
             view.gotToken(token);
@@ -65,7 +70,12 @@ public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, Auth
         }
     }
 
-    private void onError(final Throwable th) {
+    private void onTokenError(final Throwable th) {
+        onError(th, TOKEN_LOADER_ID);
+    }
+
+    private void onError(final Throwable th, final int loaderId) {
+        lifecycleHandler.clear(loaderId);
         Timber.e(th.getMessage(), th);
         view.gotError();
     }
@@ -78,17 +88,22 @@ public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, Auth
     private void createSession() {
         Disposable disposable = newSessionActionApi
                 .action(token)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::gotSession, this::onError);
+                .compose(RxUtils.async())
+                .compose(lifecycleHandler.load(SESSION_LOADER_ID))
+                .subscribe(this::onSessionSuccess, this::onSessionError);
         getCompositeDisposable().add(disposable);
     }
 
-    private void gotSession(final NewSessionResponse dto) {
+    private void onSessionSuccess(final NewSessionResponse dto) {
+        lifecycleHandler.clear(SESSION_LOADER_ID);
         if (dto.success) {
             view.gotSession(dto.sessionId);
         } else {
             view.gotServerError(dto);
         }
+    }
+
+    private void onSessionError(final Throwable th) {
+        onError(th, SESSION_LOADER_ID);
     }
 }

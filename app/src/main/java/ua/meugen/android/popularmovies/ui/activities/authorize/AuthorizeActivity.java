@@ -6,8 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.AuthorizeFragment;
+import ua.meugen.android.popularmovies.ui.activities.base.BaseActivity;
 
-public class AuthorizeActivity extends AppCompatActivity
+public class AuthorizeActivity extends BaseActivity
         implements AuthorizeFragment.OnAuthorizeResultListener {
 
     public static final int RESULT_SERVER_ERROR = 2;

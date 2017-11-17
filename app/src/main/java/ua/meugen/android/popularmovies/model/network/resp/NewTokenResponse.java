@@ -16,7 +16,7 @@ public class NewTokenResponse extends BaseResponse {
     @SerializedName("expires_at")
     @JsonAdapter(DateTimeTypeAdapter.class)
     public Date expiresAt;
-    @SerializedName("token")
+    @SerializedName("request_token")
     public String token;
 
 //    @Override

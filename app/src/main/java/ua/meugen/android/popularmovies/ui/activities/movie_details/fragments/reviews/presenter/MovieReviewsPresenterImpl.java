@@ -15,6 +15,8 @@ import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.state.MovieReviewsState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.view.MovieReviewsView;
+import ua.meugen.android.popularmovies.ui.rxloader.LifecycleHandler;
+import ua.meugen.android.popularmovies.ui.utils.RxUtils;
 
 /**
  * @author meugen
@@ -23,7 +25,10 @@ import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.rev
 public class MovieReviewsPresenterImpl extends BaseMvpPresenter<MovieReviewsView, MovieReviewsState>
         implements MovieReviewsPresenter {
 
+    private static final int LOADER_ID = 1;
+
     @Inject AppActionApi<Integer, List<ReviewItem>> reviewsActionApi;
+    @Inject LifecycleHandler lifecycleHandler;
 
     private int movieId;
 
@@ -45,8 +50,8 @@ public class MovieReviewsPresenterImpl extends BaseMvpPresenter<MovieReviewsView
     public void load() {
         Disposable disposable = reviewsActionApi
                 .action(movieId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .compose(RxUtils.async())
+                .compose(lifecycleHandler.load(LOADER_ID))
                 .subscribe(view::onReviewsLoaded, this::onReviewsError);
         getCompositeDisposable().add(disposable);
     }
