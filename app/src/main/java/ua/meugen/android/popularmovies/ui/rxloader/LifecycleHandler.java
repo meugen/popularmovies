@@ -9,6 +9,8 @@ import io.reactivex.ObservableTransformer;
 
 public interface LifecycleHandler {
 
+    <T> ObservableTransformer<T, T> load(int id, boolean restart);
+
     <T> ObservableTransformer<T, T> load(int id);
 
     <T> ObservableTransformer<T, T> reload(int id);

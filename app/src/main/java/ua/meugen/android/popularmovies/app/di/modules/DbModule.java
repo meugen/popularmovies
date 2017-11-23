@@ -28,6 +28,7 @@ public abstract class DbModule {
             @Named(AppModule.APP_CONTEXT) final Context context) {
         return Room
                 .databaseBuilder(context, AppDatabase.class, "popularmovies")
+                .fallbackToDestructiveMigration()
                 .build();
     }
 

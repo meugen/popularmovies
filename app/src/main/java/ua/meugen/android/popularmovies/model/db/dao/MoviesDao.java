@@ -32,6 +32,12 @@ public interface MoviesDao {
     @Query("SELECT * FROM movies WHERE (status&:status)=:status")
     List<MovieItem> byStatus(int status);
 
+    @Query("SELECT * FROM movies WHERE (status&:status)=:status ORDER BY popularity DESC")
+    List<MovieItem> mostPopularByStatus(int status);
+
+    @Query("SELECT * FROM movies WHERE (status&:status)=:status ORDER BY voteAverage DESC")
+    List<MovieItem> topRatedByStatus(int status);
+
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT status FROM movies WHERE id=:id")
     MovieStatus statusById(int id);

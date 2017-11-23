@@ -41,13 +41,18 @@ public class LoaderLifecycleHandler implements LifecycleHandler {
     }
 
     @Override
+    public <T> ObservableTransformer<T, T> load(final int id, final boolean restart) {
+        return upstream -> load(upstream, id, restart);
+    }
+
+    @Override
     public <T> ObservableTransformer<T, T> load(final int id) {
-        return upstream -> load(upstream, id, false);
+        return load(id, false);
     }
 
     @Override
     public <T> ObservableTransformer<T, T> reload(final int id) {
-        return upstream -> load(upstream, id, true);
+        return load(id, true);
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
@@ -28,15 +29,27 @@ public class MoviesActionApi extends OfflineFirstActionApi<Integer, List<MovieIt
     @Inject MoviesDao moviesDao;
     @Inject Executor<MoviesData> mergeMoviesExecutor;
 
-    private ObservableEmitter<List<MovieItem>> emitter;
-
     @Inject
     MoviesActionApi() {}
 
     @NonNull
     @Override
     Single<List<MovieItem>> offlineData(final Integer status) {
-        return Single.fromCallable(() -> moviesDao.byStatus(status));
+        return Single.just(status).flatMap(this::moviesByStatus);
+    }
+
+    private Single<List<MovieItem>> moviesByStatus(Integer status) {
+        Callable<List<MovieItem>> callable;
+
+        int _status = status;
+        if (_status == SortType.POPULAR) {
+            callable = () -> moviesDao.mostPopularByStatus(_status);
+        } else if (_status == SortType.TOP_RATED) {
+            callable = () -> moviesDao.topRatedByStatus(_status);
+        } else {
+            callable = () -> moviesDao.byStatus(_status);
+        }
+        return Single.fromCallable(callable);
     }
 
     @Nullable

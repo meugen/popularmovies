@@ -10,19 +10,6 @@ import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.BaseMvp
  */
 public class MoviesStateImpl extends BaseMvpState implements MoviesState {
 
-    private static final String SORT_TYPE = "sortType";
-
     @Inject
-    public MoviesStateImpl() {}
-
-    @SuppressWarnings("ResourceType")
-    @Override
-    public int getSortType() {
-        return bundle.getInt(SORT_TYPE, SortType.POPULAR);
-    }
-
-    @Override
-    public void setSortType(@SortType final int sortType) {
-        bundle.putInt(SORT_TYPE, sortType);
-    }
+    MoviesStateImpl() {}
 }
