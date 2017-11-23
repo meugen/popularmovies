@@ -9,10 +9,15 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.ActivityMovieDetailsBinding;
 import ua.meugen.android.popularmovies.ui.activities.authorize.AuthorizeActivity;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivity;
+import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.adapters.MovieDetailsPagerAdapter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.rate.OnMovieRatedListener;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.session.OnSessionTypeSelectedListener;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.MovieDetailsFragment;
@@ -20,8 +25,7 @@ import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.rev
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.MovieVideosFragment;
 
 public class MovieDetailsActivity extends BaseActivity implements
-        TabLayout.OnTabSelectedListener, OnSessionTypeSelectedListener,
-        OnMovieRatedListener {
+        OnSessionTypeSelectedListener, OnMovieRatedListener {
 
     private static final String EXTRA_MOVIE_ID = "movieId";
 
@@ -38,93 +42,48 @@ public class MovieDetailsActivity extends BaseActivity implements
         context.startActivity(intent);
     }
 
-    private ActivityMovieDetailsBinding binding;
+    @Inject @Named(BaseActivityModule.ACTIVITY_CONTEXT)
+    Context context;
+    @Inject FragmentManager fragmentManager;
 
-    private MovieDetailsFragment detailsFragment;
-    private MovieVideosFragment videosFragment;
-    private MovieReviewsFragment reviewsFragment;
+    private ActivityMovieDetailsBinding binding;
+    private MovieDetailsPagerAdapter adapter;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_details);
 
+        int movieId;
         if (savedInstanceState == null) {
-            final int movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, 0);
-            detailsFragment = MovieDetailsFragment.newInstance(movieId);
-            videosFragment = MovieVideosFragment.newInstance(movieId);
-            reviewsFragment = MovieReviewsFragment.newInstance(movieId);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.content_container, detailsFragment, TAG_DETAILS)
-                    .add(R.id.content_container, videosFragment, TAG_VIDEOS)
-                    .add(R.id.content_container, reviewsFragment, TAG_REVIEWS)
-                    .hide(videosFragment)
-                    .hide(reviewsFragment)
-                    .commit();
+            movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, 0);
+
         } else {
-            final FragmentManager fragmentManager = getSupportFragmentManager();
-            detailsFragment = (MovieDetailsFragment) fragmentManager
-                    .findFragmentByTag(TAG_DETAILS);
-            videosFragment = (MovieVideosFragment) fragmentManager
-                    .findFragmentByTag(TAG_VIDEOS);
-            reviewsFragment = (MovieReviewsFragment) fragmentManager
-                    .findFragmentByTag(TAG_REVIEWS);
-            binding.tabLayout
-                    .getTabAt(savedInstanceState.getInt(PARAM_ACTIVE_TAB))
-                    .select();
+            movieId = savedInstanceState.getInt(EXTRA_MOVIE_ID);
         }
-
-        binding.tabLayout.addOnTabSelectedListener(this);
-    }
-
-    private Fragment getFragmentByTabIndex(final int index) {
-        if (index == 0) {
-            return detailsFragment;
-        } else if (index == 1) {
-            return videosFragment;
-        } else if (index == 2) {
-            return reviewsFragment;
-        }
-        return null;
-    }
-
-    @Override
-    public void onTabSelected(final TabLayout.Tab tab) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .show(getFragmentByTabIndex(tab.getPosition()))
-                .commit();
-    }
-
-    @Override
-    public void onTabUnselected(final TabLayout.Tab tab) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .hide(getFragmentByTabIndex(tab.getPosition()))
-                .commit();
-    }
-
-    @Override
-    public void onTabReselected(final TabLayout.Tab tab) {}
-
-    @Override
-    protected void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(PARAM_ACTIVE_TAB, binding.tabLayout.getSelectedTabPosition());
+        adapter = new MovieDetailsPagerAdapter(
+                context, fragmentManager, movieId);
+        binding.pager.setAdapter(adapter);
     }
 
     @Override
     public void onUserSessionSelected() {
-        detailsFragment.onUserSessionSelected();
+        final MovieDetailsFragment fragment = (MovieDetailsFragment) adapter
+                .getInstantiatedFragment(binding.pager.getCurrentItem());
+        fragment.onUserSessionSelected();
     }
 
     @Override
     public void onGuestSessionSelected() {
-        detailsFragment.onGuestSessionSelected();
+        final MovieDetailsFragment fragment = (MovieDetailsFragment) adapter
+                .getInstantiatedFragment(binding.pager.getCurrentItem());
+        fragment.onGuestSessionSelected();
     }
 
     @Override
     public void onMovieRated(final float value) {
-        detailsFragment.onMovieRated(value);
+        final MovieDetailsFragment fragment = (MovieDetailsFragment) adapter
+                .getInstantiatedFragment(binding.pager.getCurrentItem());
+        fragment.onMovieRated(value);
     }
 }
