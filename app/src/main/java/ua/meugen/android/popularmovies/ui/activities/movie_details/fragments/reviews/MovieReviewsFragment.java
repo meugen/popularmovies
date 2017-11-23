@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieReviewsBinding;
 import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
@@ -63,6 +64,7 @@ public class MovieReviewsFragment extends BaseFragment<MovieReviewsState, MovieR
 
     @Override
     public void onStart() {
+        Timber.d("onStart()");
         super.onStart();
         presenter.load();
     }

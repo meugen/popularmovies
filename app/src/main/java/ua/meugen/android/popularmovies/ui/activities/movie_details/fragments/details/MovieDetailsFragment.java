@@ -15,6 +15,7 @@ import java.text.DateFormat;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import timber.log.Timber;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
 import ua.meugen.android.popularmovies.model.SortType;
@@ -65,6 +66,7 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
 
     @Override
     public void onStart() {
+        Timber.d("onStart()");
         super.onStart();
         presenter.load();
     }

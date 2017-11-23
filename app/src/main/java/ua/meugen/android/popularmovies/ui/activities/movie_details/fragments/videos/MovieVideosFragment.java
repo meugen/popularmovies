@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieVideosBinding;
 import ua.meugen.android.popularmovies.model.db.entity.VideoItem;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
@@ -63,6 +64,7 @@ public class MovieVideosFragment extends BaseFragment<MovieVideosState, MovieVid
 
     @Override
     public void onStart() {
+        Timber.d("onStart()");
         super.onStart();
         presenter.load();
     }

@@ -64,6 +64,7 @@ public class MovieDetailsActivity extends BaseActivity implements
         adapter = new MovieDetailsPagerAdapter(
                 context, fragmentManager, movieId);
         binding.pager.setAdapter(adapter);
+        binding.pager.setOffscreenPageLimit(2);
     }
 
     @Override
