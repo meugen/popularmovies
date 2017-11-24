@@ -63,7 +63,7 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
     @Override
     public void onStart() {
         super.onStart();
-        refresh(false);
+        presenter.load();
     }
 
 
@@ -84,15 +84,15 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int itemId = item.getItemId();
         if (itemId == R.id.popular) {
-            refresh(true, SortType.POPULAR);
+            presenter.refresh(SortType.POPULAR);
             return true;
         }
         if (itemId == R.id.top_rated) {
-            refresh(true, SortType.TOP_RATED);
+            presenter.refresh(SortType.TOP_RATED);
             return true;
         }
         if (itemId == R.id.favorites) {
-            refresh(true, SortType.FAVORITES);
+            presenter.refresh(SortType.FAVORITES);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -110,16 +110,6 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
         } else if (sortType == SortType.FAVORITES) {
             menu.findItem(R.id.favorites).setChecked(true);
         }
-    }
-
-    private void refresh(final boolean restart) {
-        @SortType
-        final int sortType = presenter.getSortType();
-        refresh(restart, sortType);
-    }
-
-    private void refresh(final boolean restart, @SortType final int sortType) {
-        presenter.refresh(restart, sortType);
     }
 
     @Override
@@ -140,6 +130,6 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
 
     @Override
     public void onRefresh() {
-        refresh(true);
+        presenter.refresh(presenter.getSortType());
     }
 }

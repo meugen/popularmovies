@@ -41,10 +41,20 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
     MoviesPresenterImpl() {}
 
     @Override
+    public void load() {
+        _load(false, prefsStorage.getSortType());
+    }
+
+    @Override
     public void refresh(
-            final boolean restart,
             @SortType final int sortType) {
         prefsStorage.setSortType(sortType);
+        _load(true, sortType);
+    }
+
+    private void _load(
+            final boolean restart,
+            @SortType final int sortType) {
         view.showRefreshing();
 
         final Disposable disposable = moviesActionApi
