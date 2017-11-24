@@ -36,7 +36,7 @@ public class PopularMovies extends Application implements HasActivityInjector {
     @Override
     public void onTrimMemory(final int level) {
         super.onTrimMemory(level);
-        if (level == TRIM_MEMORY_RUNNING_CRITICAL || level == TRIM_MEMORY_RUNNING_LOW) {
+        if (level >= TRIM_MEMORY_RUNNING_CRITICAL) {
             cache.clear();
         }
     }
