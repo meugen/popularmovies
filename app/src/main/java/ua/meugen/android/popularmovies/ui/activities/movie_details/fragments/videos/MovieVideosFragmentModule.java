@@ -8,6 +8,7 @@ import dagger.Binds;
 import dagger.Module;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.model.api.AppActionApi;
+import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
 import ua.meugen.android.popularmovies.model.api.actions.MovieVideosActionApi;
 import ua.meugen.android.popularmovies.model.db.entity.VideoItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
@@ -43,7 +44,8 @@ public abstract class MovieVideosFragmentModule {
     abstract OnClickVideoListener bindClickVideoListener(final MovieVideosFragment fragment);
 
     @Binds @PerFragment
-    abstract AppActionApi<Integer, List<VideoItem>> bindVideosActionApi(final MovieVideosActionApi api);
+    abstract AppCachedActionApi<Integer, List<VideoItem>> bindVideosActionApi(
+            final MovieVideosActionApi api);
 
     @Binds @PerFragment
     abstract Executor<VideosData> bindMergeVideosExecutor(final MergeVideosExecutor executor);

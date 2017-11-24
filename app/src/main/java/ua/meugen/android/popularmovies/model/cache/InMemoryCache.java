@@ -32,6 +32,11 @@ public class InMemoryCache implements Cache {
     }
 
     @Override
+    public void clear(final String key) {
+        lruCache.remove(key);
+    }
+
+    @Override
     public void clear() {
         lruCache.evictAll();
     }

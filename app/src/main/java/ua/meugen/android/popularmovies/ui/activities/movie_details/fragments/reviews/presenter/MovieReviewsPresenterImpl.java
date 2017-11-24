@@ -10,6 +10,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.api.AppActionApi;
+import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
 import ua.meugen.android.popularmovies.model.db.dao.ReviewsDao;
 import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
@@ -27,7 +28,7 @@ public class MovieReviewsPresenterImpl extends BaseMvpPresenter<MovieReviewsView
 
     private static final int LOADER_ID = 1;
 
-    @Inject AppActionApi<Integer, List<ReviewItem>> reviewsActionApi;
+    @Inject AppCachedActionApi<Integer, List<ReviewItem>> reviewsActionApi;
     @Inject LifecycleHandler lifecycleHandler;
 
     private int movieId;

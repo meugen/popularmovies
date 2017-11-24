@@ -8,6 +8,7 @@ import dagger.Binds;
 import dagger.Module;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.model.api.AppActionApi;
+import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
 import ua.meugen.android.popularmovies.model.api.actions.MoviesActionApi;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
@@ -46,5 +47,6 @@ public abstract class MoviesFragmentModule {
     abstract Executor<MoviesData> bindMergeMoviesExecutor(final MergeMoviesExecutor executor);
 
     @Binds @PerFragment
-    abstract AppActionApi<Integer, List<MovieItem>> bindMoviesActionApi(final MoviesActionApi api);
+    abstract AppCachedActionApi<Integer, List<MovieItem>> bindMoviesActionApi(
+            final MoviesActionApi api);
 }

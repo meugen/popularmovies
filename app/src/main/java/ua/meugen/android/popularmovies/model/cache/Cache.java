@@ -12,5 +12,7 @@ public interface Cache {
 
     <T> void set(String key, T value);
 
+    void clear(String key);
+
     void clear();
 }

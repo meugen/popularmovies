@@ -13,6 +13,7 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.api.AppActionApi;
+import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
 import ua.meugen.android.popularmovies.model.db.dao.MoviesDao;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
@@ -33,7 +34,7 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
 
     private static final int LOADER_ID = 1;
 
-    @Inject AppActionApi<Integer, List<MovieItem>> moviesActionApi;
+    @Inject AppCachedActionApi<Integer, List<MovieItem>> moviesActionApi;
     @Inject LifecycleHandler lifecycleHandler;
     @Inject PrefsStorage prefsStorage;
 
@@ -68,6 +69,11 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
     @Override
     public int getSortType() {
         return prefsStorage.getSortType();
+    }
+
+    @Override
+    public void clearCache() {
+        moviesActionApi.clearCache(prefsStorage.getSortType());
     }
 
     private void onError(final Throwable th) {

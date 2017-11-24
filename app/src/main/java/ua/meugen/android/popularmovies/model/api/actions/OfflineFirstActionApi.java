@@ -15,13 +15,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ua.meugen.android.popularmovies.model.api.AppActionApi;
+import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
 import ua.meugen.android.popularmovies.model.cache.Cache;
 
 /**
  * Created by meugen on 15.11.2017.
  */
 
-abstract class OfflineFirstActionApi<Req, Resp> extends BaseActionApi implements AppActionApi<Req, Resp> {
+abstract class OfflineFirstActionApi<Req, Resp> extends BaseActionApi implements AppCachedActionApi<Req, Resp> {
 
     @Inject Cache cache;
 
@@ -40,6 +41,11 @@ abstract class OfflineFirstActionApi<Req, Resp> extends BaseActionApi implements
     final void clear() {
         super.clear();
         emitter = null;
+    }
+
+    @Override
+    public void clearCache(final Req req) {
+        cache.clear(cacheKey(req));
     }
 
     private Observable<Resp> retrieveCache(final String key) {

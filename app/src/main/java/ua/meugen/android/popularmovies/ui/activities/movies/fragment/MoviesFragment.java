@@ -130,6 +130,7 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
 
     @Override
     public void onRefresh() {
+        presenter.clearCache();
         presenter.refresh(presenter.getSortType());
     }
 }

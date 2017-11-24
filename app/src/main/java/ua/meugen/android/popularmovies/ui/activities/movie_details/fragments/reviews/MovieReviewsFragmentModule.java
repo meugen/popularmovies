@@ -8,6 +8,7 @@ import dagger.Binds;
 import dagger.Module;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.model.api.AppActionApi;
+import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
 import ua.meugen.android.popularmovies.model.api.actions.MovieReviewsActionApi;
 import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
@@ -43,7 +44,7 @@ public abstract class MovieReviewsFragmentModule {
     abstract OnClickReviewListener bindClickReviewListener(final MovieReviewsFragment fragment);
 
     @Binds @PerFragment
-    abstract AppActionApi<Integer, List<ReviewItem>> bindReviewsActionApi(final MovieReviewsActionApi api);
+    abstract AppCachedActionApi<Integer, List<ReviewItem>> bindReviewsActionApi(final MovieReviewsActionApi api);
 
     @Binds @PerFragment
     abstract Executor<ReviewsData> bindMergeReviewsExecutor(final MergeReviewsExecutor executor);

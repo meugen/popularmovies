@@ -16,4 +16,6 @@ public interface MoviesPresenter extends MvpPresenter<MoviesState> {
 
     @SortType
     int getSortType();
+
+    void clearCache();
 }
