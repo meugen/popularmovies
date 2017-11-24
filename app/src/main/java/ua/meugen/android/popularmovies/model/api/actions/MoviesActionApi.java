@@ -4,15 +4,18 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
+import ua.meugen.android.popularmovies.model.cache.Cache;
 import ua.meugen.android.popularmovies.model.db.dao.MoviesDao;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
@@ -24,6 +27,8 @@ import ua.meugen.android.popularmovies.model.network.resp.PagedMoviesResponse;
  */
 
 public class MoviesActionApi extends OfflineFirstActionApi<Integer, List<MovieItem>> {
+
+    private static final String CACHE_KEY = "movies-by-status-%d";
 
     @Inject ServerApi serverApi;
     @Inject MoviesDao moviesDao;
@@ -72,5 +77,11 @@ public class MoviesActionApi extends OfflineFirstActionApi<Integer, List<MovieIt
                 .executeTransaction(new MoviesData(movies, status))
                 .subscribe();
         getCompositeDisposable().add(disposable);
+    }
+
+    @NonNull
+    @Override
+    String cacheKey(final Integer status) {
+        return String.format(Locale.ENGLISH, CACHE_KEY, status);
     }
 }

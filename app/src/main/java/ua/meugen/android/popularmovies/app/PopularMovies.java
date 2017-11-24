@@ -11,11 +11,13 @@ import dagger.android.HasActivityInjector;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.BuildConfig;
 import ua.meugen.android.popularmovies.app.di.DaggerAppComponent;
+import ua.meugen.android.popularmovies.model.cache.Cache;
 
 
 public class PopularMovies extends Application implements HasActivityInjector {
 
     @Inject DispatchingAndroidInjector<Activity> activityInjector;
+    @Inject Cache cache;
 
     @Override
     public void onCreate() {
@@ -29,5 +31,13 @@ public class PopularMovies extends Application implements HasActivityInjector {
     @Override
     public AndroidInjector<Activity> activityInjector() {
         return activityInjector;
+    }
+
+    @Override
+    public void onTrimMemory(final int level) {
+        super.onTrimMemory(level);
+        if (level == TRIM_MEMORY_RUNNING_CRITICAL || level == TRIM_MEMORY_RUNNING_LOW) {
+            cache.clear();
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -20,6 +21,8 @@ import ua.meugen.android.popularmovies.model.db.execs.data.VideosData;
  */
 
 public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<VideoItem>> {
+
+    private static final String CACHE_KEY = "movie-%d-videos";
 
     @Inject ServerApi serverApi;
     @Inject VideosDao videosDao;
@@ -46,5 +49,11 @@ public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<Vi
                 .executeTransaction(new VideosData(videos, movieId))
                 .subscribe();
         getCompositeDisposable().add(disposable);
+    }
+
+    @NonNull
+    @Override
+    String cacheKey(final Integer movieId) {
+        return String.format(Locale.ENGLISH, CACHE_KEY, movieId);
     }
 }

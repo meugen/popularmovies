@@ -64,7 +64,6 @@ public class MovieReviewsFragment extends BaseFragment<MovieReviewsState, MovieR
 
     @Override
     public void onStart() {
-        Timber.d("onStart()");
         super.onStart();
         presenter.load();
     }
