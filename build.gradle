@@ -21,6 +21,7 @@ ext {
     okhttp_package = 'com.squareup.okhttp3'
     rxjava_package = 'io.reactivex.rxjava2'
     room_package = 'android.arch.persistence.room'
+    mockito_package = 'org.mockito'
 
     // Versions
     retrofit_version = '2.3.0'
@@ -28,6 +29,7 @@ ext {
     dagger_version = '2.11'
     okhttp_version = '3.8.0'
     room_version = '1.0.0'
+    mockito_version = '2.12.0'
 
     support = [
             appCompat: "$support_package:appcompat-v7:$support_version",
@@ -69,6 +71,11 @@ ext {
     room = [
             runtime: "$room_package:runtime:$room_version",
             compiler: "$room_package:compiler:$room_version"
+    ]
+
+    mockito = [
+            core: "$mockito_package:mockito-core:$mockito_version",
+            android: "$mockito_package:mockito-android:$mockito_version"
     ]
 
     javatuples = "org.javatuples:javatuples:1.2"

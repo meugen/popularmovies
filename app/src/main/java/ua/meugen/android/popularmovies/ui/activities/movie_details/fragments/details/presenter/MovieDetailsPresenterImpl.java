@@ -66,7 +66,6 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
     public void load() {
         Disposable disposable = movieByIdActionApi
                 .action(movieId)
-                .compose(RxUtils.async())
                 .compose(lifecycleHandler.load(MOVIE_LOADER_ID))
                 .subscribe(this::gotMovie);
         getCompositeDisposable().add(disposable);
@@ -129,7 +128,6 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
     public void onMovieRated(final float value) {
         final Disposable disposable = rateMovieActionApi
                 .action(Pair.with(movieId, value))
-                .compose(RxUtils.async())
                 .compose(lifecycleHandler.reload(RATE_MOVIE_LOADER_ID))
                 .subscribe(this::onRateMovieSuccess, this::onRateMovieError);
         getCompositeDisposable().add(disposable);
@@ -153,7 +151,6 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
     public void createGuestSession() {
         Disposable disposable = newGuestSessionActionApi
                 .action(null)
-                .compose(RxUtils.async())
                 .compose(lifecycleHandler.reload(GUEST_SESSION_LOADER_ID))
                 .subscribe(this::onGuestSessionSuccess, this::onGuestSessionError);
         getCompositeDisposable().add(disposable);

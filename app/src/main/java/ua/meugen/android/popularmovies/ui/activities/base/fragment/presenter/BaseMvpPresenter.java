@@ -14,9 +14,9 @@ public abstract class BaseMvpPresenter<V extends MvpView, S extends MvpState>
         implements MvpPresenter<S> {
 
     @Inject
-    protected V view;
+    public V view;
     @Inject
-    protected S state;
+    public S state;
 
     private CompositeDisposable compositeDisposable;
 

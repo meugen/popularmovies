@@ -23,8 +23,6 @@ import ua.meugen.android.popularmovies.ui.utils.RxUtils;
 public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesState>
         implements MoviesPresenter {
 
-    private static final int LOADER_ID = 1;
-
     @Inject AppCachedActionApi<Integer, List<MovieItem>> moviesActionApi;
     @Inject LifecycleHandler lifecycleHandler;
     @Inject PrefsStorage prefsStorage;
@@ -51,7 +49,6 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
 
         final Disposable disposable = moviesActionApi
                 .action(sortType)
-                .compose(RxUtils.async())
                 .compose(lifecycleHandler.load(LOADER_ID, restart))
                 .subscribe(view::showMovies, this::onError);
         getCompositeDisposable().add(disposable);

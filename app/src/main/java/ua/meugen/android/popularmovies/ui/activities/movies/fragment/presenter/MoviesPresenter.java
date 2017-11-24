@@ -10,6 +10,8 @@ import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.Movie
 
 public interface MoviesPresenter extends MvpPresenter<MoviesState> {
 
+    int LOADER_ID = 1;
+
     void load();
 
     void refresh(@SortType int sortType);

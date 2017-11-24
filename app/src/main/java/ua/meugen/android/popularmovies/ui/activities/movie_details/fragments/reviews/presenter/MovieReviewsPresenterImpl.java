@@ -46,7 +46,6 @@ public class MovieReviewsPresenterImpl extends BaseMvpPresenter<MovieReviewsView
     public void load() {
         Disposable disposable = reviewsActionApi
                 .action(movieId)
-                .compose(RxUtils.async())
                 .compose(lifecycleHandler.load(LOADER_ID))
                 .subscribe(view::onReviewsLoaded, this::onReviewsError);
         getCompositeDisposable().add(disposable);

@@ -12,6 +12,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
+import ua.meugen.android.popularmovies.ui.utils.RxUtils;
 
 /**
  * Created by meugen on 17.11.2017.
@@ -24,7 +25,7 @@ public class LoaderLifecycleHandler implements LifecycleHandler {
     @Inject LoaderManager manager;
 
     @Inject
-    public LoaderLifecycleHandler() {}
+    LoaderLifecycleHandler() {}
 
     private <T> ObservableSource<T> load(
             final Observable<T> upstream,
@@ -32,8 +33,9 @@ public class LoaderLifecycleHandler implements LifecycleHandler {
         if (restart) {
             manager.destroyLoader(id);
         }
+        final Observable<T> ob = upstream.compose(RxUtils.async());
         manager.initLoader(id, Bundle.EMPTY,
-                new RxLoaderCallbacks<>(context, upstream));
+                new RxLoaderCallbacks<>(context, ob));
         RxLoader<T> loader = (RxLoader<T>) manager.getLoader(id);
         return loader.createObservable();
     }

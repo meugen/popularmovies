@@ -54,7 +54,6 @@ public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, Auth
     private void loadToken() {
         Disposable disposable = newTokenActionApi
                 .action(null)
-                .compose(RxUtils.async())
                 .compose(lifecycleHandler.load(TOKEN_LOADER_ID))
                 .subscribe(this::onTokenSuccess, this::onTokenError);
         getCompositeDisposable().add(disposable);
@@ -88,7 +87,6 @@ public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, Auth
     private void createSession() {
         Disposable disposable = newSessionActionApi
                 .action(token)
-                .compose(RxUtils.async())
                 .compose(lifecycleHandler.load(SESSION_LOADER_ID))
                 .subscribe(this::onSessionSuccess, this::onSessionError);
         getCompositeDisposable().add(disposable);

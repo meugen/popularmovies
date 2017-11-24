@@ -42,7 +42,6 @@ public class MovieVideosPresenterImpl extends BaseMvpPresenter<MovieVideosView, 
     public void load() {
         Disposable disposable = videosActionApi
                 .action(movieId)
-                .compose(RxUtils.async())
                 .compose(lifecycleHandler.load(LOADER_ID))
                 .subscribe(view::onVideosLoaded, this::onVideosError);
         getCompositeDisposable().add(disposable);
