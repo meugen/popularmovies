@@ -1,6 +1,5 @@
 package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import java.text.DateFormat;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import timber.log.Timber;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
 import ua.meugen.android.popularmovies.model.SortType;

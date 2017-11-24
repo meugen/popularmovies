@@ -3,7 +3,6 @@ package ua.meugen.android.popularmovies.model.db.execs;
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
 import ua.meugen.android.popularmovies.model.db.AppDatabase;
 
 /**

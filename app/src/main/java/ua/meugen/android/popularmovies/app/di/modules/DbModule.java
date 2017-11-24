@@ -6,16 +6,12 @@ import android.content.Context;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import ua.meugen.android.popularmovies.model.db.AppDatabase;
 import ua.meugen.android.popularmovies.model.db.dao.MoviesDao;
 import ua.meugen.android.popularmovies.model.db.dao.ReviewsDao;
 import ua.meugen.android.popularmovies.model.db.dao.VideosDao;
-import ua.meugen.android.popularmovies.model.db.execs.Executor;
-import ua.meugen.android.popularmovies.model.db.execs.MergeMoviesExecutor;
-import ua.meugen.android.popularmovies.model.db.execs.data.MoviesData;
 
 /**
  * @author meugen

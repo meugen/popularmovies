@@ -9,7 +9,6 @@ import android.arch.persistence.room.RoomWarnings;
 import java.util.Collection;
 import java.util.List;
 
-import io.reactivex.Single;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.db.entity.MovieStatus;
 

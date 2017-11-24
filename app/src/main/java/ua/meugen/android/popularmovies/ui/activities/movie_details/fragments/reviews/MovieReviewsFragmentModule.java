@@ -7,7 +7,6 @@ import java.util.List;
 import dagger.Binds;
 import dagger.Module;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
-import ua.meugen.android.popularmovies.model.api.AppActionApi;
 import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
 import ua.meugen.android.popularmovies.model.api.actions.MovieReviewsActionApi;
 import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;

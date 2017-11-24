@@ -1,7 +1,5 @@
 package ua.meugen.android.popularmovies.model.cache;
 
-import io.reactivex.Maybe;
-
 /**
  * Created by meugen on 24.11.2017.
  */

@@ -1,6 +1,5 @@
 package ua.meugen.android.popularmovies.ui.activities.movies.fragment.state;
 
-import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.MvpState;
 
 /**

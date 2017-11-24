@@ -2,7 +2,6 @@ package ua.meugen.android.popularmovies.ui.activities.authorize;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.AuthorizeFragment;

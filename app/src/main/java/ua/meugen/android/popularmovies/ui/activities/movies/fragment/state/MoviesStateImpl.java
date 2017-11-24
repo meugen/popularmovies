@@ -2,7 +2,6 @@ package ua.meugen.android.popularmovies.ui.activities.movies.fragment.state;
 
 import javax.inject.Inject;
 
-import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.BaseMvpState;
 
 /**

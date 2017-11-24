@@ -11,8 +11,6 @@ import javax.inject.Named;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
 
 /**

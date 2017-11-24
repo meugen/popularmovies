@@ -1,7 +1,5 @@
 package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.state;
 
-import java.util.UUID;
-
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.MvpState;
 
 /**

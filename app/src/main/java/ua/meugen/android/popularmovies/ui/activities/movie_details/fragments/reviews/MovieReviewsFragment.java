@@ -10,13 +10,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import timber.log.Timber;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieReviewsBinding;
 import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.review.ReviewDetailDialog;
-import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.adapters.ReviewsAdapter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.adapters.OnClickReviewListener;
+import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.adapters.ReviewsAdapter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.presenter.MovieReviewsPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.state.MovieReviewsState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.reviews.view.MovieReviewsView;

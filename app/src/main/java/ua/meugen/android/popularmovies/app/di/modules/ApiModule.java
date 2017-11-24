@@ -2,7 +2,6 @@ package ua.meugen.android.popularmovies.app.di.modules;
 
 import javax.inject.Singleton;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Interceptor;

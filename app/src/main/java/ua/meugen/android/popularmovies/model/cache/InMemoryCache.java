@@ -4,8 +4,6 @@ import android.util.LruCache;
 
 import javax.inject.Inject;
 
-import io.reactivex.Maybe;
-
 /**
  * Created by meugen on 24.11.2017.
  */

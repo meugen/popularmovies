@@ -1,11 +1,8 @@
 package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.state;
 
-import java.util.UUID;
-
 import javax.inject.Inject;
 
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.BaseMvpState;
-import ua.meugen.android.popularmovies.ui.utils.BundleUtils;
 
 /**
  * @author meugen

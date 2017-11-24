@@ -6,13 +6,9 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.widget.RatingBar;
-
-import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,7 +19,6 @@ import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseDialogFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.rate.presenter.RateMoviePresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.rate.state.RateMovieState;
-import ua.meugen.android.popularmovies.ui.utils.BundleUtils;
 
 /**
  * @author meugen

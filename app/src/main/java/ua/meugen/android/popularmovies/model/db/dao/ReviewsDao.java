@@ -8,7 +8,6 @@ import android.arch.persistence.room.Query;
 import java.util.Collection;
 import java.util.List;
 
-import io.reactivex.Single;
 import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 
 /**
