@@ -38,18 +38,16 @@ public class MoviesPresenterTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        movies = Arrays.asList(
+                Mockito.mock(MovieItem.class), Mockito.mock(MovieItem.class),
+                Mockito.mock(MovieItem.class), Mockito.mock(MovieItem.class));
 
         MoviesPresenterImpl presenter = new MoviesPresenterImpl();
         presenter.moviesActionApi = moviesActionApi;
         presenter.lifecycleHandler = lifecycleHandler;
         presenter.prefsStorage = prefsStorage;
         presenter.view = view;
-        presenter.state = state;
         this.presenter = presenter;
-
-        movies = Arrays.asList(
-                Mockito.mock(MovieItem.class), Mockito.mock(MovieItem.class),
-                Mockito.mock(MovieItem.class), Mockito.mock(MovieItem.class));
     }
 
     @Test
@@ -171,6 +169,15 @@ public class MoviesPresenterTest {
         InOrder inOrder = Mockito.inOrder(prefsStorage,
                 view, moviesActionApi, lifecycleHandler, state);
         inOrder.verify(moviesActionApi).clearCache(SortType.TOP_RATED);
+        inOrder.verifyNoMoreInteractions();
+    }
+
+    @Test
+    public void testState() {
+        presenter.restoreState(state);
+        presenter.saveState(state);
+        InOrder inOrder = Mockito.inOrder(prefsStorage,
+                view, moviesActionApi, lifecycleHandler, state);
         inOrder.verifyNoMoreInteractions();
     }
 }

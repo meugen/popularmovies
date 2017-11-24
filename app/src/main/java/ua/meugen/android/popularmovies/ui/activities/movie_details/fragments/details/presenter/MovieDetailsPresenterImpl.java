@@ -34,10 +34,6 @@ import ua.meugen.android.popularmovies.ui.utils.RxUtils;
 public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView, MovieDetailsState>
         implements MovieDetailsPresenter {
 
-    private static final int MOVIE_LOADER_ID = 1;
-    private static final int RATE_MOVIE_LOADER_ID = 2;
-    private static final int GUEST_SESSION_LOADER_ID = 3;
-
     @Inject AppActionApi<Integer, MovieItem> movieByIdActionApi;
     @Inject SessionStorage sessionStorage;
     @Inject MoviesDao moviesDao;
@@ -49,7 +45,7 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
     private int movieId;
 
     @Inject
-    public MovieDetailsPresenterImpl() {}
+    MovieDetailsPresenterImpl() {}
 
     @Override
     public void restoreState(final MovieDetailsState state) {

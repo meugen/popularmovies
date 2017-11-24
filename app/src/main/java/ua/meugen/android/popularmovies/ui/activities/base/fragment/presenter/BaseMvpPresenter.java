@@ -15,8 +15,6 @@ public abstract class BaseMvpPresenter<V extends MvpView, S extends MvpState>
 
     @Inject
     public V view;
-    @Inject
-    public S state;
 
     private CompositeDisposable compositeDisposable;
 
