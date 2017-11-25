@@ -65,7 +65,7 @@ public class MoviesActionApi extends OfflineFirstActionApi<Integer, List<MovieIt
         } else if (_status == SortType.TOP_RATED) {
             single = serverApi.getTopRatedMovies();
         }
-        return single == null ? null : single.map(resp -> resp.results);
+        return single == null ? null : single.map(PagedMoviesResponse::getResults);
     }
 
     @Override

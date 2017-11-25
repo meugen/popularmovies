@@ -25,7 +25,6 @@ import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.Bas
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.state.MovieDetailsState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.view.MovieDetailsView;
 import ua.meugen.android.popularmovies.ui.rxloader.LifecycleHandler;
-import ua.meugen.android.popularmovies.ui.utils.RxUtils;
 
 /**
  * @author meugen
@@ -65,13 +64,17 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
                 .compose(lifecycleHandler.load(MOVIE_LOADER_ID))
                 .subscribe(this::gotMovie);
         getCompositeDisposable().add(disposable);
+    }
 
+    @Override
+    public void resume() {
         if (lifecycleHandler.hasLoader(RATE_MOVIE_LOADER_ID)) {
             final Disposable rateMovie = lifecycleHandler
                     .<BaseResponse>next(RATE_MOVIE_LOADER_ID)
                     .subscribe(this::onRateMovieSuccess, this::onRateMovieError);
             getCompositeDisposable().add(rateMovie);
-        } else if (lifecycleHandler.hasLoader(GUEST_SESSION_LOADER_ID)) {
+        }
+        if (lifecycleHandler.hasLoader(GUEST_SESSION_LOADER_ID)) {
             final Disposable guestSession = lifecycleHandler
                     .<NewGuestSessionResponse>next(GUEST_SESSION_LOADER_ID)
                     .subscribe(this::onGuestSessionSuccess, this::onGuestSessionError);
@@ -131,10 +134,10 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
 
     private void onRateMovieSuccess(final BaseResponse response) {
         lifecycleHandler.clear(RATE_MOVIE_LOADER_ID);
-        if (response.success) {
+        if (response.isSuccess()) {
             view.onMovieRatedSuccess();
         } else {
-            view.onServerError(response.statusMessage);
+            view.onServerError(response.getStatusMessage());
         }
     }
 
@@ -152,15 +155,15 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
         getCompositeDisposable().add(disposable);
     }
 
-    private void onGuestSessionSuccess(final NewGuestSessionResponse dto) {
+    private void onGuestSessionSuccess(final NewGuestSessionResponse response) {
         lifecycleHandler.clear(GUEST_SESSION_LOADER_ID);
-        if (dto.success) {
+        if (response.isSuccess()) {
             sessionStorage.storeSession(
-                    dto.guestSessionId, true,
-                    dto.expiresAt);
+                    response.getGuestSessionId(), true,
+                    response.getExpiresAt());
             view.rateMovieWithSession();
         } else {
-            view.onServerError(dto.statusMessage);
+            view.onServerError(response.getStatusMessage());
         }
     }
 

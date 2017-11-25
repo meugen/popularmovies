@@ -12,7 +12,6 @@ import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.Bas
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.state.MovieVideosState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.videos.view.MovieVideosView;
 import ua.meugen.android.popularmovies.ui.rxloader.LifecycleHandler;
-import ua.meugen.android.popularmovies.ui.utils.RxUtils;
 
 public class MovieVideosPresenterImpl extends BaseMvpPresenter<MovieVideosView, MovieVideosState>
         implements MovieVideosPresenter {

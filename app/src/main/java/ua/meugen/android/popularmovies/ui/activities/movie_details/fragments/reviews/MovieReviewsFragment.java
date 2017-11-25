@@ -62,12 +62,6 @@ public class MovieReviewsFragment extends BaseFragment<MovieReviewsState, MovieR
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        presenter.load();
-    }
-
-    @Override
     public void onClickReview(final ReviewItem review) {
         final ReviewDetailDialog dialog = ReviewDetailDialog.newInstance(review.id);
         dialog.show(getFragmentManager(), "review_detail");

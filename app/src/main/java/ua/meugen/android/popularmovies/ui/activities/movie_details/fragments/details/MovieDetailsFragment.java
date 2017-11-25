@@ -63,12 +63,6 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        presenter.load();
-    }
-
-    @Override
     public void onActivityResult(
             final int requestCode,
             final int resultCode,

@@ -15,6 +15,7 @@ import ua.meugen.android.popularmovies.model.db.dao.VideosDao;
 import ua.meugen.android.popularmovies.model.db.entity.VideoItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
 import ua.meugen.android.popularmovies.model.db.execs.data.VideosData;
+import ua.meugen.android.popularmovies.model.network.resp.VideosResponse;
 
 /**
  * Created by meugen on 15.11.2017.
@@ -40,7 +41,7 @@ public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<Vi
     @Nullable
     @Override
     Single<List<VideoItem>> networkData(final Integer movieId) {
-        return serverApi.getMovieVideos(movieId).map(resp -> resp.results);
+        return serverApi.getMovieVideos(movieId).map(VideosResponse::getResults);
     }
 
     @Override

@@ -10,40 +10,53 @@ import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 public class PagedReviewsResponse extends BaseResponse {
 
     @SerializedName("id")
-    public int id;
+    private int id;
     @SerializedName("page")
-    public int page;
+    private int page;
     @SerializedName("total_pages")
-    public int totalPages;
+    private int totalPages;
     @SerializedName("total_results")
-    public int totalResults;
+    private int totalResults;
     @SerializedName("results")
-    public List<ReviewItem> results;
+    private List<ReviewItem> results;
 
-//    @Override
-//    public boolean equals(final Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        if (!super.equals(o)) return false;
-//
-//        final PagedReviewsResponse that = (PagedReviewsResponse) o;
-//
-//        if (id != that.id) return false;
-//        if (page != that.page) return false;
-//        if (totalPages != that.totalPages) return false;
-//        if (totalResults != that.totalResults) return false;
-//        return results != null ? results.equals(that.results) : that.results == null;
-//
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int result = super.hashCode();
-//        result = 31 * result + id;
-//        result = 31 * result + page;
-//        result = 31 * result + totalPages;
-//        result = 31 * result + totalResults;
-//        result = 31 * result + (results != null ? results.hashCode() : 0);
-//        return result;
-//    }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(final int id) {
+        this.id = id;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(final int page) {
+        this.page = page;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(final int totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    public int getTotalResults() {
+        return totalResults;
+    }
+
+    public void setTotalResults(final int totalResults) {
+        this.totalResults = totalResults;
+    }
+
+    public List<ReviewItem> getResults() {
+        return results;
+    }
+
+    public void setResults(final List<ReviewItem> results) {
+        this.results = results;
+    }
 }

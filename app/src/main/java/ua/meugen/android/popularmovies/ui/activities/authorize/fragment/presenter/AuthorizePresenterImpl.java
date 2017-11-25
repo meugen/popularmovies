@@ -11,7 +11,6 @@ import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.state.Au
 import ua.meugen.android.popularmovies.ui.activities.authorize.fragment.view.AuthorizeView;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
 import ua.meugen.android.popularmovies.ui.rxloader.LifecycleHandler;
-import ua.meugen.android.popularmovies.ui.utils.RxUtils;
 
 public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, AuthorizeState>
         implements AuthorizePresenter {
@@ -59,13 +58,13 @@ public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, Auth
         getCompositeDisposable().add(disposable);
     }
 
-    private void onTokenSuccess(final NewTokenResponse dto) {
+    private void onTokenSuccess(final NewTokenResponse response) {
         lifecycleHandler.clear(TOKEN_LOADER_ID);
-        if (dto.success) {
-            this.token = dto.token;
+        if (response.isSuccess()) {
+            this.token = response.getToken();
             view.gotToken(token);
         } else {
-            view.gotServerError(dto);
+            view.gotServerError(response);
         }
     }
 
@@ -92,12 +91,12 @@ public class AuthorizePresenterImpl extends BaseMvpPresenter<AuthorizeView, Auth
         getCompositeDisposable().add(disposable);
     }
 
-    private void onSessionSuccess(final NewSessionResponse dto) {
+    private void onSessionSuccess(final NewSessionResponse response) {
         lifecycleHandler.clear(SESSION_LOADER_ID);
-        if (dto.success) {
-            view.gotSession(dto.sessionId);
+        if (response.isSuccess()) {
+            view.gotSession(response.getSessionId());
         } else {
-            view.gotServerError(dto);
+            view.gotServerError(response);
         }
     }
 

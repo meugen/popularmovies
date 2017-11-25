@@ -63,7 +63,7 @@ public class AuthorizeFragment extends BaseFragment<AuthorizeState, AuthorizePre
 
     @Override
     public void gotServerError(final BaseResponse response) {
-        resultListener.onServerError(response.statusMessage, response.statusCode);
+        resultListener.onServerError(response.getStatusMessage(), response.getStatusCode());
     }
 
     @Override

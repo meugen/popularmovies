@@ -3,8 +3,6 @@ package ua.meugen.android.popularmovies.model.api.actions;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.Arrays;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -29,10 +27,9 @@ abstract class OfflineFirstActionApi<Req, Resp> extends BaseActionApi implements
     @Override
     public final Observable<Resp> action(final Req req) {
         final CachedReq<Req> cachedReq = new CachedReq<>(req, cacheKey(req));
-        final Observable<Resp> cachedData = retrieveCache(cachedReq.key);
         final Observable<Resp> data = offlineData(req)
                 .flatMapObservable(resp -> requestApi(cachedReq, resp));
-        return Observable.amb(Arrays.asList(cachedData, data));
+        return retrieveCache(cachedReq.key).ambWith(data);
     }
 
     @Override

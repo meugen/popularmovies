@@ -61,14 +61,6 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        presenter.load();
-    }
-
-
-
-    @Override
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         Timber.i("" + this + ": onSaveInstanceState(" + outState + ")");

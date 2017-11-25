@@ -15,29 +15,23 @@ public class NewTokenResponse extends BaseResponse {
 
     @SerializedName("expires_at")
     @JsonAdapter(DateTimeTypeAdapter.class)
-    public Date expiresAt;
+    private Date expiresAt;
     @SerializedName("request_token")
-    public String token;
+    private String token;
 
-//    @Override
-//    public boolean equals(final Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        if (!super.equals(o)) return false;
-//
-//        final NewTokenResponse that = (NewTokenResponse) o;
-//
-//        if (expiresAt != null ? !expiresAt.equals(that.expiresAt) : that.expiresAt != null)
-//            return false;
-//        return token != null ? token.equals(that.token) : that.token == null;
-//
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int result = super.hashCode();
-//        result = 31 * result + (expiresAt != null ? expiresAt.hashCode() : 0);
-//        result = 31 * result + (token != null ? token.hashCode() : 0);
-//        return result;
-//    }
+    public Date getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(final Date expiresAt) {
+        this.expiresAt = expiresAt;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(final String token) {
+        this.token = token;
+    }
 }

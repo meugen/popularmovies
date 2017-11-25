@@ -34,6 +34,7 @@ public class MoviesPresenterTest {
 
     private List<MovieItem> movies;
     private MoviesPresenter presenter;
+    private InOrder inOrder;
 
     @Before
     public void setup() {
@@ -41,6 +42,8 @@ public class MoviesPresenterTest {
         movies = Arrays.asList(
                 Mockito.mock(MovieItem.class), Mockito.mock(MovieItem.class),
                 Mockito.mock(MovieItem.class), Mockito.mock(MovieItem.class));
+        inOrder = Mockito.inOrder(prefsStorage,
+                view, moviesActionApi, lifecycleHandler, state);
 
         MoviesPresenterImpl presenter = new MoviesPresenterImpl();
         presenter.moviesActionApi = moviesActionApi;
@@ -59,8 +62,6 @@ public class MoviesPresenterTest {
                 .thenReturn(upstream -> upstream);
 
         presenter.load();
-        InOrder inOrder = Mockito.inOrder(prefsStorage,
-                view, moviesActionApi, lifecycleHandler, state);
         inOrder.verify(prefsStorage).getSortType();
         inOrder.verify(view).showRefreshing();
         inOrder.verify(moviesActionApi).action(SortType.POPULAR);
@@ -78,8 +79,6 @@ public class MoviesPresenterTest {
                 .thenReturn(upstream -> upstream);
 
         presenter.load();
-        InOrder inOrder = Mockito.inOrder(prefsStorage,
-                view, moviesActionApi, lifecycleHandler, state);
         inOrder.verify(prefsStorage).getSortType();
         inOrder.verify(view).showRefreshing();
         inOrder.verify(moviesActionApi).action(SortType.TOP_RATED);
@@ -96,8 +95,6 @@ public class MoviesPresenterTest {
                 .thenReturn(upstream -> upstream);
 
         presenter.refresh(SortType.POPULAR);
-        InOrder inOrder = Mockito.inOrder(prefsStorage,
-                view, moviesActionApi, lifecycleHandler, state);
         inOrder.verify(prefsStorage).setSortType(SortType.POPULAR);
         inOrder.verify(view).showRefreshing();
         inOrder.verify(moviesActionApi).action(SortType.POPULAR);
@@ -114,8 +111,6 @@ public class MoviesPresenterTest {
                 .thenReturn(upstream -> upstream);
 
         presenter.refresh(SortType.TOP_RATED);
-        InOrder inOrder = Mockito.inOrder(prefsStorage,
-                view, moviesActionApi, lifecycleHandler, state);
         inOrder.verify(prefsStorage).setSortType(SortType.TOP_RATED);
         inOrder.verify(view).showRefreshing();
         inOrder.verify(moviesActionApi).action(SortType.TOP_RATED);
@@ -129,8 +124,6 @@ public class MoviesPresenterTest {
         Mockito.when(prefsStorage.getSortType()).thenReturn(SortType.POPULAR);
 
         int sortType = presenter.getSortType();
-        InOrder inOrder = Mockito.inOrder(prefsStorage,
-                view, moviesActionApi, lifecycleHandler, state);
         inOrder.verify(prefsStorage).getSortType();
         inOrder.verifyNoMoreInteractions();
 
@@ -142,8 +135,6 @@ public class MoviesPresenterTest {
         Mockito.when(prefsStorage.getSortType()).thenReturn(SortType.TOP_RATED);
 
         int sortType = presenter.getSortType();
-        InOrder inOrder = Mockito.inOrder(prefsStorage,
-                view, moviesActionApi, lifecycleHandler, state);
         inOrder.verify(prefsStorage).getSortType();
         inOrder.verifyNoMoreInteractions();
 
@@ -155,8 +146,6 @@ public class MoviesPresenterTest {
         Mockito.when(prefsStorage.getSortType()).thenReturn(SortType.POPULAR);
 
         presenter.clearCache();
-        InOrder inOrder = Mockito.inOrder(prefsStorage,
-                view, moviesActionApi, lifecycleHandler, state);
         inOrder.verify(moviesActionApi).clearCache(SortType.POPULAR);
         inOrder.verifyNoMoreInteractions();
     }
@@ -166,8 +155,6 @@ public class MoviesPresenterTest {
         Mockito.when(prefsStorage.getSortType()).thenReturn(SortType.TOP_RATED);
 
         presenter.clearCache();
-        InOrder inOrder = Mockito.inOrder(prefsStorage,
-                view, moviesActionApi, lifecycleHandler, state);
         inOrder.verify(moviesActionApi).clearCache(SortType.TOP_RATED);
         inOrder.verifyNoMoreInteractions();
     }
@@ -176,8 +163,6 @@ public class MoviesPresenterTest {
     public void testState() {
         presenter.restoreState(state);
         presenter.saveState(state);
-        InOrder inOrder = Mockito.inOrder(prefsStorage,
-                view, moviesActionApi, lifecycleHandler, state);
         inOrder.verifyNoMoreInteractions();
     }
 }

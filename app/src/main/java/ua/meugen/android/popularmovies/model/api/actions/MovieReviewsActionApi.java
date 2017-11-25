@@ -15,6 +15,7 @@ import ua.meugen.android.popularmovies.model.db.dao.ReviewsDao;
 import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
 import ua.meugen.android.popularmovies.model.db.execs.data.ReviewsData;
+import ua.meugen.android.popularmovies.model.network.resp.PagedReviewsResponse;
 
 /**
  * Created by meugen on 15.11.2017.
@@ -40,7 +41,7 @@ public class MovieReviewsActionApi extends OfflineFirstActionApi<Integer, List<R
     @Nullable
     @Override
     Single<List<ReviewItem>> networkData(final Integer movieId) {
-        return serverApi.getMovieReviews(movieId).map(resp -> resp.results);
+        return serverApi.getMovieReviews(movieId).map(PagedReviewsResponse::getResults);
     }
 
     @Override

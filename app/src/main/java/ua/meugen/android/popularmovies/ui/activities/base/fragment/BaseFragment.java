@@ -8,7 +8,9 @@ import android.support.v4.app.Fragment;
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
+import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.LoadPresenter;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.MvpPresenter;
+import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.ResumePresenter;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.MvpState;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.MvpViewState;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.view.MvpView;
@@ -27,6 +29,22 @@ public class BaseFragment<S extends MvpState, P extends MvpPresenter<S>> extends
     public void onAttach(final Context context) {
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (presenter instanceof LoadPresenter) {
+            ((LoadPresenter) presenter).load();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (presenter instanceof ResumePresenter) {
+            ((ResumePresenter) presenter).resume();
+        }
     }
 
     @Override

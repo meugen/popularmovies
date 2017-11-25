@@ -14,7 +14,6 @@ import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.Bas
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.MoviesState;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.MoviesView;
 import ua.meugen.android.popularmovies.ui.rxloader.LifecycleHandler;
-import ua.meugen.android.popularmovies.ui.utils.RxUtils;
 
 /**
  * @author meugen

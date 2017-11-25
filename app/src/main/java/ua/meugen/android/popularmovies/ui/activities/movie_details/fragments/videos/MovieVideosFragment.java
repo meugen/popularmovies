@@ -62,12 +62,6 @@ public class MovieVideosFragment extends BaseFragment<MovieVideosState, MovieVid
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        presenter.load();
-    }
-
-    @Override
     public void onClickVideo(final VideoItem dto) {
         final Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("https://www.youtube.com/watch?v=" + dto.key));

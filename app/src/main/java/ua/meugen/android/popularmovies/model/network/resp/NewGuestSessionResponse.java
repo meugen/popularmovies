@@ -14,30 +14,24 @@ import ua.meugen.android.popularmovies.model.network.adapters.DateTimeTypeAdapte
 public class NewGuestSessionResponse extends BaseResponse {
 
     @SerializedName("guest_session_id")
-    public String guestSessionId;
+    private String guestSessionId;
     @SerializedName("expires_at")
     @JsonAdapter(DateTimeTypeAdapter.class)
-    public Date expiresAt;
+    private Date expiresAt;
 
-//    @Override
-//    public boolean equals(final Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        if (!super.equals(o)) return false;
-//
-//        final NewGuestSessionResponse that = (NewGuestSessionResponse) o;
-//
-//        if (guestSessionId != null ? !guestSessionId.equals(that.guestSessionId) : that.guestSessionId != null)
-//            return false;
-//        return expiresAt != null ? expiresAt.equals(that.expiresAt) : that.expiresAt == null;
-//
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        int result = super.hashCode();
-//        result = 31 * result + (guestSessionId != null ? guestSessionId.hashCode() : 0);
-//        result = 31 * result + (expiresAt != null ? expiresAt.hashCode() : 0);
-//        return result;
-//    }
+    public String getGuestSessionId() {
+        return guestSessionId;
+    }
+
+    public void setGuestSessionId(final String guestSessionId) {
+        this.guestSessionId = guestSessionId;
+    }
+
+    public Date getExpiresAt() {
+        return expiresAt;
+    }
+
+    public void setExpiresAt(final Date expiresAt) {
+        this.expiresAt = expiresAt;
+    }
 }
