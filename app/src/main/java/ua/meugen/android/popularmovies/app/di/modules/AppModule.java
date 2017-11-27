@@ -22,7 +22,8 @@ import ua.meugen.android.popularmovies.model.prefs.PrefsStorageImpl;
  * @author meugen
  */
 
-@Module(includes = { AndroidSupportInjectionModule.class, DbModule.class, ActivitiesModule.class, ApiModule.class })
+@Module(includes = { AndroidSupportInjectionModule.class, DbModule.class,
+        ActivitiesModule.class, ApiModule.class })
 public abstract class AppModule {
 
     public static final String APP_CONTEXT = "appContext";

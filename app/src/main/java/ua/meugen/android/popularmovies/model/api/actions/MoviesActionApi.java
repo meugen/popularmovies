@@ -8,11 +8,13 @@ import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
+import ua.meugen.android.popularmovies.model.cache.KeyGenerator;
 import ua.meugen.android.popularmovies.model.db.dao.MoviesDao;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
@@ -25,11 +27,10 @@ import ua.meugen.android.popularmovies.model.network.resp.PagedMoviesResponse;
 
 public class MoviesActionApi extends OfflineFirstActionApi<Integer, List<MovieItem>> {
 
-    private static final String CACHE_KEY = "movies-by-status-%d";
-
     @Inject ServerApi serverApi;
     @Inject MoviesDao moviesDao;
     @Inject Executor<MoviesData> mergeMoviesExecutor;
+    @Inject KeyGenerator<Integer> keyGenerator;
 
     @Inject
     MoviesActionApi() {}
@@ -79,6 +80,6 @@ public class MoviesActionApi extends OfflineFirstActionApi<Integer, List<MovieIt
     @NonNull
     @Override
     String cacheKey(final Integer status) {
-        return String.format(Locale.ENGLISH, CACHE_KEY, status);
+        return keyGenerator.generateKey(status);
     }
 }

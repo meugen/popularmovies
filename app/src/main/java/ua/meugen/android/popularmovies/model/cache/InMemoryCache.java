@@ -12,6 +12,10 @@ public class InMemoryCache implements Cache {
 
     private static final int MAX_SIZE = 10;
 
+    private static final String MOVIES_CACHE_KEY = "movies-by-status-%d";
+    private static final String MOVIE_REVIEWS_CACHE_KEY = "movie-%d-reviews";
+    private static final String MOVIE_VIDEOS_CACHE_KEY = "movie-%d-videos";
+
     private final LruCache<String, Object> lruCache;
 
     @Inject

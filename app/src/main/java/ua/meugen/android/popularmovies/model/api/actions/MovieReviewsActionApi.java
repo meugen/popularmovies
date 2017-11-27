@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
+import ua.meugen.android.popularmovies.model.cache.KeyGenerator;
 import ua.meugen.android.popularmovies.model.db.dao.ReviewsDao;
 import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
@@ -23,11 +25,10 @@ import ua.meugen.android.popularmovies.model.network.resp.PagedReviewsResponse;
 
 public class MovieReviewsActionApi extends OfflineFirstActionApi<Integer, List<ReviewItem>> {
 
-    private static final String CACHE_KEY = "movie-%d-reviews";
-
     @Inject ReviewsDao reviewsDao;
     @Inject ServerApi serverApi;
     @Inject Executor<ReviewsData> mergeReviewsExecutor;
+    @Inject KeyGenerator<Integer> keyGenerator;
 
     @Inject
     MovieReviewsActionApi() {}
@@ -55,6 +56,6 @@ public class MovieReviewsActionApi extends OfflineFirstActionApi<Integer, List<R
     @NonNull
     @Override
     String cacheKey(final Integer movieId) {
-        return String.format(Locale.ENGLISH, CACHE_KEY, movieId);
+        return keyGenerator.generateKey(movieId);
     }
 }

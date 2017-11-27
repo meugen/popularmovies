@@ -6,9 +6,11 @@ import java.util.List;
 
 import dagger.Binds;
 import dagger.Module;
+import dagger.Provides;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
 import ua.meugen.android.popularmovies.model.api.actions.MovieReviewsActionApi;
+import ua.meugen.android.popularmovies.model.cache.KeyGenerator;
 import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
 import ua.meugen.android.popularmovies.model.db.execs.MergeReviewsExecutor;
@@ -47,4 +49,9 @@ public abstract class MovieReviewsFragmentModule {
 
     @Binds @PerFragment
     abstract Executor<ReviewsData> bindMergeReviewsExecutor(final MergeReviewsExecutor executor);
+
+    @Provides @PerFragment
+    static KeyGenerator<Integer> provideMovieReviewsKeyGenerator() {
+        return KeyGenerator.forMovieReviews();
+    }
 }

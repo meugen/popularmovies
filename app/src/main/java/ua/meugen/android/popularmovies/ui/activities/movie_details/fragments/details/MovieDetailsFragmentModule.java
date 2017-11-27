@@ -6,11 +6,14 @@ import org.javatuples.Pair;
 
 import dagger.Binds;
 import dagger.Module;
+import dagger.Provides;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.model.api.AppActionApi;
 import ua.meugen.android.popularmovies.model.api.actions.MovieByIdActionApi;
 import ua.meugen.android.popularmovies.model.api.actions.NewGuestSessionActionApi;
 import ua.meugen.android.popularmovies.model.api.actions.RateMovieActionApi;
+import ua.meugen.android.popularmovies.model.api.actions.SwitchFavoriteActionApi;
+import ua.meugen.android.popularmovies.model.cache.KeyGenerator;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.network.resp.BaseResponse;
 import ua.meugen.android.popularmovies.model.network.resp.NewGuestSessionResponse;
@@ -49,4 +52,13 @@ public abstract class MovieDetailsFragmentModule {
     @Binds @PerFragment
     abstract AppActionApi<Void, NewGuestSessionResponse> bindNewGuestSessionActionApi(
             final NewGuestSessionActionApi api);
+
+    @Provides @PerFragment
+    static KeyGenerator<Integer> provideMoviesKeyGenerator() {
+        return KeyGenerator.forMovies();
+    }
+
+    @Binds @PerFragment
+    abstract AppActionApi<MovieItem, Void> bindSwitchFavoriteActionApi(
+            final SwitchFavoriteActionApi api);
 }

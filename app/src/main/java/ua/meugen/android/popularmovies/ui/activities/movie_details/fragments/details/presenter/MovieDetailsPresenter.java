@@ -15,6 +15,7 @@ public interface MovieDetailsPresenter extends MvpPresenter<MovieDetailsState>,
     int MOVIE_LOADER_ID = 1;
     int RATE_MOVIE_LOADER_ID = 2;
     int GUEST_SESSION_LOADER_ID = 3;
+    int MERGE_MOVIE_LOADER_ID = 4;
 
     void rateMovie();
 

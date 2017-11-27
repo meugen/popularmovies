@@ -31,12 +31,12 @@ public class MovieDetailsPresenterTest {
 
     private @Mock AppActionApi<Integer, MovieItem> movieByIdActionApi;
     private @Mock SessionStorage sessionStorage;
-    private @Mock MoviesDao moviesDao;
     private @Mock AppActionApi<Pair<Integer, Float>, BaseResponse> rateMovieActionApi;
     private @Mock AppActionApi<Void, NewGuestSessionResponse> newGuestSessionActionApi;
     private @Mock LifecycleHandler lifecycleHandler;
     private @Mock MovieDetailsView view;
     private @Mock MovieDetailsState state;
+    private @Mock AppActionApi<MovieItem, Void> switchFavoriteActionApi;
 
     private @Mock Session session;
     private @Mock BaseResponse rateMovieResponse;
@@ -49,19 +49,19 @@ public class MovieDetailsPresenterTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         inOrder = Mockito.inOrder(state,
-                movieByIdActionApi, sessionStorage, moviesDao,
+                movieByIdActionApi, sessionStorage,
                 rateMovieActionApi, newGuestSessionActionApi,
                 lifecycleHandler, view, rateMovieResponse,
-                newGuestSessionResponse);
+                newGuestSessionResponse, switchFavoriteActionApi);
 
         MovieDetailsPresenterImpl presenter = new MovieDetailsPresenterImpl();
         presenter.movieByIdActionApi = movieByIdActionApi;
         presenter.sessionStorage = sessionStorage;
-        presenter.moviesDao = moviesDao;
         presenter.rateMovieActionApi = rateMovieActionApi;
         presenter.newGuestSessionActionApi = newGuestSessionActionApi;
         presenter.lifecycleHandler = lifecycleHandler;
         presenter.view = view;
+        presenter.switchFavoriteActionApi = switchFavoriteActionApi;
         this.presenter = presenter;
     }
 
@@ -266,22 +266,27 @@ public class MovieDetailsPresenterTest {
         inOrder.verifyNoMoreInteractions();
     }
 
-//    @Test
-//    public void testSwitchFavoritesMovieNotNUll() {
-//        Mockito.when(state.getMovieId()).thenReturn(1);
-//        Mockito.when(movieByIdActionApi.action(1))
-//                .thenReturn(Observable.just(movie));
-//        Mockito.when(lifecycleHandler.load(MovieDetailsPresenter.MOVIE_LOADER_ID))
-//                .thenReturn(upstream -> upstream);
-//
-//        presenter.restoreState(state);
-//        presenter.load();
-//        presenter.switchFavorites();
-//        inOrder.verify(state).getMovieId();
-//        inOrder.verify(movieByIdActionApi).action(1);
-//        inOrder.verify(lifecycleHandler).load(MovieDetailsPresenter.MOVIE_LOADER_ID);
-//        inOrder.verify(view).gotMovie(movie);
-//        inOrder.verify(moviesDao).merge(Collections.singleton(movie));
-//        inOrder.verifyNoMoreInteractions();
-//    }
+    @Test
+    public void testSwitchFavoritesMovieNotNUll() {
+        Mockito.when(state.getMovieId()).thenReturn(1);
+        Mockito.when(movieByIdActionApi.action(1))
+                .thenReturn(Observable.just(movie));
+        Mockito.when(lifecycleHandler.load(MovieDetailsPresenter.MOVIE_LOADER_ID))
+                .thenReturn(upstream -> upstream);
+        Mockito.when(lifecycleHandler.reload(MovieDetailsPresenter.MERGE_MOVIE_LOADER_ID))
+                .thenReturn(upstream -> upstream);
+        Mockito.when(switchFavoriteActionApi.action(movie))
+                .thenReturn(Observable.empty());
+
+        presenter.restoreState(state);
+        presenter.load();
+        presenter.switchFavorites();
+        inOrder.verify(state).getMovieId();
+        inOrder.verify(movieByIdActionApi).action(1);
+        inOrder.verify(lifecycleHandler).load(MovieDetailsPresenter.MOVIE_LOADER_ID);
+        inOrder.verify(view).gotMovie(movie);
+        inOrder.verify(switchFavoriteActionApi).action(movie);
+        inOrder.verify(lifecycleHandler).reload(MovieDetailsPresenter.MERGE_MOVIE_LOADER_ID);
+        inOrder.verifyNoMoreInteractions();
+    }
 }

@@ -9,6 +9,8 @@ import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableEmitter;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -35,10 +37,10 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
 
     @Inject AppActionApi<Integer, MovieItem> movieByIdActionApi;
     @Inject SessionStorage sessionStorage;
-    @Inject MoviesDao moviesDao;
     @Inject AppActionApi<Pair<Integer, Float>, BaseResponse> rateMovieActionApi;
     @Inject AppActionApi<Void, NewGuestSessionResponse> newGuestSessionActionApi;
     @Inject LifecycleHandler lifecycleHandler;
+    @Inject AppActionApi<MovieItem, Void> switchFavoriteActionApi;
 
     private MovieItem movie;
     private int movieId;
@@ -103,24 +105,10 @@ public class MovieDetailsPresenterImpl extends BaseMvpPresenter<MovieDetailsView
 
     public void switchFavorites() {
         if (movie != null) {
-            if ((movie.status & SortType.FAVORITES) == SortType.FAVORITES) {
-                movie.status = movie.status & ~SortType.FAVORITES;
-            } else {
-                movie.status = movie.status | SortType.FAVORITES;
-            }
-            Disposable disposable = Completable
-                    .create(this::mergeMovie)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
+            Disposable disposable = switchFavoriteActionApi.action(movie)
+                    .compose(lifecycleHandler.reload(MERGE_MOVIE_LOADER_ID))
                     .subscribe();
             getCompositeDisposable().add(disposable);
-        }
-    }
-
-    private void mergeMovie(final CompletableEmitter emitter) {
-        moviesDao.merge(Collections.singleton(movie));
-        if (!emitter.isDisposed()) {
-            emitter.onComplete();
         }
     }
 
