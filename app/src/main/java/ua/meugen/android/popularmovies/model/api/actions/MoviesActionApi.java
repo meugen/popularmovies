@@ -12,7 +12,9 @@ import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
+import ua.meugen.android.popularmovies.model.api.req.MoviesReq;
 import ua.meugen.android.popularmovies.model.cache.KeyGenerator;
+import ua.meugen.android.popularmovies.model.config.Config;
 import ua.meugen.android.popularmovies.model.db.dao.MoviesDao;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
@@ -25,6 +27,7 @@ import ua.meugen.android.popularmovies.model.network.resp.PagedMoviesResponse;
 
 public class MoviesActionApi extends OfflineFirstActionApi<Integer, List<MovieItem>> {
 
+    @Inject Config config;
     @Inject ServerApi serverApi;
     @Inject MoviesDao moviesDao;
     @Inject Executor<MoviesData> mergeMoviesExecutor;
@@ -60,9 +63,9 @@ public class MoviesActionApi extends OfflineFirstActionApi<Integer, List<MovieIt
 
         Single<PagedMoviesResponse> single = null;
         if (_status == SortType.POPULAR) {
-            single = serverApi.getPopularMovies();
+            single = serverApi.getPopularMovies(config.getLanguage(), 1);
         } else if (_status == SortType.TOP_RATED) {
-            single = serverApi.getTopRatedMovies();
+            single = serverApi.getTopRatedMovies(config.getLanguage(), 1);
         }
         return single == null ? null : single.map(PagedMoviesResponse::getResults);
     }

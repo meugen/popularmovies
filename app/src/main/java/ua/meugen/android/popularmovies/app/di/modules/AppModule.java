@@ -15,6 +15,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
 import ua.meugen.android.popularmovies.app.PopularMovies;
 import ua.meugen.android.popularmovies.model.cache.Cache;
 import ua.meugen.android.popularmovies.model.cache.InMemoryCache;
+import ua.meugen.android.popularmovies.model.config.Config;
+import ua.meugen.android.popularmovies.model.config.ConfigImpl;
 import ua.meugen.android.popularmovies.model.prefs.PrefsStorage;
 import ua.meugen.android.popularmovies.model.prefs.PrefsStorageImpl;
 
@@ -44,4 +46,7 @@ public abstract class AppModule {
 
     @Binds @Singleton
     abstract Cache bindCache(final InMemoryCache cache);
+
+    @Binds @Singleton
+    abstract Config bindConfig(final ConfigImpl impl);
 }

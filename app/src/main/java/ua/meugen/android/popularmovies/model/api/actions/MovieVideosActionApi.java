@@ -11,6 +11,7 @@ import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
 import ua.meugen.android.popularmovies.model.cache.KeyGenerator;
+import ua.meugen.android.popularmovies.model.config.Config;
 import ua.meugen.android.popularmovies.model.db.dao.VideosDao;
 import ua.meugen.android.popularmovies.model.db.entity.VideoItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
@@ -23,6 +24,7 @@ import ua.meugen.android.popularmovies.model.network.resp.VideosResponse;
 
 public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<VideoItem>> {
 
+    @Inject Config config;
     @Inject ServerApi serverApi;
     @Inject VideosDao videosDao;
     @Inject Executor<VideosData> mergeVideosExecutor;
@@ -40,7 +42,8 @@ public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<Vi
     @Nullable
     @Override
     Single<List<VideoItem>> networkData(final Integer movieId) {
-        return serverApi.getMovieVideos(movieId).map(VideosResponse::getResults);
+        return serverApi.getMovieVideos(movieId, config.getLanguage())
+                .map(VideosResponse::getResults);
     }
 
     @Override

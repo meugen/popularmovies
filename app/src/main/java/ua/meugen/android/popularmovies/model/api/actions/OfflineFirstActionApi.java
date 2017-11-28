@@ -104,15 +104,15 @@ abstract class OfflineFirstActionApi<Req, Resp> extends BaseActionApi implements
 
     @NonNull
     abstract String cacheKey(Req req);
-}
 
-class CachedReq<Req> {
+    private static class CachedReq<Req> {
 
-    final Req req;
-    final String key;
+        final Req req;
+        final String key;
 
-    CachedReq(final Req req, final String key) {
-        this.req = req;
-        this.key = key;
+        CachedReq(final Req req, final String key) {
+            this.req = req;
+            this.key = key;
+        }
     }
 }

@@ -11,6 +11,7 @@ import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
 import ua.meugen.android.popularmovies.model.cache.KeyGenerator;
+import ua.meugen.android.popularmovies.model.config.Config;
 import ua.meugen.android.popularmovies.model.db.dao.ReviewsDao;
 import ua.meugen.android.popularmovies.model.db.entity.ReviewItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
@@ -23,6 +24,7 @@ import ua.meugen.android.popularmovies.model.network.resp.PagedReviewsResponse;
 
 public class MovieReviewsActionApi extends OfflineFirstActionApi<Integer, List<ReviewItem>> {
 
+    @Inject Config config;
     @Inject ReviewsDao reviewsDao;
     @Inject ServerApi serverApi;
     @Inject Executor<ReviewsData> mergeReviewsExecutor;
@@ -40,7 +42,7 @@ public class MovieReviewsActionApi extends OfflineFirstActionApi<Integer, List<R
     @Nullable
     @Override
     Single<List<ReviewItem>> networkData(final Integer movieId) {
-        return serverApi.getMovieReviews(movieId).map(PagedReviewsResponse::getResults);
+        return serverApi.getMovieReviews(movieId, config.getLanguage()).map(PagedReviewsResponse::getResults);
     }
 
     @Override

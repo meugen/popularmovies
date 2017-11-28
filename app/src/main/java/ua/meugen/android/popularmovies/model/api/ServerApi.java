@@ -25,18 +25,24 @@ import ua.meugen.android.popularmovies.model.network.resp.VideosResponse;
 public interface ServerApi {
 
     @GET("movie/popular")
-    Single<PagedMoviesResponse> getPopularMovies();
+    Single<PagedMoviesResponse> getPopularMovies(
+            @Query("language") String language,
+            @Query("page") int page);
 
     @GET("movie/top_rated")
-    Single<PagedMoviesResponse> getTopRatedMovies();
+    Single<PagedMoviesResponse> getTopRatedMovies(
+            @Query("language") String language,
+            @Query("page") int page);
 
     @GET("movie/{id}/videos")
     Single<VideosResponse> getMovieVideos(
-            @Path("id") int id);
+            @Path("id") int id,
+            @Query("language") String language);
 
     @GET("movie/{id}/reviews")
     Single<PagedReviewsResponse> getMovieReviews(
-            @Path("id") int id);
+            @Path("id") int id,
+            @Query("language") String language);
 
     @GET("authentication/token/new")
     Single<NewTokenResponse> createNewToken();
