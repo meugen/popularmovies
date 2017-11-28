@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activities.movies.MoviesActivity"
-            android:label="@string/activity_movies_title">
+            android:label="@string/activity_movies_title"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

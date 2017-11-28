@@ -15,8 +15,6 @@ import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.databinding.ItemMovieBinding;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
-import ua.meugen.android.popularmovies.ui.utils.images.FileSize;
-import ua.meugen.android.popularmovies.ui.utils.images.ImageLoader;
 
 @PerFragment
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
@@ -27,7 +25,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     private List<MovieItem> movies;
 
     @Inject
-    public MoviesAdapter(
+    MoviesAdapter(
             @Named(BaseActivityModule.ACTIVITY_CONTEXT) final Context context,
             final OnMovieClickListener listener) {
         this.inflater = LayoutInflater.from(context);
@@ -64,17 +62,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         private int movieId;
 
-        public MovieViewHolder(final ItemMovieBinding binding) {
+        MovieViewHolder(final ItemMovieBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             binding.setHolder(this);
         }
 
-        public void bind(final MovieItem movie) {
+        void bind(final MovieItem movie) {
             movieId = movie.id;
-            ImageLoader.from(itemView.getContext())
-                    .load(FileSize.w(500), movie.posterPath)
-                    .into(binding.poster);
+            binding.setMovie(movie);
         }
 
         public void click() {

@@ -2,22 +2,13 @@ package ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.de
 
 import org.javatuples.Pair;
 
-import java.util.Collections;
 import java.util.Date;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
-import io.reactivex.CompletableEmitter;
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
-import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.api.AppActionApi;
-import ua.meugen.android.popularmovies.model.db.dao.MoviesDao;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.network.resp.BaseResponse;
 import ua.meugen.android.popularmovies.model.network.resp.NewGuestSessionResponse;

@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 
 import java.util.List;
 
-import javax.inject.Named;
-
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;

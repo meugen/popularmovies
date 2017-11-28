@@ -4,11 +4,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;

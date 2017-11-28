@@ -9,14 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.FragmentMovieDetailsBinding;
-import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.ui.activities.authorize.AuthorizeActivity;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
@@ -28,8 +25,6 @@ import ua.meugen.android.popularmovies.ui.activities.movie_details.dialogs.sessi
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.presenter.MovieDetailsPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.state.MovieDetailsState;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.fragments.details.view.MovieDetailsView;
-import ua.meugen.android.popularmovies.ui.utils.images.FileSize;
-import ua.meugen.android.popularmovies.ui.utils.images.ImageLoader;
 
 
 public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieDetailsPresenter>
@@ -78,16 +73,7 @@ public class MovieDetailsFragment extends BaseFragment<MovieDetailsState, MovieD
 
     @Override
     public void gotMovie(final MovieItem movie) {
-        ImageLoader.from(getContext())
-                .load(FileSize.w(500), movie.posterPath)
-                .into(binding.poster);
-        binding.releaseDate.setText(DateFormat.getDateInstance()
-                .format(movie.releaseDate));
-        binding.voteAverage.setText(getString(R.string.activity_movie_details_vote_average,
-                movie.voteAverage));
-        binding.overview.setText(movie.overview);
-        binding.switchFavorites.setChecked(
-                (movie.status & SortType.FAVORITES) == SortType.FAVORITES);
+        binding.setMovie(movie);
     }
 
     @Override

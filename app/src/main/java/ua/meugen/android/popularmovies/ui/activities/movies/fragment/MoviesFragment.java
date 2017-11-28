@@ -1,7 +1,10 @@
 package ua.meugen.android.popularmovies.ui.activities.movies.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,12 +16,14 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import timber.log.Timber;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.FragmentMoviesBinding;
+import ua.meugen.android.popularmovies.databinding.ItemMovieBinding;
 import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
+import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.MovieDetailsActivity;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.adapters.MoviesAdapter;
@@ -31,6 +36,8 @@ import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.Movies
 public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
         implements MoviesView, OnMovieClickListener, SwipeRefreshLayout.OnRefreshListener {
 
+    @Inject @Named(BaseActivityModule.ACTIVITY_CONTEXT)
+    Context context;
     @Inject MoviesPresenter presenter;
     @Inject MoviesAdapter adapter;
 
@@ -40,7 +47,6 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        Timber.i("" + this + ": onCreate(" + savedInstanceState + ")");
     }
 
     @Nullable
@@ -56,14 +62,8 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
     @Override
     public void onViewCreated(final View view, @Nullable final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding.recycler.setAdapter(adapter);
+//        binding.recycler.setAdapter(adapter);
         binding.swipeRefresh.setOnRefreshListener(this);
-    }
-
-    @Override
-    public void onSaveInstanceState(final Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Timber.i("" + this + ": onSaveInstanceState(" + outState + ")");
     }
 
     @Override
@@ -113,11 +113,14 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
     public void showMovies(final List<MovieItem> movies) {
         binding.swipeRefresh.setRefreshing(false);
         adapter.swapMovies(movies);
+        if (binding.recycler.getAdapter() == null) {
+            binding.recycler.setAdapter(adapter);
+        }
     }
 
     @Override
     public void onClickMovie(final int movieId) {
-        MovieDetailsActivity.start(getContext(), movieId);
+        MovieDetailsActivity.start(context, movieId);
     }
 
     @Override

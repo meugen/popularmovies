@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -23,13 +25,8 @@ public class MovieDetailsActivity extends BaseActivity implements
 
     private static final String EXTRA_MOVIE_ID = "movieId";
 
-    private static final String PARAM_ACTIVE_TAB = "activeTab";
-
-    private static final String TAG_DETAILS = "details";
-    private static final String TAG_VIDEOS = "videos";
-    private static final String TAG_REVIEWS = "reviews";
-
-    public static void start(final Context context, final int movieId) {
+    public static void start(
+            final Context context, final int movieId) {
         final Intent intent = new Intent(context,
                 MovieDetailsActivity.class);
         intent.putExtra(EXTRA_MOVIE_ID, movieId);

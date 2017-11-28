@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <import type="ua.meugen.android.popularmovies.ui.activities.movies.fragment.adapters.MoviesAdapter.MovieViewHolder"/>
+        <import type="ua.meugen.android.popularmovies.model.db.entity.MovieItem"/>
         <variable name="holder" type="MovieViewHolder"/>
+        <variable name="movie" type="MovieItem"/>
     </data>
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:id="@+id/poster"
         android:scaleType="fitXY"
-        app:onClick="@{holder::click}"/>
+        app:onClick="@{holder::click}"
+        app:path="@{movie.posterPath}"
+        android:contentDescription="@{movie.title}"
+        tools:src="@drawable/titanic_poster"/>
 </layout>

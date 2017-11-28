@@ -15,7 +15,8 @@
             android:layout_height="match_parent"
             android:id="@+id/recycler"
             app:layoutManager="GridLayoutManager"
-            app:spanCount="@integer/main_recycler_span_count"/>
+            app:spanCount="@integer/main_recycler_span_count"
+            tools:listitem="@layout/item_movie"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 </layout>
