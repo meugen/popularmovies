@@ -9,6 +9,7 @@ import android.arch.persistence.room.RoomWarnings;
 import java.util.Collection;
 import java.util.List;
 
+import ua.meugen.android.popularmovies.model.db.entity.EntityCount;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.db.entity.MovieStatus;
 
@@ -31,11 +32,14 @@ public interface MoviesDao {
     @Query("SELECT * FROM movies WHERE (status&:status)=:status")
     List<MovieItem> byStatus(int status);
 
-    @Query("SELECT * FROM movies WHERE (status&:status)=:status ORDER BY popularity DESC")
-    List<MovieItem> mostPopularByStatus(int status);
+    @Query("SELECT * FROM movies WHERE (status&:status)=:status ORDER BY popularity DESC LIMIT :limit OFFSET :offset")
+    List<MovieItem> mostPopularByStatus(int status, int limit, int offset);
 
-    @Query("SELECT * FROM movies WHERE (status&:status)=:status ORDER BY voteAverage DESC")
-    List<MovieItem> topRatedByStatus(int status);
+    @Query("SELECT * FROM movies WHERE (status&:status)=:status ORDER BY voteAverage DESC LIMIT :limit OFFSET :offset")
+    List<MovieItem> topRatedByStatus(int status, int limit, int offset);
+
+    @Query("SELECT count(id) c FROM movies WHERE (status&:status)=:status")
+    EntityCount countByStatus(int status);
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT status FROM movies WHERE id=:id")

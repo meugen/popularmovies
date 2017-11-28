@@ -54,6 +54,13 @@ public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<Vi
         getCompositeDisposable().add(disposable);
     }
 
+    @Override
+    List<VideoItem> mergeCache(
+            final List<VideoItem> cachedResp,
+            final List<VideoItem> newResp) {
+        return newResp;
+    }
+
     @NonNull
     @Override
     String cacheKey(final Integer movieId) {

@@ -12,6 +12,7 @@ import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.Movie
 public interface MoviesPresenter extends MvpPresenter<MoviesState>, LoadPresenter {
 
     int LOADER_ID = 1;
+    int PAGE_LOADER_ID = 2;
 
     void refresh(@SortType int sortType);
 
@@ -19,4 +20,6 @@ public interface MoviesPresenter extends MvpPresenter<MoviesState>, LoadPresente
     int getSortType();
 
     void clearCache();
+
+    void loadNextPage(int page);
 }

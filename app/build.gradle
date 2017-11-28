@@ -13,6 +13,7 @@ android {
 
         buildConfigField 'String', 'SERVER_URL', '"https://api.themoviedb.org/3/"'
         buildConfigField 'String', 'API_KEY', '"4d0aefea62c601c18d2e9902f2570a61"'
+        buildConfigField 'int', 'PAGE_SIZE', '20'
     }
     buildTypes {
         release {

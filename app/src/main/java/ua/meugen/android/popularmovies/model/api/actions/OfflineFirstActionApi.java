@@ -89,9 +89,15 @@ abstract class OfflineFirstActionApi<Req, Resp> extends BaseActionApi implements
     }
 
     private Single<Resp> _storeOffline(final CachedReq<Req> cachedReq, final Resp resp) {
-        cache.set(cachedReq.key, resp);
+        Resp cachedResp = cache.get(cachedReq.key);
+        if (cachedResp == null) {
+            cachedResp = resp;
+        } else {
+            cachedResp = mergeCache(cachedResp, resp);
+        }
+        cache.set(cachedReq.key, cachedResp);
         storeOffline(cachedReq.req, resp);
-        return Single.just(resp);
+        return Single.just(cachedResp);
     }
 
     @NonNull
@@ -103,7 +109,9 @@ abstract class OfflineFirstActionApi<Req, Resp> extends BaseActionApi implements
     abstract void storeOffline(final Req req, final Resp resp);
 
     @NonNull
-    abstract String cacheKey(Req req);
+    abstract String cacheKey(final Req req);
+
+    abstract Resp mergeCache(final Resp cachedResp, final Resp newResp);
 
     private static class CachedReq<Req> {
 

@@ -5,35 +5,35 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.Collections;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ua.meugen.android.popularmovies.BuildConfig;
 import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.databinding.ItemMovieBinding;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
+import ua.meugen.android.popularmovies.model.network.resp.PagedMoviesResponse;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
+import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.MoviesView;
 
 @PerFragment
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
 
     private final LayoutInflater inflater;
-    private final OnMovieClickListener listener;
+    private final OnMoviesListener listener;
 
-    private List<MovieItem> movies;
+    private PagedMoviesResponse movies;
 
     @Inject
     MoviesAdapter(
             @Named(BaseActivityModule.ACTIVITY_CONTEXT) final Context context,
-            final OnMovieClickListener listener) {
+            final OnMoviesListener listener) {
         this.inflater = LayoutInflater.from(context);
         this.listener = listener;
-        this.movies = Collections.emptyList();
+        this.movies = PagedMoviesResponse.empty();
     }
 
-    public void swapMovies(final List<MovieItem> movies) {
+    public void swapMovies(final PagedMoviesResponse movies) {
         this.movies = movies;
         notifyDataSetChanged();
     }
@@ -48,12 +48,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public void onBindViewHolder(
             final MovieViewHolder holder,
             final int position) {
-        holder.bind(movies.get(position));
+        holder.bind(movies.getResults().get(position));
+        if (movies.getResults().size() - position < BuildConfig.PAGE_SIZE / 2) {
+            listener.onLoadNextPage(movies.getPage() + 1);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return movies.size();
+        return movies.getResults().size();
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder {

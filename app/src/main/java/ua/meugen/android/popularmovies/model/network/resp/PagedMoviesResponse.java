@@ -2,11 +2,21 @@ package ua.meugen.android.popularmovies.model.network.resp;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Collections;
 import java.util.List;
 
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 
 public class PagedMoviesResponse extends BaseResponse {
+
+    public static PagedMoviesResponse empty() {
+        final PagedMoviesResponse response = new PagedMoviesResponse();
+        response.setPage(0);
+        response.setTotalPages(0);
+        response.setTotalResults(0);
+        response.setResults(Collections.emptyList());
+        return response;
+    }
 
     @SerializedName("page")
     private int page;

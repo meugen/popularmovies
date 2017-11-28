@@ -1,10 +1,8 @@
 package ua.meugen.android.popularmovies.ui.activities.movies.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,28 +11,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.FragmentMoviesBinding;
-import ua.meugen.android.popularmovies.databinding.ItemMovieBinding;
 import ua.meugen.android.popularmovies.model.SortType;
-import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
+import ua.meugen.android.popularmovies.model.network.resp.PagedMoviesResponse;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.MovieDetailsActivity;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.adapters.MoviesAdapter;
-import ua.meugen.android.popularmovies.ui.activities.movies.fragment.adapters.OnMovieClickListener;
+import ua.meugen.android.popularmovies.ui.activities.movies.fragment.adapters.OnMoviesListener;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.presenter.MoviesPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.MoviesState;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.view.MoviesView;
 
 
 public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
-        implements MoviesView, OnMovieClickListener, SwipeRefreshLayout.OnRefreshListener {
+        implements MoviesView, OnMoviesListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject @Named(BaseActivityModule.ACTIVITY_CONTEXT)
     Context context;
@@ -110,7 +105,7 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
     }
 
     @Override
-    public void showMovies(final List<MovieItem> movies) {
+    public void showMovies(final PagedMoviesResponse movies) {
         binding.swipeRefresh.setRefreshing(false);
         adapter.swapMovies(movies);
         if (binding.recycler.getAdapter() == null) {
@@ -119,8 +114,18 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter>
     }
 
     @Override
+    public void showNextPage(final PagedMoviesResponse movies) {
+        adapter.swapMovies(movies);
+    }
+
+    @Override
     public void onClickMovie(final int movieId) {
         MovieDetailsActivity.start(context, movieId);
+    }
+
+    @Override
+    public void onLoadNextPage(final int page) {
+        presenter.loadNextPage(page);
     }
 
     @Override

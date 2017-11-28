@@ -8,7 +8,9 @@ import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
+import ua.meugen.android.popularmovies.model.api.req.MoviesReq;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
+import ua.meugen.android.popularmovies.model.network.resp.PagedMoviesResponse;
 import ua.meugen.android.popularmovies.model.prefs.PrefsStorage;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.MoviesState;
@@ -22,7 +24,7 @@ import ua.meugen.android.popularmovies.ui.rxloader.LifecycleHandler;
 public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesState>
         implements MoviesPresenter {
 
-    @Inject AppCachedActionApi<Integer, List<MovieItem>> moviesActionApi;
+    @Inject AppCachedActionApi<MoviesReq, PagedMoviesResponse> moviesActionApi;
     @Inject LifecycleHandler lifecycleHandler;
     @Inject PrefsStorage prefsStorage;
 
@@ -47,9 +49,18 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
         view.showRefreshing();
 
         final Disposable disposable = moviesActionApi
-                .action(sortType)
+                .action(new MoviesReq(sortType, 1))
                 .compose(lifecycleHandler.load(LOADER_ID, restart))
                 .subscribe(view::showMovies, this::onError);
+        getCompositeDisposable().add(disposable);
+    }
+
+    @Override
+    public void loadNextPage(final int page) {
+        final Disposable disposable = moviesActionApi
+                .action(new MoviesReq(PAGE_LOADER_ID, page))
+                .compose(lifecycleHandler.reload(PAGE_LOADER_ID))
+                .subscribe(view::showNextPage, this::onError);
         getCompositeDisposable().add(disposable);
     }
 
@@ -60,7 +71,7 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
 
     @Override
     public void clearCache() {
-        moviesActionApi.clearCache(prefsStorage.getSortType());
+        moviesActionApi.clearCache(new MoviesReq(prefsStorage.getSortType(), 1));
     }
 
     private void onError(final Throwable th) {

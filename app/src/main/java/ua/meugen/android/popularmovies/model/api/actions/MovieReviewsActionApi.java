@@ -53,6 +53,13 @@ public class MovieReviewsActionApi extends OfflineFirstActionApi<Integer, List<R
         getCompositeDisposable().add(disposable);
     }
 
+    @Override
+    List<ReviewItem> mergeCache(
+            final List<ReviewItem> cachedResp,
+            final List<ReviewItem> newResp) {
+        return newResp;
+    }
+
     @NonNull
     @Override
     String cacheKey(final Integer movieId) {
