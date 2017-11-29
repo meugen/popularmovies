@@ -41,6 +41,9 @@ public interface MoviesDao {
     @Query("SELECT count(id) c FROM movies WHERE (status&:status)=:status")
     EntityCount countByStatus(int status);
 
+    @Query("UPDATE movies SET status=status&~:status")
+    void resetStatus(int status);
+
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("SELECT status FROM movies WHERE id=:id")
     MovieStatus statusById(int id);

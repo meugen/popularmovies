@@ -7,4 +7,8 @@ import ua.meugen.android.popularmovies.ui.activities.base.fragment.state.MvpStat
  */
 
 public interface MoviesState extends MvpState {
+
+    int getPage();
+
+    void setPage(int value);
 }

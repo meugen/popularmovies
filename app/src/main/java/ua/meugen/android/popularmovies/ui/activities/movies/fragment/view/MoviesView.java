@@ -14,7 +14,5 @@ public interface MoviesView extends MvpView {
 
     void showRefreshing();
 
-    void showMovies(PagedMoviesResponse movies);
-
-    void showNextPage(PagedMoviesResponse movies);
+    void showMovies(List<MovieItem> movies);
 }

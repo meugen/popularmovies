@@ -24,12 +24,26 @@ import ua.meugen.android.popularmovies.ui.rxloader.LifecycleHandler;
 public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesState>
         implements MoviesPresenter {
 
-    @Inject AppCachedActionApi<MoviesReq, PagedMoviesResponse> moviesActionApi;
+    @Inject AppCachedActionApi<MoviesReq, List<MovieItem>> moviesActionApi;
     @Inject LifecycleHandler lifecycleHandler;
     @Inject PrefsStorage prefsStorage;
 
+    private int page;
+
     @Inject
     MoviesPresenterImpl() {}
+
+    @Override
+    public void restoreState(final MoviesState state) {
+        super.restoreState(state);
+        page = state.getPage();
+    }
+
+    @Override
+    public void saveState(final MoviesState state) {
+        super.saveState(state);
+        state.setPage(page);
+    }
 
     @Override
     public void load() {
@@ -48,6 +62,7 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
             @SortType final int sortType) {
         view.showRefreshing();
 
+        page = 1;
         final Disposable disposable = moviesActionApi
                 .action(new MoviesReq(sortType, 1))
                 .compose(lifecycleHandler.load(LOADER_ID, restart))
@@ -56,11 +71,11 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
     }
 
     @Override
-    public void loadNextPage(final int page) {
+    public void loadNextPage() {
         final Disposable disposable = moviesActionApi
-                .action(new MoviesReq(PAGE_LOADER_ID, page))
+                .action(new MoviesReq(PAGE_LOADER_ID, ++page))
                 .compose(lifecycleHandler.reload(PAGE_LOADER_ID))
-                .subscribe(view::showNextPage, this::onError);
+                .subscribe(view::showMovies, this::onError);
         getCompositeDisposable().add(disposable);
     }
 
@@ -71,6 +86,7 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
 
     @Override
     public void clearCache() {
+        page = 1;
         moviesActionApi.clearCache(new MoviesReq(prefsStorage.getSortType(), 1));
     }
 

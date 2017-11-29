@@ -5,6 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -22,7 +26,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     private final LayoutInflater inflater;
     private final OnMoviesListener listener;
 
-    private PagedMoviesResponse movies;
+    private final List<MovieItem> movies;
 
     @Inject
     MoviesAdapter(
@@ -30,12 +34,13 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             final OnMoviesListener listener) {
         this.inflater = LayoutInflater.from(context);
         this.listener = listener;
-        this.movies = PagedMoviesResponse.empty();
+        this.movies = new ArrayList<>();
     }
 
-    public void swapMovies(final PagedMoviesResponse movies) {
-        this.movies = movies;
-        notifyDataSetChanged();
+    public void addMovies(final List<MovieItem> movies) {
+        int start = this.movies.size();
+        this.movies.addAll(movies);
+        notifyItemRangeInserted(start, movies.size());
     }
 
     @Override
@@ -48,15 +53,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public void onBindViewHolder(
             final MovieViewHolder holder,
             final int position) {
-        holder.bind(movies.getResults().get(position));
-        if (movies.getResults().size() - position < BuildConfig.PAGE_SIZE / 2) {
-            listener.onLoadNextPage(movies.getPage() + 1);
-        }
+        holder.bind(movies.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return movies.getResults().size();
+        return movies.size();
     }
 
     public class MovieViewHolder extends RecyclerView.ViewHolder {

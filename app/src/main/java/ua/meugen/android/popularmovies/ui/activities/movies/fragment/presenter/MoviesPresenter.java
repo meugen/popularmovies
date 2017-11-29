@@ -21,5 +21,5 @@ public interface MoviesPresenter extends MvpPresenter<MoviesState>, LoadPresente
 
     void clearCache();
 
-    void loadNextPage(int page);
+    void loadNextPage();
 }

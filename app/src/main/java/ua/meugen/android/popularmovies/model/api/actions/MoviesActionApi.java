@@ -8,12 +8,14 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.BuildConfig;
 import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
 import ua.meugen.android.popularmovies.model.api.req.MoviesReq;
+import ua.meugen.android.popularmovies.model.cache.Cache;
 import ua.meugen.android.popularmovies.model.cache.KeyGenerator;
 import ua.meugen.android.popularmovies.model.config.Config;
 import ua.meugen.android.popularmovies.model.db.dao.MoviesDao;
@@ -27,8 +29,9 @@ import ua.meugen.android.popularmovies.model.network.resp.PagedMoviesResponse;
  * Created by meugen on 15.11.2017.
  */
 
-public class MoviesActionApi extends OfflineFirstActionApi<MoviesReq, PagedMoviesResponse> {
+public class MoviesActionApi extends OfflineFirstActionApi<MoviesReq, List<MovieItem>> {
 
+    @Inject Cache cache;
     @Inject Config config;
     @Inject ServerApi serverApi;
     @Inject MoviesDao moviesDao;
@@ -40,11 +43,20 @@ public class MoviesActionApi extends OfflineFirstActionApi<MoviesReq, PagedMovie
 
     @NonNull
     @Override
-    Single<PagedMoviesResponse> offlineData(final MoviesReq req) {
-        return Single.just(req).flatMap(this::moviesByStatus);
+    Single<List<MovieItem>> offlineData(final MoviesReq req) {
+        return Single.just(req)
+                .flatMap(this::moviesByStatus)
+                .flatMap(this::checkEmpty);
     }
 
-    private Single<PagedMoviesResponse> moviesByStatus(final MoviesReq req) {
+    private Single<List<MovieItem>> checkEmpty(final List<MovieItem> movies) {
+        if (movies.isEmpty()) {
+            throw new IllegalArgumentException("Offline data is empty.");
+        }
+        return Single.just(movies);
+    }
+
+    private Single<List<MovieItem>> moviesByStatus(final MoviesReq req) {
         Callable<List<MovieItem>> callable;
 
         int offset = (req.page - 1) * BuildConfig.PAGE_SIZE;
@@ -57,65 +69,66 @@ public class MoviesActionApi extends OfflineFirstActionApi<MoviesReq, PagedMovie
         } else {
             callable = () -> moviesDao.byStatus(req.status);
         }
-        return Single.fromCallable(callable)
-                .map(results -> resultsToResponse(req, results));
+        return Single.fromCallable(callable);
     }
 
-    private PagedMoviesResponse resultsToResponse(
-            final MoviesReq req, final List<MovieItem> results) {
-        EntityCount entityCount = moviesDao.countByStatus(req.status);
-        int totalPages = entityCount.count / BuildConfig.PAGE_SIZE;
-        if (entityCount.count % BuildConfig.PAGE_SIZE != 0) {
-            totalPages++;
-        }
-
-        PagedMoviesResponse response = new PagedMoviesResponse();
-        response.setResults(results);
-        response.setTotalPages(totalPages);
-        response.setTotalResults(entityCount.count);
-        response.setPage(1);
-        return response;
-    }
-
-    @Nullable
+    @NonNull
     @Override
-    Single<PagedMoviesResponse> networkData(final MoviesReq req) {
+    Single<List<MovieItem>> networkData(final MoviesReq req) {
         Single<PagedMoviesResponse> single = null;
         if (req.status == SortType.POPULAR) {
             single = serverApi.getPopularMovies(config.getLanguage(), req.page);
         } else if (req.status == SortType.TOP_RATED) {
             single = serverApi.getTopRatedMovies(config.getLanguage(), req.page);
+        } else {
+            throw new IllegalArgumentException("Unknown status: " + req.status);
         }
-        return single;
+        return single.map(this::checkResponse);
+    }
+
+    private List<MovieItem> checkResponse(final PagedMoviesResponse response) {
+        if (!response.isSuccess()) {
+            throw new IllegalArgumentException("Not success: code = "
+                    + response.getStatusCode() + ", message = " + response.getStatusMessage());
+        }
+        return response.getResults();
     }
 
     @Override
-    void storeOffline(final MoviesReq req, final PagedMoviesResponse response) {
+    void storeOffline(final MoviesReq req, final List<MovieItem> movies) {
         final Disposable disposable = mergeMoviesExecutor
-                .executeTransaction(new MoviesData(response.getResults(), req.status))
+                .executeTransaction(new MoviesData(movies, req.status))
                 .subscribe();
         getCompositeDisposable().add(disposable);
     }
 
     @Override
-    PagedMoviesResponse mergeCache(
-            final PagedMoviesResponse cachedResp,
-            final PagedMoviesResponse newResp) {
-        cachedResp.getResults().addAll(
-                newResp.getResults());
-        cachedResp.setTotalResults(Math.max(
-                cachedResp.getTotalResults(),
-                newResp.getTotalResults()));
-        cachedResp.setTotalPages(Math.max(
-                cachedResp.getTotalPages(),
-                newResp.getTotalPages()));
-        cachedResp.setPage(newResp.getPage());
-        return cachedResp;
+    public void clearCache(final MoviesReq req) {
+        cache.clear(keyGenerator.generateKey(req.status));
+        moviesDao.resetStatus(req.status);
     }
 
     @NonNull
     @Override
-    String cacheKey(final MoviesReq req) {
-        return keyGenerator.generateKey(req.status);
+    List<MovieItem> retrieveCache(final MoviesReq req) {
+        if (req.page != 1) {
+            throw new IllegalArgumentException("Cache retrieving only for page 1");
+        }
+        List<MovieItem> movies = cache.get(keyGenerator.generateKey(req.status));
+        if (movies == null) {
+            throw new IllegalArgumentException("No cache was found for movies with status " + req.status);
+        }
+        return movies;
+    }
+
+    @Override
+    void storeCache(final MoviesReq req, final List<MovieItem> movies) {
+        String key = keyGenerator.generateKey(req.status);
+        List<MovieItem> cachedMovies = cache.get(key);
+        if (req.page == 1 || cachedMovies == null) {
+            cache.set(keyGenerator.generateKey(req.status), movies);
+        } else {
+            cachedMovies.addAll(movies);
+        }
     }
 }

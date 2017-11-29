@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
+import ua.meugen.android.popularmovies.model.cache.Cache;
 import ua.meugen.android.popularmovies.model.cache.KeyGenerator;
 import ua.meugen.android.popularmovies.model.config.Config;
 import ua.meugen.android.popularmovies.model.db.dao.VideosDao;
@@ -24,6 +25,7 @@ import ua.meugen.android.popularmovies.model.network.resp.VideosResponse;
 
 public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<VideoItem>> {
 
+    @Inject Cache cache;
     @Inject Config config;
     @Inject ServerApi serverApi;
     @Inject VideosDao videosDao;
@@ -36,14 +38,30 @@ public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<Vi
     @NonNull
     @Override
     Single<List<VideoItem>> offlineData(final Integer movieId) {
-        return Single.fromCallable(() -> videosDao.byMovieId(movieId));
+        return Single.fromCallable(() -> videosDao.byMovieId(movieId))
+                .flatMap(this::checkEmpty);
     }
 
-    @Nullable
+    private Single<List<VideoItem>> checkEmpty(final List<VideoItem> videos) {
+        if (videos.isEmpty()) {
+            throw new IllegalArgumentException("Offline data is empty");
+        }
+        return Single.just(videos);
+    }
+
+    @NonNull
     @Override
     Single<List<VideoItem>> networkData(final Integer movieId) {
         return serverApi.getMovieVideos(movieId, config.getLanguage())
                 .map(VideosResponse::getResults);
+    }
+
+    private List<VideoItem> checkResponse(final VideosResponse response) {
+        if (!response.isSuccess()) {
+            throw new IllegalArgumentException("Not success: code = "
+                    + response.getStatusCode() + ", message = " + response.getStatusMessage());
+        }
+        return response.getResults();
     }
 
     @Override
@@ -55,15 +73,23 @@ public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<Vi
     }
 
     @Override
-    List<VideoItem> mergeCache(
-            final List<VideoItem> cachedResp,
-            final List<VideoItem> newResp) {
-        return newResp;
+    public void clearCache(final Integer movieId) {
+        cache.clear(keyGenerator.generateKey(movieId));
     }
 
     @NonNull
     @Override
-    String cacheKey(final Integer movieId) {
-        return keyGenerator.generateKey(movieId);
+    List<VideoItem> retrieveCache(final Integer movieId) {
+        List<VideoItem> videos = cache.get(keyGenerator.generateKey(movieId));
+        if (videos == null) {
+            throw new IllegalArgumentException("No cache for videos for movie with id "
+                    + movieId);
+        }
+        return videos;
+    }
+
+    @Override
+    void storeCache(final Integer movieId, final List<VideoItem> videos) {
+        cache.set(keyGenerator.generateKey(movieId), videos);
     }
 }

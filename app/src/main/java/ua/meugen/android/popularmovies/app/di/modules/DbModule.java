@@ -25,6 +25,7 @@ public abstract class DbModule {
         return Room
                 .databaseBuilder(context, AppDatabase.class, "popularmovies")
                 .fallbackToDestructiveMigration()
+                .allowMainThreadQueries()
                 .build();
     }
 
