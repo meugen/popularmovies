@@ -115,13 +115,18 @@ public class MoviesFragment extends BaseFragment<MoviesState, MoviesPresenter> i
     }
 
     @Override
-    public void showMovies(final List<MovieItem> movies) {
+    public void showNewMovies(final List<MovieItem> movies) {
         binding.swipeRefresh.setRefreshing(false);
-        adapter.addMovies(movies);
-        moviesScrollListener.setNotLoading();
+        adapter.swapMovies(movies);
         if (binding.recycler.getAdapter() == null) {
             binding.recycler.setAdapter(adapter);
         }
+    }
+
+    @Override
+    public void showNextPage(final List<MovieItem> movies) {
+        adapter.addMovies(movies);
+        moviesScrollListener.setNotLoading();
     }
 
     @Override

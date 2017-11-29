@@ -1,12 +1,13 @@
 package ua.meugen.android.popularmovies.model.api.actions;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
@@ -39,21 +40,21 @@ public class MovieReviewsActionApi extends OfflineFirstActionApi<Integer, List<R
     @Override
     Single<List<ReviewItem>> offlineData(final Integer movieId) {
         return Single.fromCallable(() -> reviewsDao.byMovieId(movieId))
-                .flatMap(this::checkEmpty);
+                .map(this::checkOfflineEmpty);
     }
 
-    private Single<List<ReviewItem>> checkEmpty(final List<ReviewItem> reviews) {
+    private List<ReviewItem> checkOfflineEmpty(final List<ReviewItem> reviews) {
         if (reviews.isEmpty()) {
             throw new IllegalArgumentException("Offline data is empty.");
         }
-        return Single.just(reviews);
+        return reviews;
     }
 
     @NonNull
     @Override
-    Single<List<ReviewItem>> networkData(final Integer movieId) {
+    Maybe<List<ReviewItem>> networkData(final Integer movieId) {
         return serverApi.getMovieReviews(movieId, config.getLanguage())
-                .map(this::checkResponse);
+                .map(this::checkResponse).toMaybe();
     }
 
     private List<ReviewItem> checkResponse(final PagedReviewsResponse response) {
@@ -88,7 +89,8 @@ public class MovieReviewsActionApi extends OfflineFirstActionApi<Integer, List<R
     }
 
     @Override
-    void storeCache(final Integer movieId, final List<ReviewItem> reviews) {
+    List<ReviewItem> storeCache(final Integer movieId, final List<ReviewItem> reviews) {
         cache.set(keyGenerator.generateKey(movieId), reviews);
+        return new ArrayList<>(reviews);
     }
 }

@@ -1,14 +1,14 @@
 package ua.meugen.android.popularmovies.model.api.actions;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.BuildConfig;
@@ -19,7 +19,6 @@ import ua.meugen.android.popularmovies.model.cache.Cache;
 import ua.meugen.android.popularmovies.model.cache.KeyGenerator;
 import ua.meugen.android.popularmovies.model.config.Config;
 import ua.meugen.android.popularmovies.model.db.dao.MoviesDao;
-import ua.meugen.android.popularmovies.model.db.entity.EntityCount;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
 import ua.meugen.android.popularmovies.model.db.execs.data.MoviesData;
@@ -46,14 +45,14 @@ public class MoviesActionApi extends OfflineFirstActionApi<MoviesReq, List<Movie
     Single<List<MovieItem>> offlineData(final MoviesReq req) {
         return Single.just(req)
                 .flatMap(this::moviesByStatus)
-                .flatMap(this::checkEmpty);
+                .map(this::checkOfflineEmpty);
     }
 
-    private Single<List<MovieItem>> checkEmpty(final List<MovieItem> movies) {
+    private List<MovieItem> checkOfflineEmpty(final List<MovieItem> movies) {
         if (movies.isEmpty()) {
             throw new IllegalArgumentException("Offline data is empty.");
         }
-        return Single.just(movies);
+        return movies;
     }
 
     private Single<List<MovieItem>> moviesByStatus(final MoviesReq req) {
@@ -74,16 +73,20 @@ public class MoviesActionApi extends OfflineFirstActionApi<MoviesReq, List<Movie
 
     @NonNull
     @Override
-    Single<List<MovieItem>> networkData(final MoviesReq req) {
-        Single<PagedMoviesResponse> single = null;
+    Maybe<List<MovieItem>> networkData(final MoviesReq req) {
+        Maybe<PagedMoviesResponse> maybe;
         if (req.status == SortType.POPULAR) {
-            single = serverApi.getPopularMovies(config.getLanguage(), req.page);
+            maybe = serverApi.getPopularMovies(config.getLanguage(), req.page)
+                    .toMaybe();
         } else if (req.status == SortType.TOP_RATED) {
-            single = serverApi.getTopRatedMovies(config.getLanguage(), req.page);
+            maybe = serverApi.getTopRatedMovies(config.getLanguage(), req.page)
+                    .toMaybe();
+        } else if (req.status == SortType.FAVORITES) {
+            maybe = Maybe.empty();
         } else {
             throw new IllegalArgumentException("Unknown status: " + req.status);
         }
-        return single.map(this::checkResponse);
+        return maybe.map(this::checkResponse);
     }
 
     private List<MovieItem> checkResponse(final PagedMoviesResponse response) {
@@ -122,13 +125,15 @@ public class MoviesActionApi extends OfflineFirstActionApi<MoviesReq, List<Movie
     }
 
     @Override
-    void storeCache(final MoviesReq req, final List<MovieItem> movies) {
+    List<MovieItem> storeCache(final MoviesReq req, final List<MovieItem> movies) {
         String key = keyGenerator.generateKey(req.status);
         List<MovieItem> cachedMovies = cache.get(key);
         if (req.page == 1 || cachedMovies == null) {
-            cache.set(keyGenerator.generateKey(req.status), movies);
+            cache.set(key, movies);
+            cachedMovies = movies;
         } else {
             cachedMovies.addAll(movies);
         }
+        return new ArrayList<>(cachedMovies);
     }
 }

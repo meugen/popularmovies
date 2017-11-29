@@ -6,11 +6,11 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
+import ua.meugen.android.popularmovies.BuildConfig;
 import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
 import ua.meugen.android.popularmovies.model.api.req.MoviesReq;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
-import ua.meugen.android.popularmovies.model.network.resp.PagedMoviesResponse;
 import ua.meugen.android.popularmovies.model.prefs.PrefsStorage;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.presenter.BaseMvpPresenter;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.state.MoviesState;
@@ -66,16 +66,26 @@ public class MoviesPresenterImpl extends BaseMvpPresenter<MoviesView, MoviesStat
         final Disposable disposable = moviesActionApi
                 .action(new MoviesReq(sortType, 1))
                 .compose(lifecycleHandler.load(LOADER_ID, restart))
-                .subscribe(view::showMovies, this::onError);
+                .doOnNext(this::calculatePage)
+                .subscribe(view::showNewMovies, this::onError);
         getCompositeDisposable().add(disposable);
+    }
+
+    private void calculatePage(final List<MovieItem> movies) {
+        int page = movies.size() / BuildConfig.PAGE_SIZE;
+        if (movies.size() % BuildConfig.PAGE_SIZE != 0) {
+            page++;
+        }
+        this.page = page;
     }
 
     @Override
     public void loadNextPage() {
+        final int sortType = prefsStorage.getSortType();
         final Disposable disposable = moviesActionApi
-                .action(new MoviesReq(PAGE_LOADER_ID, ++page))
+                .action(new MoviesReq(sortType, ++page))
                 .compose(lifecycleHandler.reload(PAGE_LOADER_ID))
-                .subscribe(view::showMovies, this::onError);
+                .subscribe(view::showNextPage, this::onError);
         getCompositeDisposable().add(disposable);
     }
 

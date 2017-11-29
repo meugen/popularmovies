@@ -1,12 +1,13 @@
 package ua.meugen.android.popularmovies.model.api.actions;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.model.api.ServerApi;
@@ -39,21 +40,21 @@ public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<Vi
     @Override
     Single<List<VideoItem>> offlineData(final Integer movieId) {
         return Single.fromCallable(() -> videosDao.byMovieId(movieId))
-                .flatMap(this::checkEmpty);
+                .map(this::checkOfflineEmpty);
     }
 
-    private Single<List<VideoItem>> checkEmpty(final List<VideoItem> videos) {
+    private List<VideoItem> checkOfflineEmpty(final List<VideoItem> videos) {
         if (videos.isEmpty()) {
             throw new IllegalArgumentException("Offline data is empty");
         }
-        return Single.just(videos);
+        return videos;
     }
 
     @NonNull
     @Override
-    Single<List<VideoItem>> networkData(final Integer movieId) {
+    Maybe<List<VideoItem>> networkData(final Integer movieId) {
         return serverApi.getMovieVideos(movieId, config.getLanguage())
-                .map(VideosResponse::getResults);
+                .map(this::checkResponse).toMaybe();
     }
 
     private List<VideoItem> checkResponse(final VideosResponse response) {
@@ -89,7 +90,8 @@ public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<Vi
     }
 
     @Override
-    void storeCache(final Integer movieId, final List<VideoItem> videos) {
+    List<VideoItem> storeCache(final Integer movieId, final List<VideoItem> videos) {
         cache.set(keyGenerator.generateKey(movieId), videos);
+        return new ArrayList<>(videos);
     }
 }

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import javax.inject.Inject;
 
+import io.reactivex.Maybe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.Single;
@@ -20,87 +21,33 @@ import ua.meugen.android.popularmovies.model.cache.Cache;
 
 abstract class OfflineFirstActionApi<Req, Resp> extends BaseActionApi implements AppCachedActionApi<Req, Resp> {
 
-//    @Inject Cache cache;
-
-//    private ObservableEmitter<Resp> emitter;
-
     @Override
     public final Observable<Resp> action(final Req req) {
-        final Single<Resp> data = offlineData(req)
+        final Maybe<Resp> data = offlineData(req)
+                .toMaybe()
                 .onErrorResumeNext(networkData(req))
-                .flatMap(resp -> _storeOffline(req, resp));
-        return Single.fromCallable(() -> retrieveCache(req))
+                .map(resp -> _storeOffline(req, resp));
+        return Maybe.fromCallable(() -> retrieveCache(req))
                 .onErrorResumeNext(data)
                 .toObservable();
     }
 
-//    @Override
-//    final void clear() {
-//        super.clear();
-//        emitter = null;
-//    }
-
-//    private Observable<Resp> retrieveCache(final String key) {
-//        return Observable.create(e -> {
-//            final Resp resp = cache.get(key);
-//            if (resp != null) {
-//                e.onNext(resp);
-//            }
-//        });
-//    }
-
-//    private Observable<Resp> requestApi(final CachedReq<Req> cachedReq, final Resp resp) {
-//        return Observable.<Resp>create(e -> {
-//            emitter = e;
-//            cache.set(cachedReq.key, resp);
-//            if (!emitter.isDisposed()) {
-//                emitter.onNext(resp);
-//                startNetworkRequest(cachedReq);
-//            }
-//        }).doOnDispose(this::clear);
-//    }
-
-//    private void startNetworkRequest(final CachedReq<Req> cachedReq) {
-//        final Single<Resp> single = networkData(cachedReq.req);
-//        if (single == null) {
-//            return;
-//        }
-//        final Disposable disposable = single
-//                .flatMap(resp -> _storeOffline(cachedReq, resp))
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(this::onNetworkSuccess, this::onNetworkError);
-//        getCompositeDisposable().add(disposable);
-//    }
-
-//    private void onNetworkSuccess(final Resp resp) {
-//        if (emitter != null && !emitter.isDisposed()) {
-//            emitter.onNext(resp);
-//        }
-//    }
-//
-//    private void onNetworkError(final Throwable th) {
-//        if (emitter != null && !emitter.isDisposed()) {
-//            emitter.onError(th);
-//        }
-//    }
-
-    private Single<Resp> _storeOffline(final Req req, final Resp resp) {
-        storeCache(req, resp);
-        storeOffline(req, resp);
-        return Single.just(resp);
+    private Resp _storeOffline(final Req req, final Resp resp) {
+        Resp cachedResp = storeCache(req, resp);
+        storeOffline(req, cachedResp);
+        return cachedResp;
     }
 
     @NonNull
     abstract Single<Resp> offlineData(final Req req);
 
     @NonNull
-    abstract Single<Resp> networkData(final Req req);
+    abstract Maybe<Resp> networkData(final Req req);
 
     abstract void storeOffline(final Req req, final Resp resp);
 
     @NonNull
     abstract Resp retrieveCache(final Req req);
 
-    abstract void storeCache(final Req req, final Resp resp);
+    abstract Resp storeCache(final Req req, final Resp resp);
 }

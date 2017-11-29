@@ -26,7 +26,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     private final LayoutInflater inflater;
     private final OnMoviesListener listener;
 
-    private final List<MovieItem> movies;
+    private List<MovieItem> movies;
 
     @Inject
     MoviesAdapter(
@@ -34,7 +34,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             final OnMoviesListener listener) {
         this.inflater = LayoutInflater.from(context);
         this.listener = listener;
-        this.movies = new ArrayList<>();
+        this.movies = Collections.emptyList();
+    }
+
+    public void swapMovies(final List<MovieItem> movies) {
+        this.movies = movies;
+        notifyDataSetChanged();
     }
 
     public void addMovies(final List<MovieItem> movies) {
