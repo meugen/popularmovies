@@ -74,7 +74,7 @@ public class MoviesPresenterTest {
     @Test
     public void testLoadTopRated() {
         Mockito.when(prefsStorage.getSortType()).thenReturn(SortType.TOP_RATED);
-        Mockito.when(moviesActionApi.action(new MoviesReq(SortType.POPULAR, 1)))
+        Mockito.when(moviesActionApi.action(new MoviesReq(SortType.TOP_RATED, 1)))
                 .thenReturn(Observable.just(movies));
         Mockito.when(lifecycleHandler.load(MoviesPresenter.LOADER_ID, false))
                 .thenReturn(upstream -> upstream);
@@ -82,7 +82,7 @@ public class MoviesPresenterTest {
         presenter.load();
         inOrder.verify(prefsStorage).getSortType();
         inOrder.verify(view).showRefreshing();
-        inOrder.verify(moviesActionApi).action(new MoviesReq(SortType.POPULAR, 1));
+        inOrder.verify(moviesActionApi).action(new MoviesReq(SortType.TOP_RATED, 1));
         inOrder.verify(lifecycleHandler).load(MoviesPresenter.LOADER_ID, false);
         inOrder.verify(view).showNewMovies(movies);
         inOrder.verifyNoMoreInteractions();
@@ -106,7 +106,7 @@ public class MoviesPresenterTest {
 
     @Test
     public void testRefreshTopRated() {
-        Mockito.when(moviesActionApi.action(new MoviesReq(SortType.POPULAR, 1)))
+        Mockito.when(moviesActionApi.action(new MoviesReq(SortType.TOP_RATED, 1)))
                 .thenReturn(Observable.just(movies));
         Mockito.when(lifecycleHandler.load(MoviesPresenter.LOADER_ID, true))
                 .thenReturn(upstream -> upstream);
@@ -114,7 +114,7 @@ public class MoviesPresenterTest {
         presenter.refresh(SortType.TOP_RATED);
         inOrder.verify(prefsStorage).setSortType(SortType.TOP_RATED);
         inOrder.verify(view).showRefreshing();
-        inOrder.verify(moviesActionApi).action(new MoviesReq(SortType.POPULAR, 1));
+        inOrder.verify(moviesActionApi).action(new MoviesReq(SortType.TOP_RATED, 1));
         inOrder.verify(lifecycleHandler).load(MoviesPresenter.LOADER_ID, true);
         inOrder.verify(view).showNewMovies(movies);
         inOrder.verifyNoMoreInteractions();
@@ -147,7 +147,6 @@ public class MoviesPresenterTest {
         Mockito.when(prefsStorage.getSortType()).thenReturn(SortType.POPULAR);
 
         presenter.clearCache();
-.
         inOrder.verify(moviesActionApi).clearCache(new MoviesReq(SortType.POPULAR, 1));
         inOrder.verifyNoMoreInteractions();
     }
@@ -157,14 +156,18 @@ public class MoviesPresenterTest {
         Mockito.when(prefsStorage.getSortType()).thenReturn(SortType.TOP_RATED);
 
         presenter.clearCache();
-        inOrder.verify(moviesActionApi).clearCache(new MoviesReq(SortType.POPULAR, 1));
+        inOrder.verify(moviesActionApi).clearCache(new MoviesReq(SortType.TOP_RATED, 1));
         inOrder.verifyNoMoreInteractions();
     }
 
     @Test
     public void testState() {
+        Mockito.when(state.getPage()).thenReturn(1);
+
         presenter.restoreState(state);
         presenter.saveState(state);
+        inOrder.verify(state).getPage();
+        inOrder.verify(state).setPage(1);
         inOrder.verifyNoMoreInteractions();
     }
 }
