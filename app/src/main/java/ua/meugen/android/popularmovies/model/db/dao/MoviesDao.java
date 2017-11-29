@@ -29,8 +29,8 @@ public interface MoviesDao {
     @Query("SELECT * FROM movies WHERE id=:id")
     MovieItem byId(int id);
 
-    @Query("SELECT * FROM movies WHERE (status&:status)=:status")
-    List<MovieItem> byStatus(int status);
+    @Query("SELECT * FROM movies WHERE (status&:status)=:status LIMIT :limit OFFSET :offset")
+    List<MovieItem> byStatus(int status, int limit, int offset);
 
     @Query("SELECT * FROM movies WHERE (status&:status)=:status ORDER BY popularity DESC LIMIT :limit OFFSET :offset")
     List<MovieItem> mostPopularByStatus(int status, int limit, int offset);

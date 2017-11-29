@@ -23,11 +23,10 @@ abstract class OfflineFirstActionApi<Req, Resp> extends BaseActionApi implements
 
     @Override
     public final Observable<Resp> action(final Req req) {
-        final Maybe<Resp> data = offlineData(req)
-                .toMaybe()
+        final Single<Resp> data = offlineData(req)
                 .onErrorResumeNext(networkData(req))
                 .map(resp -> _storeOffline(req, resp));
-        return Maybe.fromCallable(() -> retrieveCache(req))
+        return Single.fromCallable(() -> retrieveCache(req))
                 .onErrorResumeNext(data)
                 .toObservable();
     }
@@ -42,7 +41,7 @@ abstract class OfflineFirstActionApi<Req, Resp> extends BaseActionApi implements
     abstract Single<Resp> offlineData(final Req req);
 
     @NonNull
-    abstract Maybe<Resp> networkData(final Req req);
+    abstract Single<Resp> networkData(final Req req);
 
     abstract void storeOffline(final Req req, final Resp resp);
 

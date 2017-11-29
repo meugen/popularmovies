@@ -3,6 +3,7 @@ package ua.meugen.android.popularmovies.model.api.actions;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -66,27 +67,28 @@ public class MoviesActionApi extends OfflineFirstActionApi<MoviesReq, List<Movie
             callable = () -> moviesDao.topRatedByStatus(
                     req.status, BuildConfig.PAGE_SIZE, offset);
         } else {
-            callable = () -> moviesDao.byStatus(req.status);
+            callable = () -> moviesDao.byStatus(req.status,
+                    BuildConfig.PAGE_SIZE, offset);
         }
         return Single.fromCallable(callable);
     }
 
     @NonNull
     @Override
-    Maybe<List<MovieItem>> networkData(final MoviesReq req) {
-        Maybe<PagedMoviesResponse> maybe;
+    Single<List<MovieItem>> networkData(final MoviesReq req) {
+        Single<List<MovieItem>> single;
         if (req.status == SortType.POPULAR) {
-            maybe = serverApi.getPopularMovies(config.getLanguage(), req.page)
-                    .toMaybe();
+            single = serverApi.getPopularMovies(config.getLanguage(), req.page)
+                    .map(this::checkResponse);
         } else if (req.status == SortType.TOP_RATED) {
-            maybe = serverApi.getTopRatedMovies(config.getLanguage(), req.page)
-                    .toMaybe();
+            single = serverApi.getTopRatedMovies(config.getLanguage(), req.page)
+                    .map(this::checkResponse);
         } else if (req.status == SortType.FAVORITES) {
-            maybe = Maybe.empty();
+            single = Single.<List<MovieItem>>just(Collections.emptyList());
         } else {
             throw new IllegalArgumentException("Unknown status: " + req.status);
         }
-        return maybe.map(this::checkResponse);
+        return single;
     }
 
     private List<MovieItem> checkResponse(final PagedMoviesResponse response) {

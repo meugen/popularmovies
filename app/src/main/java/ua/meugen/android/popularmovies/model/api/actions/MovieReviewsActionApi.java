@@ -52,9 +52,9 @@ public class MovieReviewsActionApi extends OfflineFirstActionApi<Integer, List<R
 
     @NonNull
     @Override
-    Maybe<List<ReviewItem>> networkData(final Integer movieId) {
+    Single<List<ReviewItem>> networkData(final Integer movieId) {
         return serverApi.getMovieReviews(movieId, config.getLanguage())
-                .map(this::checkResponse).toMaybe();
+                .map(this::checkResponse);
     }
 
     private List<ReviewItem> checkResponse(final PagedReviewsResponse response) {

@@ -52,9 +52,9 @@ public class MovieVideosActionApi extends OfflineFirstActionApi<Integer, List<Vi
 
     @NonNull
     @Override
-    Maybe<List<VideoItem>> networkData(final Integer movieId) {
+    Single<List<VideoItem>> networkData(final Integer movieId) {
         return serverApi.getMovieVideos(movieId, config.getLanguage())
-                .map(this::checkResponse).toMaybe();
+                .map(this::checkResponse);
     }
 
     private List<VideoItem> checkResponse(final VideosResponse response) {
