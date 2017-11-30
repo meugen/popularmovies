@@ -18,6 +18,6 @@ public abstract class BaseServiceModule {
 
     public static final String SERVICE_CONTEXT = "serviceContext";
 
-    @Binds @PerService
-    abstract Context bindContext(@Named(SERVICE_CONTEXT) final Service service);
+    @Binds @Named(SERVICE_CONTEXT) @PerService
+    abstract Context bindContext(final Service service);
 }

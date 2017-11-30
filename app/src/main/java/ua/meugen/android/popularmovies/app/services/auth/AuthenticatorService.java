@@ -1,4 +1,4 @@
-package ua.meugen.android.popularmovies.app.services.sync;
+package ua.meugen.android.popularmovies.app.services.auth;
 
 import android.app.Service;
 import android.content.Intent;
@@ -8,15 +8,14 @@ import android.support.annotation.Nullable;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import dagger.android.support.AndroidSupportInjection;
 
 /**
  * Created by meugen on 30.11.2017.
  */
 
-public class SyncService extends Service {
+public class AuthenticatorService extends Service {
 
-    @Inject SyncAdapter adapter;
+    @Inject Authenticator authenticator;
 
     @Override
     public void onCreate() {
@@ -27,6 +26,6 @@ public class SyncService extends Service {
     @Nullable
     @Override
     public IBinder onBind(final Intent intent) {
-        return adapter.getSyncAdapterBinder();
+        return authenticator.getIBinder();
     }
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<account-authenticator
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accountType="ua.meugen.android.popularmovies.datasync"
+    android:icon="@drawable/ic_android_film"
+    android:smallIcon="@drawable/ic_android_film"
+    android:label="@string/app_name"/>
