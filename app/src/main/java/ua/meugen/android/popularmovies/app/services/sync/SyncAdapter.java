@@ -13,6 +13,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import io.reactivex.Completable;
+import timber.log.Timber;
 import ua.meugen.android.popularmovies.app.di.PerService;
 import ua.meugen.android.popularmovies.app.services.BaseServiceModule;
 import ua.meugen.android.popularmovies.model.SortType;
@@ -47,6 +48,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             final String authority,
             final ContentProviderClient provider,
             final SyncResult syncResult) {
+        Timber.d("onPerformSync()");
         moviesActionApi.clearCache(new MoviesReq(SortType.POPULAR, 1));
         moviesActionApi.clearCache(new MoviesReq(SortType.TOP_RATED, 1));
         Completable popularCompletable = moviesActionApi

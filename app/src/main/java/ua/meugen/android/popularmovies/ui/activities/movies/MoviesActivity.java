@@ -5,10 +5,12 @@ import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContentResolverCompat;
 
 import java.util.concurrent.TimeUnit;
 
+import timber.log.Timber;
 import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivity;
 
@@ -26,15 +28,21 @@ public class MoviesActivity extends BaseActivity {
         setContentView(R.layout.activity_movies);
 
         Account account = createSyncAccount();
-        ContentResolver.addPeriodicSync(account,
-                AUTHORITY, Bundle.EMPTY, PERIOD);
-        ContentResolver.setSyncAutomatically(account, AUTHORITY, true);
+        if (account != null) {
+            ContentResolver.setSyncAutomatically(account,
+                    AUTHORITY, true);
+            ContentResolver.addPeriodicSync(account,
+                    AUTHORITY, Bundle.EMPTY, PERIOD);
+        }
     }
 
-    public Account createSyncAccount() {
+    @Nullable
+    private Account createSyncAccount() {
         final Account newAccount = new Account(ACCOUNT, ACCOUNT_TYPE);
         final AccountManager accountManager = AccountManager.get(this);
-        accountManager.addAccountExplicitly(newAccount, null, null);
-        return newAccount;
+        final boolean result = accountManager.addAccountExplicitly(
+                newAccount, null, null);
+        Timber.d("Create account result: " + result);
+        return result ? newAccount : null;
     }
 }

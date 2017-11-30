@@ -42,8 +42,17 @@
             android:name=".ui.activities.authorize.AuthorizeActivity"
             android:label="@string/activity_authorize_title"/>
 
+        <provider
+            android:authorities="ua.meugen.android.popularmovies"
+            android:name=".app.provider.MoviesProvider"
+            android:syncable="true"
+            android:exported="true"
+            android:enabled="true"/>
+
         <service
-            android:name=".app.services.sync.SyncService">
+            android:name=".app.services.sync.SyncService"
+            android:exported="true"
+            android:enabled="true">
 
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
@@ -54,7 +63,9 @@
         </service>
 
         <service
-            android:name=".app.services.auth.AuthenticatorService">
+            android:name=".app.services.auth.AuthenticatorService"
+            android:exported="true"
+            android:enabled="true">
 
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator"/>
