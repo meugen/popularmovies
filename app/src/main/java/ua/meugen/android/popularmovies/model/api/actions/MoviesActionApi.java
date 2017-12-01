@@ -131,7 +131,6 @@ public class MoviesActionApi extends OfflineFirstActionApi<MoviesReq, List<Movie
         List<MovieItem> cachedMovies = cache.get(key);
         if (req.page == 1 || cachedMovies == null) {
             cache.set(key, movies);
-            cachedMovies = movies;
         } else {
             cachedMovies.addAll(movies);
         }
