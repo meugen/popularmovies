@@ -22,7 +22,6 @@ import ua.meugen.android.popularmovies.R;
 import ua.meugen.android.popularmovies.databinding.FragmentMoviesBinding;
 import ua.meugen.android.popularmovies.model.SortType;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
-import ua.meugen.android.popularmovies.model.network.resp.PagedMoviesResponse;
 import ua.meugen.android.popularmovies.ui.activities.base.BaseActivityModule;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragment;
 import ua.meugen.android.popularmovies.ui.activities.movie_details.MovieDetailsActivity;

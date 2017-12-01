@@ -1,16 +1,12 @@
 package ua.meugen.android.popularmovies.app.services.sync;
 
 import android.app.Service;
-import android.content.Context;
 
 import java.util.List;
-
-import javax.inject.Named;
 
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import ua.meugen.android.popularmovies.app.di.PerFragment;
 import ua.meugen.android.popularmovies.app.di.PerService;
 import ua.meugen.android.popularmovies.app.services.BaseServiceModule;
 import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;

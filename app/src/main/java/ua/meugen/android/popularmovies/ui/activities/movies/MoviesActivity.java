@@ -3,10 +3,8 @@ package ua.meugen.android.popularmovies.ui.activities.movies;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContentResolverCompat;
 
 import java.util.concurrent.TimeUnit;
 

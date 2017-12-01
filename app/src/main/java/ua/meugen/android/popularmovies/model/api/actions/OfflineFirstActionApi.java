@@ -1,19 +1,10 @@
 package ua.meugen.android.popularmovies.model.api.actions;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import javax.inject.Inject;
-
-import io.reactivex.Maybe;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
-import ua.meugen.android.popularmovies.model.cache.Cache;
 
 /**
  * Created by meugen on 15.11.2017.

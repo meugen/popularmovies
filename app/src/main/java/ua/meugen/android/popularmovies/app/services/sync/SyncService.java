@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import dagger.android.support.AndroidSupportInjection;
 
 /**
  * Created by meugen on 30.11.2017.

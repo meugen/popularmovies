@@ -16,7 +16,6 @@ import ua.meugen.android.popularmovies.model.db.entity.MovieItem;
 import ua.meugen.android.popularmovies.model.db.execs.Executor;
 import ua.meugen.android.popularmovies.model.db.execs.MergeMoviesExecutor;
 import ua.meugen.android.popularmovies.model.db.execs.data.MoviesData;
-import ua.meugen.android.popularmovies.model.network.resp.PagedMoviesResponse;
 import ua.meugen.android.popularmovies.ui.activities.base.fragment.BaseFragmentModule;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.adapters.OnMoviesListener;
 import ua.meugen.android.popularmovies.ui.activities.movies.fragment.presenter.MoviesPresenter;

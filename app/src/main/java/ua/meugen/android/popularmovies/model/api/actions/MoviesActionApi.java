@@ -9,7 +9,6 @@ import java.util.concurrent.Callable;
 
 import javax.inject.Inject;
 
-import io.reactivex.Maybe;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
 import ua.meugen.android.popularmovies.BuildConfig;
@@ -136,6 +135,6 @@ public class MoviesActionApi extends OfflineFirstActionApi<MoviesReq, List<Movie
         } else {
             cachedMovies.addAll(movies);
         }
-        return new ArrayList<>(cachedMovies);
+        return new ArrayList<>(movies);
     }
 }

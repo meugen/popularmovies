@@ -17,7 +17,6 @@ import timber.log.Timber;
 import ua.meugen.android.popularmovies.app.di.PerService;
 import ua.meugen.android.popularmovies.app.services.BaseServiceModule;
 import ua.meugen.android.popularmovies.model.SortType;
-import ua.meugen.android.popularmovies.model.api.AppActionApi;
 import ua.meugen.android.popularmovies.model.api.AppCachedActionApi;
 import ua.meugen.android.popularmovies.model.api.req.MoviesReq;
 import ua.meugen.android.popularmovies.model.db.entity.MovieItem;

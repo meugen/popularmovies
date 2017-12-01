@@ -3,7 +3,6 @@ package ua.meugen.android.popularmovies.app.di.modules;
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import ua.meugen.android.popularmovies.app.di.PerService;
-import ua.meugen.android.popularmovies.app.services.auth.Authenticator;
 import ua.meugen.android.popularmovies.app.services.auth.AuthenticatorService;
 import ua.meugen.android.popularmovies.app.services.auth.AuthenticatorServiceModule;
 import ua.meugen.android.popularmovies.app.services.sync.SyncService;
